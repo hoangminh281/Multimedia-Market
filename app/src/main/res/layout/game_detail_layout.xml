@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/youtube_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/spacing_cell"
+        android:paddingRight="@dimen/spacing_cell">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/image_size"
+                android:layout_height="@dimen/image_size"
+                android:layout_margin="@dimen/spacing_cell" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textViewTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_cell"
+                    android:text="Title"
+                    android:textColor="#000"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/textViewOwner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewTitle"
+                    android:layout_marginTop="@dimen/spacing_cell"
+                    android:text="Owner"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewOldLimit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewOwner"
+                    android:layout_marginTop="@dimen/spacing_cell"
+                    android:background="@drawable/black_border"
+                    android:text="3+" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <TextView style="@style/separate_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/blue_circle_border"
+                    android:text="1"
+                    android:gravity="center"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="13dp"
+                    android:text="TRIỆU"
+                    android:textSize="9sp"
+                    android:gravity="center"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/blue_radius_background"
+                    android:textColor="#fff"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@mipmap/ic_star_90"
+                    android:text="4.6"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:textColor="#fff" />
+            </RelativeLayout>
+
+        </LinearLayout>
+<!--
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:background="#fff"
+            android:numStars="5"
+            android:rating="2.0"
+            android:stepSize="1.0"
+            style="?android:attr/ratingBarStyleSmall"/>-->
+
+    </LinearLayout>
+
+</LinearLayout>

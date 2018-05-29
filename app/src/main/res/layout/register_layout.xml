@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <EditText
+        android:id="@+id/edtUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableLeft="@mipmap/ic_lock"
+        android:drawablePadding="20dp"
+        android:hint="@string/hint_username"
+        android:padding="25dp"
+        android:textSize="14sp"
+        android:textColor="#fff"
+        android:textColorHint="#fff"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableLeft="@mipmap/ic_person"
+        android:drawablePadding="20dp"
+        android:hint="@string/hint_email"
+        android:inputType="textEmailAddress"
+        android:padding="25dp"
+        android:textSize="14sp"
+        android:textColor="#fff"
+        android:textColorHint="#fff"/>
+
+    <EditText
+        android:id="@+id/edtPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableLeft="@mipmap/ic_lock"
+        android:drawablePadding="20dp"
+        android:hint="@string/hint_password"
+        android:padding="25dp"
+        android:textSize="14sp"
+        android:textColor="#fff"
+        android:textColorHint="#fff"
+        android:inputType="textPassword"/>
+    <EditText
+        android:id="@+id/edtPasswordConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableLeft="@mipmap/ic_lock"
+        android:drawablePadding="20dp"
+        android:hint="@string/hint_repassword"
+        android:padding="25dp"
+        android:textSize="14sp"
+        android:textColor="#fff"
+        android:textColorHint="#fff"
+        android:inputType="textPassword"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separate_line" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/blue_radius_background"
+        android:text="@string/btn_signup"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textSize="20dp"
+        android:onClick="Signup"/>
+</LinearLayout>
+
