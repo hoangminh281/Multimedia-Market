@@ -16,7 +16,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.thm.hoangminh.multimediamarket.models.Member;
+import com.google.firebase.auth.FirebaseUser;
+import com.thm.hoangminh.multimediamarket.models.User;
+import com.thm.hoangminh.multimediamarket.views.MainViews.MainActivity;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText edtEmail, edtPassword, edtPasswordConfirm, edtUsername;
@@ -47,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         final String username = edtUsername.getText().toString();
         final String email = edtEmail.getText().toString();
-        final String matkhau = edtPassword.getText().toString();
+        final String password = edtPassword.getText().toString();
         String nhaplaimatkhau = edtPasswordConfirm.getText().toString();
 
         if (username.trim().length() == 0) {
@@ -56,20 +58,20 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (email.trim().length() == 0) {
             Toast.makeText(this, "Email required", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
-        } else if (matkhau.trim().length() == 0) {
+        } else if (password.trim().length() == 0) {
             Toast.makeText(this, "Pass required", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
-        } else if (!nhaplaimatkhau.equals(matkhau)) {
+        } else if (!nhaplaimatkhau.equals(password)) {
             Toast.makeText(this, "Password not same", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         } else {
-            firebaseAuth.createUserWithEmailAndPassword(email, matkhau).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         progressDialog.dismiss();
-
-                        new Member(firebaseAuth.getCurrentUser().getUid(), username, "user.png", email, "", "", "").createMemberOnFirebase();
+                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                        new User(firebaseUser.getUid(), username, "user.png", email, "", "", "", 0).createUserOnFirebase();
 
                         Intent login = new Intent(RegisterActivity.this, MainActivity.class);
                         startActivity(login);

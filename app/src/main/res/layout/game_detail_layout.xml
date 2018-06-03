@@ -1,134 +1,403 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/youtube_layout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/spacing_cell"
-        android:paddingRight="@dimen/spacing_cell">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="@dimen/image_size"
-                android:layout_height="@dimen/image_size"
-                android:layout_margin="@dimen/spacing_cell" />
-
-            <RelativeLayout
+            <com.google.android.youtube.player.YouTubePlayerView
+                android:id="@+id/youtube_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="200dp"
+                android:layout_marginBottom="@dimen/spacing_cell" />
 
-                <TextView
-                    android:id="@+id/textViewTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_cell"
-                    android:text="Title"
-                    android:textColor="#000"
-                    android:textSize="25sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textViewOwner"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewTitle"
-                    android:layout_marginTop="@dimen/spacing_cell"
-                    android:text="Owner"
-                    android:textSize="18sp" />
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/spacing_cell"
+                    android:paddingRight="@dimen/spacing_cell">
 
-                <TextView
-                    android:id="@+id/textViewOldLimit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewOwner"
-                    android:layout_marginTop="@dimen/spacing_cell"
-                    android:background="@drawable/black_border"
-                    android:text="3+" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/half_spacing_cell"
+                        android:paddingRight="@dimen/half_spacing_cell">
 
-                <CheckBox
-                    android:id="@+id/checkBoxSave"
-                    android:layout_width="wrap_content"
+                        <ImageView
+                            android:id="@+id/imageViewPhoto"
+                            android:layout_width="@dimen/image_size"
+                            android:layout_height="@dimen/image_size"
+                            android:layout_marginBottom="@dimen/spacing_cell"
+                            android:layout_marginRight="@dimen/spacing_cell"
+                            android:layout_marginTop="@dimen/spacing_cell" />
+
+                        <TextView
+                            android:id="@+id/textViewTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_cell"
+                            android:layout_toLeftOf="@id/checkBoxSave"
+                            android:layout_toRightOf="@id/imageViewPhoto"
+                            android:textColor="#000"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <CheckBox
+                            android:id="@+id/checkBoxSave"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right" />
+
+                        <TextView
+                            android:id="@+id/textViewOwner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/textViewTitle"
+                            android:layout_marginTop="@dimen/half_spacing_cell"
+                            android:layout_toRightOf="@id/imageViewPhoto"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/textViewAgeLimit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/textViewOwner"
+                            android:layout_marginTop="@dimen/half_spacing_cell"
+                            android:layout_toRightOf="@id/imageViewPhoto"
+                            android:background="@drawable/black_border"
+                            android:padding="2dp"
+                            android:textColor="#000"
+                            android:textSize="12sp" />
+                    </RelativeLayout>
+
+                    <Button
+                        android:id="@+id/buttonBuy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/blue_radius_button"
+                        android:minHeight="35dp"
+                        android:textAllCaps="false"
+                        android:textColor="#fff" />
+
+                    <TextView style="@style/separate_line" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/half_spacing_cell"
+                        android:paddingRight="@dimen/half_spacing_cell">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="80dp"
+                                android:layout_height="80dp">
+
+                                <TextView
+                                    android:id="@+id/textViewDownloaded"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/blue_circle_border"
+                                    android:gravity="center"
+                                    android:textSize="25sp" />
+
+                                <TextView
+                                    android:id="@+id/textViewSubDownloaded"
+                                    android:layout_width="55dp"
+                                    android:layout_height="15dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_centerInParent="true"
+                                    android:background="@drawable/blue_radius_background"
+                                    android:gravity="center"
+                                    android:textColor="#fff"
+                                    android:textSize="9sp" />
+
+                            </RelativeLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="@string/txt_downloaded"
+                                android:textColor="@color/grey"
+                                android:textSize="13sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/spacing_cell"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:background="@drawable/blue_radius_background">
+
+                                <TextView
+                                    android:id="@+id/textViewRating"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:textColor="#fff"
+                                    android:textSize="25sp"
+                                    android:textStyle="bold" />
+
+                                <RatingBar
+                                    android:id="@+id/ratingBar"
+                                    style="?android:attr/ratingBarStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/textViewRating"
+                                    android:layout_centerInParent="true"
+                                    android:background="@null"
+                                    android:numStars="5"
+                                    android:rating="4.5"
+                                    android:scaleX=".6"
+                                    android:scaleY=".6"
+                                    android:stepSize=".5" />
+                            </RelativeLayout>
+
+                            <TextView
+                                android:id="@+id/textViewRatingNumber"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:drawableRight="@mipmap/ic_person_2"
+                                android:textColor="@color/grey"
+                                android:textSize="13sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <TextView style="@style/separate_line" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/spacing_cell"
+                        android:paddingRight="@dimen/spacing_cell">
+
+                        <TextView
+                            android:id="@+id/textViewIntro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp" />
+
+
+                        <TextView
+                            android:id="@+id/textViewDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/half_spacing_cell"
+                            android:paddingRight="@dimen/half_spacing_cell" />
+
+                        <TextView
+                            android:id="@+id/textViewRead"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:clickable="true"
+                            android:onClick="UnCollapse_Description"
+                            android:text="@string/txt_Readmore"
+                            android:textColor="@color/theme_app"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout> <!--Section detail product-->
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp" /> <!--Section image slider-->
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="35dp"
+                        android:background="#7ad4d4d4"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingTop="45dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_infor_rating"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                        <RatingBar
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@null"
+                            android:numStars="5"
+                            android:rating="4.5"
+                            android:scaleX=".8"
+                            android:scaleY=".8"
+                            android:stepSize=".5" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/btn_submit" />
+
+                    </LinearLayout>
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imageViewUser"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_centerHorizontal="true"
+                        app:civ_border_color="#fff"
+                        app:civ_border_width="2dp" />
+
+                </RelativeLayout> <!--Section Rating-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true" />
-            </RelativeLayout>
+                    android:orientation="horizontal"
+                    android:padding="@dimen/spacing_cell">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4,6"
+                        android:textSize="60sp" /> <!--sub section rating count-->
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/spacing_cell"
+                        android:paddingRight="@dimen/spacing_cell">
+
+                        <RatingBar
+                            android:id="@+id/ratingBarOverview"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:numStars="5"
+                            android:rating="5"
+                            android:stepSize=".5" />
+
+                        <TextView
+                            android:id="@+id/textViewRatingNumberOverview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@mipmap/ic_person_2"
+                            android:text="2.723.434"
+                            android:textColor="@color/grey"
+                            android:textSize="13sp" />
+
+                    </LinearLayout> <!--sub section rating person-->
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical">
+
+                        <ProgressBar
+                            android:id="@+id/progressBarRating1"
+                            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:max="100"
+                            android:progress="75"
+                            android:progressBackgroundTint="#fff"
+                            android:progressTint="#26c6da"
+                            android:scaleY="4" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBarRating2"
+                            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:max="100"
+                            android:progress="55"
+                            android:progressBackgroundTint="#fff"
+                            android:progressTint="#26da50"
+                            android:scaleY="4" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBarRating3"
+                            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:max="100"
+                            android:progress="25"
+                            android:progressBackgroundTint="#fff"
+                            android:progressTint="#b0da26"
+                            android:scaleY="4" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBarRating4"
+                            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:max="100"
+                            android:progress="15"
+                            android:progressBackgroundTint="#fff"
+                            android:progressTint="#da8026"
+                            android:scaleY="4" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBar5"
+                            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:max="100"
+                            android:progress="5"
+                            android:progressBackgroundTint="#fff"
+                            android:progressTint="#da2626"
+                            android:scaleY="4" />
+
+                    </LinearLayout> <!--sub section rating count overview-->
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <TextView style="@style/separate_line" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:layout_width="60dp"
-                android:layout_height="60dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/blue_circle_border"
-                    android:text="1"
-                    android:gravity="center"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:layout_width="30dp"
-                    android:layout_height="13dp"
-                    android:text="TRIỆU"
-                    android:textSize="9sp"
-                    android:gravity="center"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/blue_radius_background"
-                    android:textColor="#fff"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="60dp"
-                android:layout_height="60dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@mipmap/ic_star_90"
-                    android:text="4.6"
-                    android:gravity="center"
-                    android:textSize="18sp"
-                    android:textColor="#fff" />
-            </RelativeLayout>
-
-        </LinearLayout>
-<!--
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:background="#fff"
-            android:numStars="5"
-            android:rating="2.0"
-            android:stepSize="1.0"
-            style="?android:attr/ratingBarStyleSmall"/>-->
-
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

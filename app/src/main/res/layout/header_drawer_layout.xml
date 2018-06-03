@@ -1,22 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:layout_height="200dp"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginLeft="100dp" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageViewPhoto"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_user_image" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="5dp"
-        android:text="Name"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:layout_marginTop="@dimen/half_spacing_cell"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textviewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey"
+            android:textSize="25sp" />
+
+        <ImageView
+            android:id="@+id/imageViewSex"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/ic_male_female"
+            android:tint="@color/theme_app" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textviewBalance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/half_spacing_cell"
+        android:drawableLeft="@mipmap/ic_diamond"
+        android:drawablePadding="@dimen/half_spacing_cell"
+        android:textColor="#000"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/buttonRecharge"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="@dimen/half_spacing_cell"
+        android:background="@drawable/blue_radius_button"
+        android:text="@string/btn_Recharge"
+        android:textColor="#fff" />
 
 </LinearLayout>

@@ -82,7 +82,6 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
                 bundle.putString("section_id", sectionId);
                 moveToGameActivity.putExtras(bundle);
                 mContext.startActivity(moveToGameActivity);
-                Toast.makeText(v.getContext(), "Click event on more, " + sectionName, Toast.LENGTH_SHORT).show();
             }
         });
 

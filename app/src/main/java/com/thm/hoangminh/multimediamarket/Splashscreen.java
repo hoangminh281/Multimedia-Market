@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.thm.hoangminh.multimediamarket.views.MainViews.MainActivity;
+
 public class Splashscreen extends AppCompatActivity {
     final static String SHARED_PREFERENCES_NAME = "MyPrefsFile";
 

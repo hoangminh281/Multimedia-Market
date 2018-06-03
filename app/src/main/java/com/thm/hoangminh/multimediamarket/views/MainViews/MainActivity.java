@@ -1,71 +1,156 @@
-package com.thm.hoangminh.multimediamarket;
+package com.thm.hoangminh.multimediamarket.views.MainViews;
 
+import android.content.res.Configuration;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.models.User;
+import com.thm.hoangminh.multimediamarket.presenters.MainPresenters.MainPresenter;
 import com.thm.hoangminh.multimediamarket.views.HomeViews.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    ViewPagerAdapter adapter;
+public class MainActivity extends AppCompatActivity implements MainView {
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+    private Button btnRecharge;
+    private NavigationView navigationView;
+    private de.hdodenhof.circleimageview.CircleImageView imgUser;
+    private TextView txtUserName, txtBalance;
+    private ImageView imgSex;
+    private MainPresenter presenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-
-
         setControls();
 
-        setSupportActionBar(toolbar);
+        initPresenter();
+
+        setupNavigationView();
+
+        presenter.LoadUserProfile();
+
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+
+        setEvents();
     }
 
-    void setControls() {
-        toolbar = findViewById(R.id.toolbarHome);
-        tabLayout = findViewById(R.id.tablayoutHome);
-        viewPager = findViewById(R.id.viewPagerHome);
+    public void initPresenter() {
+        presenter = new MainPresenter(this);
     }
-/*
+
+    @Override
+    public void updateUI(User user) {
+        txtUserName.setText(user.getName());
+        if (user.getSex().equals("male")) {
+            imgSex.setImageResource(R.mipmap.ic_male);
+        }
+        else if (user.getSex().equals("female")) {
+            imgSex.setImageResource(R.mipmap.ic_female);
+        }
+        txtBalance.setText(user.getBalance() + "");
+    }
+
+    @Override
+    public void updateUI(String image_link) {
+        Picasso.with(this)
+                .load(image_link)
+                .placeholder(R.drawable.ic_user_image)
+                .into(imgUser);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_item, menu);
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            menu.findItem(R.id.menuSignIn).setVisible(false);
-        } else {
-            menu.findItem(R.id.menuSignOut).setVisible(false);
-        }
+        inflater.inflate(R.menu.drawer_menu, menu);
         return super.onCreateOptionsMenu(menu);
-    }*/
-/*
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menuSignIn:
-                Intent intent = new Intent(MainActivity.this, SigninActivity.class);
-                startActivity(intent);
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.menu_profile:
+
                 break;
-            case R.id.menuSignOut:
-                FirebaseAuth.getInstance().signOut();
-                recreate();
+            case R.id.menu_setting:
+
+                break;
+            case R.id.menu_help:
+
+                break;
+            case R.id.menu_about:
+
+                break;
+            case R.id.menu_logout:
+
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }*/
+    }
+
+    private void setupNavigationView() {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        View headerView = navigationView.inflateHeaderView(R.layout.header_drawer_layout);
+
+        btnRecharge = headerView.findViewById(R.id.buttonRecharge);
+        imgUser = headerView.findViewById(R.id.imageViewPhoto);
+        txtUserName = headerView.findViewById(R.id.textviewName);
+        imgSex = headerView.findViewById(R.id.imageViewSex);
+        txtBalance = headerView.findViewById(R.id.textviewBalance);
+
+    }
 
     void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -156,4 +241,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    void setControls() {
+        toolbar = findViewById(R.id.toolbarHome);
+        tabLayout = findViewById(R.id.tablayoutHome);
+        viewPager = findViewById(R.id.viewPagerHome);
+        drawerLayout = findViewById(R.id.activity_main_drawer);
+        navigationView = findViewById(R.id.navView);
+    }
+
+    private void setEvents() {
+        btnRecharge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Button recharge's clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

@@ -24,6 +24,11 @@ public class Section {
         this.game_id = game_id;
     }
 
+    public Section(String section_id, String title) {
+        this.section_id = section_id;
+        this.title = title;
+    }
+
     public Section(String section_id, String title, HashMap<String, String> game_id) {
         this.section_id = section_id;
         this.title = title;
@@ -57,11 +62,15 @@ public class Section {
     public static List<Section> initializeData(){
         List<Section> mdata = new ArrayList<>();
         HashMap<String, String> data = new HashMap<>();
+        data.put("-LDLVXmkoVbFwSqrumCQ", "-LDCT0gFJfJierreY8vh");
         mdata.add(new Section("Game mới + c.nhật", data));
         mdata.add(new Section("Thống trị Arcade", data));
         mdata.add(new Section("Được gợi ý cho bạn", data));
         mdata.add(new Section("Lập chiến lược và chinh phục", data));
         mdata.add(new Section("Đề xuất cho bạn", data));
+        mdata.add(new Section("Game nhập vai", data));
+        mdata.add(new Section( "Game sinh tồn", data));
+        mdata.add(new Section("Game phiêu lưu", data));
         return mdata;
     }
 

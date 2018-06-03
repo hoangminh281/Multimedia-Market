@@ -7,10 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.models.Game;
 
@@ -20,12 +21,14 @@ public class GridViewAdapter extends ArrayAdapter<Game> {
     private Context context;
     private int resource;
     private List<Game> objects;
+    private StorageReference mStorageRef;
 
     public GridViewAdapter(@NonNull Context context, int resource, @NonNull List<Game> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
         this.objects = objects;
+        this.mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
     private class ViewHolder {
@@ -52,9 +55,10 @@ public class GridViewAdapter extends ArrayAdapter<Game> {
 
         Game game = objects.get(position);
         holder.txtTitle.setText(game.getTitle());
-        holder.txtRate.setText(game.getRate() + "");
+        holder.txtRate.setText(game.getRating() + "");
         holder.txtPrice.setText(game.getPrice().getMoney() + game.getPrice().getCurrency());
-        game.setBitmapImage(holder.img);// not working exactly
+        game.setBitmapImage(holder.img, context);
+
         return convertView;
     }
 }

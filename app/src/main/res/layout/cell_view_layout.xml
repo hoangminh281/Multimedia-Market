@@ -11,8 +11,7 @@
         android:id="@+id/imageViewPhoto"
         android:layout_width="@dimen/image_size"
         android:layout_height="@dimen/image_size"
-        android:layout_gravity="fill"
-        android:scaleType="centerInside" />
+        android:scaleType="fitCenter" />
 
     <TextView
         android:id="@+id/textViewTitle"

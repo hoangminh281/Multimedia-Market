@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HomeInteractor {
-    HomeListener listener;
-    DatabaseReference mRef;
+    private HomeListener listener;
+    private DatabaseReference mRef;
 
     public HomeInteractor(HomeListener listener) {
         this.listener = listener;

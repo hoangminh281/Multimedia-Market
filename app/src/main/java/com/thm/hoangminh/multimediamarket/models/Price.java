@@ -1,6 +1,8 @@
 package com.thm.hoangminh.multimediamarket.models;
 
-public class Price {
+import java.io.Serializable;
+
+public class Price implements Serializable {
     private int money;
     private String currency;
 

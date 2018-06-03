@@ -1,9 +1,12 @@
 package com.thm.hoangminh.multimediamarket.views.GameViews;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -11,6 +14,7 @@ import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.adapters.GridViewAdapter;
 import com.thm.hoangminh.multimediamarket.models.Game;
 import com.thm.hoangminh.multimediamarket.presenters.GamePresenters.GamePresenter;
+import com.thm.hoangminh.multimediamarket.views.GameDetailViews.GameDetailActivity;
 
 import java.util.ArrayList;
 
@@ -66,8 +70,17 @@ public class GameActivity extends AppCompatActivity implements GameView {
                 Boolean isBottomReached = !gridView.canScrollVertically(1);
                 if (isBottomReached) {
                     presenter.LoadGameNexttoScroll();
-                    Toast.makeText(GameActivity.this, "end of list", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(GameActivity.this, GameDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("game_object", gamesList.get(i));
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }

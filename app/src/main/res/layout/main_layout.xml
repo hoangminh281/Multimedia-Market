@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/activity_main_drawer">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -42,6 +43,5 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#ffff"
-        app:headerLayout="@layout/header_drawer_layout"
         app:menu="@menu/drawer_menu" />
 </android.support.v4.widget.DrawerLayout>

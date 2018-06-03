@@ -11,4 +11,18 @@
     <string name="txt_or">OR</string>
     <string name="btn_facebook">Sign in with Facebook</string>
     <string name="btn_more">More</string>
+    <string-array name="unit">
+        <item></item>
+        <item>THOUSAND</item>
+        <item>MILLION</item>
+        <item>BILLION</item>
+    </string-array>
+    <string name="txt_Readmore">READ MORE</string>
+    <string name="txt_Readless">READ LESS</string>
+    <string name="txt_infor_rating">Rating this content</string>
+    <string name="btn_submit">SUBMIT</string>
+    <string name="txt_downloaded">Downloaded</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="btn_Recharge">Recharge</string>
 </resources>

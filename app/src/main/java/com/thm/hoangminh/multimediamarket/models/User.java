@@ -1,10 +1,7 @@
 package com.thm.hoangminh.multimediamarket.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,12 +12,14 @@ import com.google.firebase.database.ValueEventListener;
  * Created by Dell on 5/7/2018.
  */
 
-public class Member {
-    String id, name, image, email, phone, birthday, sex;
+public class User {
+    private String id, name, image, email, phone, birthday, sex;
+    private double balance;
+    private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
-    DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+    public User() {}
 
-    public Member(String name, String image, String email, String phone, String birthday, String sex) {
+    public User(String name, String image, String email, String phone, String birthday, String sex) {
         this.name = name;
         this.image = image;
         this.email = email;
@@ -29,7 +28,7 @@ public class Member {
         this.sex = sex;
     }
 
-    public Member(String id, String name, String image, String email, String phone, String birthday, String sex) {
+    public User(String id, String name, String image, String email, String phone, String birthday, String sex) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -37,6 +36,17 @@ public class Member {
         this.phone = phone;
         this.birthday = birthday;
         this.sex = sex;
+    }
+
+    public User(String id, String name, String image, String email, String phone, String birthday, String sex, double balance) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.email = email;
+        this.phone = phone;
+        this.birthday = birthday;
+        this.sex = sex;
+        this.balance = balance;
     }
 
     public String getName() {
@@ -95,21 +105,29 @@ public class Member {
         this.sex = sex;
     }
 
-    public void createMemberOnFirebase() {
-        Log.d("Member", "createMemberOnFirebase..." + name);
-        mRef.child("members/" + id).addListenerForSingleValueEvent(new ValueEventListener() {
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public void createUserOnFirebase() {
+        Log.d("User", "createUserOnFirebase..." + name);
+        mRef.child("users/" + id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
-                    mRef.child("members/" + id).setValue(Member.this);
-                    Log.d("Member", "createMemberOnFirebase success");
+                    mRef.child("users/" + id).setValue(User.this);
+                    Log.d("User", "createUserOnFirebase success");
                 }
-                Log.d("Member", "createMemberOnFirebase exist" + name);
+                Log.d("User", "createUserOnFirebase exist" + name);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("Member", "createMemberOnFirebase failure" + databaseError);
+                Log.d("User", "createUserOnFirebase failure" + databaseError);
             }
         });
 

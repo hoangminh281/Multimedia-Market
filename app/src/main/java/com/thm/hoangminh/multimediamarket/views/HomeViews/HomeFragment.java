@@ -18,23 +18,26 @@ import com.thm.hoangminh.multimediamarket.models.SectionDataModel;
 import com.thm.hoangminh.multimediamarket.presenters.HomePresenters.HomePresenter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HomeFragment extends Fragment implements HomeView {
     private ArrayList<SectionDataModel> allSampleData;
     private HomePresenter presenter;
     private AllSectionsAdapter adapter;
     private RecyclerView myRecyclerView;
-    private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_layout, null);
-        createDummyData();
+
+        //createDummyData();
+
         setControls(view);
         initPresenter();
         initAdapter();
         setEvents();
+
         presenter.LoadHomeSectionPaging();
         return view;
     }
@@ -76,8 +79,7 @@ public class HomeFragment extends Fragment implements HomeView {
     }
 
     public void createDummyData() {
-        //mRef.child("sections").removeValue();
-        /*DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+        /*mRef.child("sections").removeValue();
         for (Section section : Section.initializeData()) {
             DatabaseReference reference = mRef.child("sections").push();
             String id = reference.getKey();
@@ -85,10 +87,21 @@ public class HomeFragment extends Fragment implements HomeView {
             reference.setValue(section);
         }*/
         /*for (Game game : Game.initializeData()) {
-            mRef.child("games").push().setValue(game);
+            mRef.child("games/" + game.getGame_id()).setValue(game);
         }*/
-        for (int i = 0; i < 30; i++)
-            mRef.child("sections/-LDCT0g97ifg4RhZKzO1/game_id").push().setValue("-LDCT0gFJfJierreY8vh");
+        /*for (int i = 0; i < 30; i++)
+            mRef.child("sections/-LDCT0g97ifg4RhZKzO1/game_id").push().setValue("-LDCT0gFJfJierreY8vh");*/
+        /*for (GameDetail gameDetail : GameDetail.initializeData()) {
+            mRef.child("game_detail/" +gameDetail.getId()).setValue(gameDetail);
+        }*/
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+        HashMap<String, String> list = new HashMap<>();
+        list.put("-LDlhVwesbhJsBsFVmEt", "20150902172241.png");
+        list.put("-LDlhVwesbhJsBsFVmE2", "406x228bb.png");
+        list.put("-LDlhVwesbhJsBsFVmE3", "images (1).png");
+        list.put("-LDlhVwesbhJsBsFVmE4", "images.png");
+        list.put("-LDlhVwesbhJsBsFVmE5", "maxresdefault.png");
+        mRef.child("game_detail/-LDlhVwX9fzrFxtdewJo/imageList").setValue(list);
     }
 
     @Override

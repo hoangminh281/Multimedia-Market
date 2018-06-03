@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 public class GameInteractor {
-    GameListener listener;
-    DatabaseReference mRef;
+    private GameListener listener;
+    private DatabaseReference mRef;
 
     public GameInteractor(GameListener listener) {
         this.listener = listener;
