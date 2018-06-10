@@ -17,12 +17,50 @@
         <item>MILLION</item>
         <item>BILLION</item>
     </string-array>
-    <string name="txt_Readmore">READ MORE</string>
-    <string name="txt_Readless">READ LESS</string>
+    <string name="txt_readmore">READ MORE</string>
+    <string name="txt_readless">READ LESS</string>
     <string name="txt_infor_rating">Rating this content</string>
     <string name="btn_submit">SUBMIT</string>
     <string name="txt_downloaded">Downloaded</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="btn_Recharge">Recharge</string>
+    <string name="btn_recharge">Recharge</string>
+    <string name="btn_profile">Profile</string>
+    <string name="btn_setting">Setting</string>
+    <string name="btn_help">Help</string>
+    <string name="btn_about">About</string>
+    <string name="btn_logout">Logout</string>
+    <string name="edt_rating">Tell us what you think</string>
+    <string name="txt_ratingsuccess">Thank you for rating this content</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_next">Next</string>
+    <string name="txt_cardCategory">Payment</string>
+    <string name="txt_cardValue">Value</string>
+    <string name="txt_total">Wallet</string>
+    <string name="txt_cardNumber">Card Num</string>
+    <string name="txt_cardSeri">Seri Num</string>
+    <string name="hint_cardNumber">Input card number</string>
+    <string name="hint_cardSeri">Input seri number</string>
+    <string name="txt_10k">$0.49</string>
+    <string name="txt_20k">$0.99</string>
+    <string name="txt_50k">$2.49</string>
+    <string name="txt_100k">$4.99</string>
+    <string name="txt_200k">$9.99</string>
+    <string name="txt_500k">$24.99</string>
+    <string name="err_empty">Empty</string>
+    <string name="info_success">Congratulation!!! You successfully recharged</string>
+    <string name="infor_failure">Oops!!! We encountered an unexpected error. Please try again</string>
+    <string name="info_wrong">Oh no!!! We are unable to validate your information. Please try again</string>
+    <string name="btn_newRecharge">New recharge</string>
+    <string name="txt_time">Time</string>
+    <string name="txt_transactioncode">Transaction code</string>
+    <string name="txt_feeRecharge">Transaction cost</string>
+    <string name="txt_free">Free</string>
+    <string name="txt_status">Status</string>
+    <string name="txt_recharged">Recharged</string>
+    <string name="txt_rechargeIntoWallet">RECHARGE HISTORY</string>
+    <string name="txt_success">Success</string>
+    <string name="txt_unRecharge">Unrecharge</string>
+    <string name="txt_failure">Failure</string>
+    <string name="txt_cardDetail">Card detail</string>
 </resources>

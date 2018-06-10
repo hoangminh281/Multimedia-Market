@@ -103,6 +103,7 @@ public class Game implements Serializable {
                     .load(image_url)
                     .resize(image_size, image_size)
                     .centerInside()
+                    .error(R.mipmap.icon_app_2)
                     .into(img);
         } else {
             final StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -115,6 +116,7 @@ public class Game implements Serializable {
                             .load(uri)
                             .resize(image_size, image_size)
                             .centerInside()
+                            .error(R.mipmap.icon_app_2)
                             .into(img);
                 }
             });

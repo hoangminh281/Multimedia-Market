@@ -2,19 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_profile"
-        android:title="Profile" />
+        android:title="@string/btn_profile" />
     <item
         android:id="@+id/menu_setting"
-        android:title="Settings" />
+        android:title="@string/btn_setting" />
     <item
         android:id="@+id/menu_help"
-        android:title="Help" />
+        android:title="@string/btn_help" />
     <item
         android:id="@+id/menu_about"
-        android:title="About" />
+        android:title="@string/btn_about" />
     <item
         android:id="@+id/menu_logout"
-        android:title="Logout" />
+        android:title="@string/btn_logout" />
 
 
 </menu>

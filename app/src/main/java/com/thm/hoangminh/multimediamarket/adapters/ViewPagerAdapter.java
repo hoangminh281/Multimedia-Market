@@ -51,7 +51,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         Picasso.with(mContext)
                 .load(itemsList.get(position))
                 .fit()
-                .placeholder(R.drawable.mm_icon)
+                .placeholder(R.drawable.icon_app_2)
                 .into(img);
 
         container.addView(view, 0);

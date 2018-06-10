@@ -71,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         progressDialog.dismiss();
                         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                        new User(firebaseUser.getUid(), username, "user.png", email, "", "", "", 0).createUserOnFirebase();
+                        new User(firebaseUser.getUid(), username, "user.png", email, "", "", 2, 2, 0).createUserOnFirebase();
 
                         Intent login = new Intent(RegisterActivity.this, MainActivity.class);
                         startActivity(login);

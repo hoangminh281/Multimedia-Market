@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_10"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_rechargeIntoWallet"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textViewValueHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="40sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/theme_app"
+                android:textSize="22sp"
+                android:id="@+id/textViewStatusHeader"/>
+
+        </LinearLayout> <!--section header-->
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp" />
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_feeRecharge"
+                    android:textColor="@color/grey_50"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/txt_free"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_transactioncode"
+                    android:textColor="@color/grey_50"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewTransCode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_time"
+                    android:textColor="@color/grey_50"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </TableRow>
+
+        </TableLayout> <!--section recharge detail history -->
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey_10"
+            android:padding="15dp"
+            android:text="@string/txt_cardDetail"
+            android:textColor="@color/black"
+            android:textSize="18sp" /> <!--section "value"-->
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_cardCategory"
+                    android:textColor="@color/grey_50"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewCardCategory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_cardValue"
+                    android:textColor="@color/grey_50"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_cardSeri"
+                    android:textColor="@color/grey_50"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewSeriNum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_status"
+                    android:textColor="@color/grey_50"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </TableRow>
+
+        </TableLayout> <!--section card detail -->
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="15dp"
+        android:background="@drawable/blue_radius_button"
+        android:onClick="NewRecharge"
+        android:text="@string/btn_newRecharge"
+        android:textColor="@color/white"
+        android:textSize="22sp" />
+
+</RelativeLayout>

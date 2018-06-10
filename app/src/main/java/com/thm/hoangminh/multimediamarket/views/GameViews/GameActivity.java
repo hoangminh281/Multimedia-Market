@@ -3,15 +3,13 @@ package com.thm.hoangminh.multimediamarket.views.GameViews;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
-import com.thm.hoangminh.multimediamarket.adapters.GridViewAdapter;
+import com.thm.hoangminh.multimediamarket.adapters.GameAdapter;
 import com.thm.hoangminh.multimediamarket.models.Game;
 import com.thm.hoangminh.multimediamarket.presenters.GamePresenters.GamePresenter;
 import com.thm.hoangminh.multimediamarket.views.GameDetailViews.GameDetailActivity;
@@ -22,7 +20,7 @@ public class GameActivity extends AppCompatActivity implements GameView {
     private ArrayList<Game> gamesList;
     private GridView gridView;
     private GamePresenter presenter;
-    private GridViewAdapter myAdapter;
+    private GameAdapter myAdapter;
     private String section_id;
 
     @Override
@@ -54,7 +52,7 @@ public class GameActivity extends AppCompatActivity implements GameView {
     }
 
     private void initAdapter() {
-        this.myAdapter = new GridViewAdapter(GameActivity.this, R.layout.cell_view_layout, gamesList);
+        this.myAdapter = new GameAdapter(GameActivity.this, R.layout.cell_view_layout, gamesList);
         gridView.setAdapter(myAdapter);
     }
 

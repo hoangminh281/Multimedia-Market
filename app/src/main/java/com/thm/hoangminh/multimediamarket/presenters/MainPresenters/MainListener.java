@@ -6,6 +6,4 @@ public interface MainListener {
 
     public void onLoadUserProfileSuccess(User user);
 
-    public void onLoadUserImageLinkSuccess(String image_link);
-
 }

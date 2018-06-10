@@ -110,8 +110,7 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
         progressDialog.dismiss();
         final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), "user.png", firebaseUser.getEmail(), firebaseUser.getPhoneNumber(), "", "", 0).createUserOnFirebase();
-
+            new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), "user.png", firebaseUser.getEmail(), firebaseUser.getPhoneNumber(), "",2, 2, 0).createUserOnFirebase();
             Intent in = new Intent(SigninActivity.this, MainActivity.class);
             startActivity(in);
             finish();

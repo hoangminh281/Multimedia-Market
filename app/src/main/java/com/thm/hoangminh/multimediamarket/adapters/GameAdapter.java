@@ -17,13 +17,13 @@ import com.thm.hoangminh.multimediamarket.models.Game;
 
 import java.util.List;
 
-public class GridViewAdapter extends ArrayAdapter<Game> {
+public class GameAdapter extends ArrayAdapter<Game> {
     private Context context;
     private int resource;
     private List<Game> objects;
     private StorageReference mStorageRef;
 
-    public GridViewAdapter(@NonNull Context context, int resource, @NonNull List<Game> objects) {
+    public GameAdapter(@NonNull Context context, int resource, @NonNull List<Game> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;

@@ -7,5 +7,4 @@ public interface MainView {
 
     public void updateUI(User user);
 
-    public void updateUI(String image_link);
 }

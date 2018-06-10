@@ -1,10 +1,10 @@
 package com.thm.hoangminh.multimediamarket.references;
 
-public class ConvertDownloadedNumber {
+public class ConvertNumberToString {
     private int downloaded;
     private String[] unitArr;
 
-    public ConvertDownloadedNumber(int downloaded, String[] unitArr) {
+    public ConvertNumberToString(int downloaded, String[] unitArr) {
         this.downloaded = downloaded;
         this.unitArr = unitArr;
     }

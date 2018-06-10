@@ -18,12 +18,8 @@ public class MainPresenter implements MainListener {
 
     @Override
     public void onLoadUserProfileSuccess(User user) {
+        User.getInstance(user);
         listener.updateUI(user);
-        interactor.LoadUserImageLink(user.getImage());
     }
 
-    @Override
-    public void onLoadUserImageLinkSuccess(String image_link) {
-        listener.updateUI(image_link);
-    }
 }

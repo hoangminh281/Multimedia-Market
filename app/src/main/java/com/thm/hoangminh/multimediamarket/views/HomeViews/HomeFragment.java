@@ -18,7 +18,6 @@ import com.thm.hoangminh.multimediamarket.models.SectionDataModel;
 import com.thm.hoangminh.multimediamarket.presenters.HomePresenters.HomePresenter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class HomeFragment extends Fragment implements HomeView {
     private ArrayList<SectionDataModel> allSampleData;
@@ -31,7 +30,7 @@ public class HomeFragment extends Fragment implements HomeView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_layout, null);
 
-        //createDummyData();
+        createDummyData();
 
         setControls(view);
         initPresenter();
@@ -79,6 +78,7 @@ public class HomeFragment extends Fragment implements HomeView {
     }
 
     public void createDummyData() {
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
         /*mRef.child("sections").removeValue();
         for (Section section : Section.initializeData()) {
             DatabaseReference reference = mRef.child("sections").push();
@@ -94,14 +94,15 @@ public class HomeFragment extends Fragment implements HomeView {
         /*for (GameDetail gameDetail : GameDetail.initializeData()) {
             mRef.child("game_detail/" +gameDetail.getId()).setValue(gameDetail);
         }*/
-        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-        HashMap<String, String> list = new HashMap<>();
+
+        /*HashMap<String, String> list = new HashMap<>();
         list.put("-LDlhVwesbhJsBsFVmEt", "20150902172241.png");
         list.put("-LDlhVwesbhJsBsFVmE2", "406x228bb.png");
         list.put("-LDlhVwesbhJsBsFVmE3", "images (1).png");
         list.put("-LDlhVwesbhJsBsFVmE4", "images.png");
         list.put("-LDlhVwesbhJsBsFVmE5", "maxresdefault.png");
-        mRef.child("game_detail/-LDlhVwX9fzrFxtdewJo/imageList").setValue(list);
+        mRef.child("game_detail/-LDlhVwX9fzrFxtdewJo/imageList").setValue(list);*/
+        //mRef.child("cards/0/0").push().setValue(new Card(Tools.md5("123456"),"seri123",0));
     }
 
     @Override

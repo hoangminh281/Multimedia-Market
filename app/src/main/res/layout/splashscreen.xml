@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.thm.hoangminh.multimediamarket.views.MainViews.MainActivity"
-    android:background="@color/purple_50">
+    android:background="@color/theme_app">
 
     <ImageView
         android:id="@+id/imageView"
@@ -16,5 +16,5 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/mm_icon" />
+        app:srcCompat="@drawable/icon_app_3" />
 </android.support.constraint.ConstraintLayout>

@@ -14,15 +14,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.youtube.player.YouTubePlayerView
+            <fragment
                 android:id="@+id/youtube_layout"
+                android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginBottom="@dimen/spacing_cell" />
+                android:layout_height="200dp" /> <!--Video game-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_cell"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -182,7 +183,7 @@
                             </RelativeLayout>
 
                             <TextView
-                                android:id="@+id/textViewRatingNumber"
+                                android:id="@+id/textViewRatingSum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
@@ -224,7 +225,7 @@
                             android:layout_gravity="center"
                             android:clickable="true"
                             android:onClick="UnCollapse_Description"
-                            android:text="@string/txt_Readmore"
+                            android:text="@string/txt_readmore"
                             android:textColor="@color/theme_app"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -236,11 +237,15 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/viewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp" /> <!--Section image slider-->
+                    android:layout_height="250dp"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin" /> <!--Section image slider-->
 
                 <RelativeLayout
+                    android:id="@+id/relativeLayoutRatingOverview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -249,30 +254,40 @@
                         android:background="#7ad4d4d4"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
-                        android:paddingTop="45dp">
+                        android:padding="@dimen/activity_horizontal_margin">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
                             android:text="@string/txt_infor_rating"
                             android:textColor="#000"
                             android:textSize="18sp" />
 
                         <RatingBar
+                            android:id="@+id/ratingBarUser"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:background="@null"
                             android:numStars="5"
-                            android:rating="4.5"
                             android:scaleX=".8"
                             android:scaleY=".8"
-                            android:stepSize=".5" />
+                            android:stepSize="1.0" />
+
+                        <EditText
+                            android:id="@+id/editTextRating"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/edt_rating"
+                            android:inputType="textMultiLine|textCapSentences" />
 
                         <Button
+                            android:id="@+id/buttonRating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:enabled="false"
                             android:text="@string/btn_submit" />
 
                     </LinearLayout>
@@ -287,112 +302,16 @@
 
                 </RelativeLayout> <!--Section Rating-->
 
-                <LinearLayout
+                <!--<fragment
+                    android:id="@+id/fragmentRatingComment"
+                    android:name="com.thm.hoangminh.multimediamarket.views.fragments.RatingFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/spacing_cell">
+                    android:layout_height="wrap_content" />-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="4,6"
-                        android:textSize="60sp" /> <!--sub section rating count-->
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:paddingLeft="@dimen/spacing_cell"
-                        android:paddingRight="@dimen/spacing_cell">
-
-                        <RatingBar
-                            android:id="@+id/ratingBarOverview"
-                            style="?android:attr/ratingBarStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:numStars="5"
-                            android:rating="5"
-                            android:stepSize=".5" />
-
-                        <TextView
-                            android:id="@+id/textViewRatingNumberOverview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableRight="@mipmap/ic_person_2"
-                            android:text="2.723.434"
-                            android:textColor="@color/grey"
-                            android:textSize="13sp" />
-
-                    </LinearLayout> <!--sub section rating person-->
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:orientation="vertical">
-
-                        <ProgressBar
-                            android:id="@+id/progressBarRating1"
-                            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="75"
-                            android:progressBackgroundTint="#fff"
-                            android:progressTint="#26c6da"
-                            android:scaleY="4" />
-
-                        <ProgressBar
-                            android:id="@+id/progressBarRating2"
-                            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="55"
-                            android:progressBackgroundTint="#fff"
-                            android:progressTint="#26da50"
-                            android:scaleY="4" />
-
-                        <ProgressBar
-                            android:id="@+id/progressBarRating3"
-                            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="25"
-                            android:progressBackgroundTint="#fff"
-                            android:progressTint="#b0da26"
-                            android:scaleY="4" />
-
-                        <ProgressBar
-                            android:id="@+id/progressBarRating4"
-                            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="15"
-                            android:progressBackgroundTint="#fff"
-                            android:progressTint="#da8026"
-                            android:scaleY="4" />
-
-                        <ProgressBar
-                            android:id="@+id/progressBar5"
-                            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="5"
-                            android:progressBackgroundTint="#fff"
-                            android:progressTint="#da2626"
-                            android:scaleY="4" />
-
-                    </LinearLayout> <!--sub section rating count overview-->
-
-                </LinearLayout>
+                <FrameLayout
+                    android:id="@+id/frameRatingComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

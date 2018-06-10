@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_cell"
+        android:layout_alignParentTop="true"
+        android:id="@+id/linearLayoutRatingOverview">
+
+        <TextView
+            android:id="@+id/textViewRatingOverview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="60sp" /> <!--sub section rating count-->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/spacing_cell"
+            android:paddingRight="@dimen/spacing_cell">
+
+            <RatingBar
+                android:id="@+id/ratingBarOverview"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:numStars="5"
+                android:rating="5"
+                android:stepSize=".5" />
+
+            <TextView
+                android:id="@+id/textViewRatingSumOverview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/ic_person_2"
+                android:textColor="@color/grey"
+                android:textSize="13sp" />
+
+        </LinearLayout> <!--sub section rating person-->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/progressBarRating1"
+                style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressBackgroundTint="#fff"
+                android:progressTint="#26c6da"
+                android:scaleY="4" />
+
+            <ProgressBar
+                android:id="@+id/progressBarRating2"
+                style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressBackgroundTint="#fff"
+                android:progressTint="#26da50"
+                android:scaleY="4" />
+
+            <ProgressBar
+                android:id="@+id/progressBarRating3"
+                style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressBackgroundTint="#fff"
+                android:progressTint="#b0da26"
+                android:scaleY="4" />
+
+            <ProgressBar
+                android:id="@+id/progressBarRating4"
+                style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressBackgroundTint="#fff"
+                android:progressTint="#da8026"
+                android:scaleY="4" />
+
+            <ProgressBar
+                android:id="@+id/progressBarRating5"
+                style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressBackgroundTint="#fff"
+                android:progressTint="#da2626"
+                android:scaleY="4" />
+
+        </LinearLayout> <!--sub section rating count overview-->
+
+    </LinearLayout> <!--Section Rating Overview-->
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_cell"
+        android:layout_below="@id/linearLayoutRatingOverview"/> <!--rating comment-->
+
+</RelativeLayout>

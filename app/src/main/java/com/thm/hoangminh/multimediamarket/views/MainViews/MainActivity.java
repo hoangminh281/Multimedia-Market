@@ -1,6 +1,6 @@
 package com.thm.hoangminh.multimediamarket.views.MainViews;
 
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,17 +13,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.views.RechargeViews.RechargeActivity;
 import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.presenters.MainPresenters.MainPresenter;
 import com.thm.hoangminh.multimediamarket.views.HomeViews.HomeFragment;
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private Button btnRecharge;
     private NavigationView navigationView;
     private de.hdodenhof.circleimageview.CircleImageView imgUser;
-    private TextView txtUserName, txtBalance;
+    private TextView txtUserName, txtBalance, txtRole;
     private ImageView imgSex;
     private MainPresenter presenter;
 
@@ -71,22 +70,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void updateUI(User user) {
+        user.LoadUserImageView(imgUser, this);
+        user.LoadUserRole(txtRole);
         txtUserName.setText(user.getName());
-        if (user.getSex().equals("male")) {
+        if (user.getSex() == 0) {
             imgSex.setImageResource(R.mipmap.ic_male);
-        }
-        else if (user.getSex().equals("female")) {
+        } else if (user.getSex() == 1) {
             imgSex.setImageResource(R.mipmap.ic_female);
         }
-        txtBalance.setText(user.getBalance() + "");
-    }
-
-    @Override
-    public void updateUI(String image_link) {
-        Picasso.with(this)
-                .load(image_link)
-                .placeholder(R.drawable.ic_user_image)
-                .into(imgUser);
+        txtBalance.setText(Tools.FormatDecimal(user.getBalance()) + "đ");
     }
 
     @Override
@@ -94,19 +86,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.drawer_menu, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -149,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         txtUserName = headerView.findViewById(R.id.textviewName);
         imgSex = headerView.findViewById(R.id.imageViewSex);
         txtBalance = headerView.findViewById(R.id.textviewBalance);
-
+        txtRole = headerView.findViewById(R.id.textViewRole);
     }
 
     void setupViewPager(ViewPager viewPager) {
@@ -254,7 +233,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         btnRecharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Button recharge's clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, RechargeActivity.class);
+                startActivity(intent);
             }
         });
     }

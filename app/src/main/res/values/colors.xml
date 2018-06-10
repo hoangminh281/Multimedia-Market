@@ -3,14 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="purple_50">#F3E5F5</color>
-    <color name="purple_200">#CE93D8</color>
-    <color name="purple_600">#8E24AA</color>
-    <color name="purple_900">#4A148C</color>
     <color name="theme_app">#26C6DA</color>
     <color name="cyan_50">#E0F7FA</color>
     <color name="separate_line">#666666</color>
     <color name="green">#7fba55</color>
     <color name="grey">#5A5A5A</color>
-
+    <color name="white">#fff</color>
+    <color name="grey_50">#898989</color>
+    <color name="grey_25">#c0c0c0</color>
+    <color name="grey_10">#edeeee</color>
+    <color name="black">#4a4a4a</color>
+    <color name="grey_5">#dcdcdc</color>
 </resources>

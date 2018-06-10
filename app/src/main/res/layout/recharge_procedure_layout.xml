@@ -1,11 +1,332 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey_10"
+            android:padding="15dp"
+            android:text="@string/txt_cardCategory"
+            android:textColor="@color/black"
+            android:textSize="18sp" /> <!--section "card category"-->
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupCardCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:clipToPadding="false"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <RadioButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/custom_btn_radio_viettel"
+                android:button="@android:color/transparent"
+                android:checked="true"/>
+
+            <RadioButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/custom_btn_radio_mobiphone"
+                android:button="@android:color/transparent" />
+
+            <RadioButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/custom_btn_radio_vinaphone"
+                android:button="@android:color/transparent" />
+
+            <RadioButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/custom_btn_radio_vietnammobi"
+                android:button="@android:color/transparent" />
+
+            <RadioButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/custom_btn_radio_garena"
+                android:button="@android:color/transparent" />
+
+        </RadioGroup> <!--Card category-->
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey_10"
+            android:padding="15dp"
+            android:text="@string/txt_cardValue"
+            android:textColor="@color/black"
+            android:textSize="18sp" /> <!--section "value"-->
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp" />
+
+        <TableRow
+            android:id="@+id/radioGroupCardValue1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="20dp">
+
+            <RadioButton
+                android:id="@+id/radioButtonCardValue1"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:background="@drawable/radio_button_custom"
+                android:button="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/txt_10k"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/radioButtonCardValue2"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/radio_button_custom"
+                android:button="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/txt_20k"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/radioButtonCardValue3"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/radio_button_custom"
+                android:button="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/txt_50k"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </TableRow> <!--Card value #1-->
+
+        <TableRow
+            android:id="@+id/radioGroupCardValue2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
+
+            <RadioButton
+                android:id="@+id/radioButtonCardValue4"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:background="@drawable/radio_button_custom"
+                android:button="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/txt_100k"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/radioButtonCardValue5"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/radio_button_custom"
+                android:button="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/txt_200k"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/radioButtonCardValue6"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/radio_button_custom"
+                android:button="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/txt_500k"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </TableRow> <!--Card value #2-->
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp" />
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/txt_cardNumber"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                style="@style/separate_line_vertical"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="10dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:hint="@string/hint_cardNumber"
+                android:inputType="number"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColor="#000"
+                android:textSize="22sp"
+                android:id="@+id/editTextCardNumber"
+                android:maxLength="13"
+                android:text="123456"/>
+
+        </LinearLayout> <!--Card number-->
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/txt_cardSeri"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                style="@style/separate_line_vertical"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="10dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:hint="@string/hint_cardSeri"
+                android:inputType="textNoSuggestions|textVisiblePassword"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColor="#000"
+                android:textSize="22sp"
+                android:id="@+id/editTextCardSeri"
+                android:maxLength="15"
+                android:text="seri123"/>
+
+        </LinearLayout> <!--Card seri-->
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/separate_line"
+            android:layout_margin="0dp"
+            android:background="@color/grey_5" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_total"
+                android:textColor="#000"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/textViewTotal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:maxLines="1"
+                android:textColor="#000"
+                android:textSize="18dp" />
+
+        </LinearLayout> <!--total checkout-->
+
+        <Button
+            android:id="@+id/buttonNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="@drawable/grey_radius_background"
+            android:enabled="false"
+            android:onClick="onClicked_btnNext"
+            android:text="@string/btn_next"
+            android:textColor="@color/white" />
+
+    </LinearLayout> <!--check out-->
+
+</RelativeLayout>

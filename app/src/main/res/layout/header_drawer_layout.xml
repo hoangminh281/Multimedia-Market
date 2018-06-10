@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="250dp"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/half_spacing_cell"
+        android:layout_marginTop="@dimen/spacing_cell"
         android:orientation="horizontal">
 
         <TextView
@@ -32,13 +32,21 @@
             android:src="@mipmap/ic_male_female"
             android:tint="@color/theme_app" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:textColor="#ff0000"
+            android:id="@+id/textViewRole"/>
+
+
     </LinearLayout>
 
     <TextView
         android:id="@+id/textviewBalance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/half_spacing_cell"
+        android:layout_marginTop="@dimen/spacing_cell"
         android:drawableLeft="@mipmap/ic_diamond"
         android:drawablePadding="@dimen/half_spacing_cell"
         android:textColor="#000"
@@ -48,9 +56,9 @@
         android:id="@+id/buttonRecharge"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginTop="@dimen/half_spacing_cell"
+        android:layout_marginTop="@dimen/spacing_cell"
         android:background="@drawable/blue_radius_button"
-        android:text="@string/btn_Recharge"
+        android:text="@string/btn_recharge"
         android:textColor="#fff" />
 
 </LinearLayout>

@@ -17,10 +17,48 @@
         <item>TRIỆU</item>
         <item>TỈ</item>
     </string-array>
-    <string name="txt_Readmore">ĐỌC THÊM</string>
-    <string name="txt_Readless">ĐỌC ÍT HƠN</string>
+    <string name="txt_readmore">ĐỌC THÊM</string>
+    <string name="txt_readless">ĐỌC ÍT HƠN</string>
     <string name="txt_infor_rating">Xếp hạng nội dung này</string>
     <string name="btn_submit">Gửi</string>
     <string name="txt_downloaded">Tải xuống</string>
-    <string name="btn_Recharge">Nạp tiền</string>
+    <string name="btn_recharge">Nạp tiền</string>
+    <string name="btn_profile">Hồ sơ</string>
+    <string name="btn_setting">Cài đặt</string>
+    <string name="btn_help">Trợ giúp</string>
+    <string name="btn_about">Liên hệ</string>
+    <string name="btn_logout">Đăng xuất</string>
+    <string name="edt_rating">Hãy cho chúng tôi một đánh giá ngắn</string>
+    <string name="txt_ratingsuccess">Cảm ơn bạn vì đã đánh giá nội dung này</string>
+    <string name="btn_back">Quay lại</string>
+    <string name="btn_next">Tiếp theo</string>
+    <string name="txt_cardCategory">Loại thẻ</string>
+    <string name="txt_cardValue">Mệnh giá thẻ</string>
+    <string name="txt_total">Ví tiền</string>
+    <string name="txt_cardNumber">Mã thẻ</string>
+    <string name="txt_cardSeri">Seri thẻ</string>
+    <string name="hint_cardNumber">Nhập mã thẻ</string>
+    <string name="hint_cardSeri">Nhập seri thẻ</string>
+    <string name="txt_10k">10.000đ</string>
+    <string name="txt_20k">20.000đ</string>
+    <string name="txt_50k">50.000đ</string>
+    <string name="txt_100k">100.000đ</string>
+    <string name="txt_200k">200.000đ</string>
+    <string name="txt_500k">500.000đ</string>
+    <string name="err_empty">Còn trống</string>
+    <string name="info_success">Chúc mừng!!! Bạn đã nạp thẻ thành công</string>
+    <string name="infor_failure">Ối!!! Chúng tôi đã phát hiện một lỗi không lường trước. Vui lòng thử lại</string>
+    <string name="info_wrong">Ôi không!!! Chúng tôi không thể xác minh thông tin của bạn. Vui lòng thử lại</string>
+    <string name="btn_newRecharge">Tạo giao dịch mới</string>
+    <string name="txt_time">Thời gian</string>
+    <string name="txt_transactioncode">Mã giao dịch</string>
+    <string name="txt_feeRecharge">Phí giao dịch</string>
+    <string name="txt_free">Miễn phí</string>
+    <string name="txt_status">Trạng thái</string>
+    <string name="txt_recharged">Đã nạp</string>
+    <string name="txt_rechargeIntoWallet">NẠP TIỀN VÀO VÍ</string>
+    <string name="txt_success">Thành công</string>
+    <string name="txt_unRecharge">Chưa nạp</string>
+    <string name="txt_failure">Thất bại</string>
+    <string name="txt_cardDetail">Chi tiết thẻ</string>
 </resources>
