@@ -3,12 +3,12 @@ package com.thm.hoangminh.multimediamarket.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -22,19 +22,21 @@ public class RatingAdapter extends ArrayAdapter<RatingContent> {
     private Context context;
     private int resource;
     private ArrayList<RatingContent> objects;
+    private int limit;
 
-    public RatingAdapter(@NonNull Context context, int resource, @NonNull ArrayList<RatingContent> objects) {
+    public RatingAdapter(@NonNull Context context, int resource, @NonNull ArrayList<RatingContent> objects, int limit) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
         this.objects = objects;
+        this.limit = limit;
     }
 
     private class ViewHolder {
         ImageView imgAvatar, imgOption;
         TextView txtName, txtDate, txtComment;
         RatingBar ratingBar;
-        CheckBox imgLike;
+        CheckBox cbLike;
     }
 
     @NonNull
@@ -46,12 +48,18 @@ public class RatingAdapter extends ArrayAdapter<RatingContent> {
             convertView = inflater.inflate(this.resource, null);
             holder = new ViewHolder();
 
-            holder.imgAvatar =  convertView.findViewById(R.id.imageViewAvatar);
-            holder.imgLike =  convertView.findViewById(R.id.imageViewLike);
+            holder.imgAvatar = convertView.findViewById(R.id.imageViewAvatar);
+            holder.cbLike = convertView.findViewById(R.id.imageViewLike);
             holder.imgOption = convertView.findViewById(R.id.imageViewOption);
             holder.txtName = convertView.findViewById(R.id.textViewName);
             holder.txtDate = convertView.findViewById(R.id.textViewDate);
             holder.txtComment = convertView.findViewById(R.id.textViewComment);
+
+            if (limit != -1) {
+                holder.txtComment.setMaxLines(3);
+                holder.txtComment.setEllipsize(TextUtils.TruncateAt.END);
+            }
+
             holder.ratingBar = convertView.findViewById(R.id.ratingBarUser);
 
             convertView.setTag(holder);
@@ -59,27 +67,24 @@ public class RatingAdapter extends ArrayAdapter<RatingContent> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        RatingContent ratingContent = objects.get(position);
+        final RatingContent ratingContent = objects.get(position);
         ratingContent.LoadImageViewUser(holder.imgAvatar, context);
         ratingContent.LoadUserName(holder.txtName);
         holder.txtDate.setText(ratingContent.getTime());
-        holder.txtComment.setText(ratingContent.getContent());
+        String st = ratingContent.getContent().trim();
+        if (st.length() == 0) {
+            holder.txtComment.setVisibility(View.GONE);
+        } else {
+            holder.txtComment.setText(st);
+        }
         holder.ratingBar.setRating(ratingContent.getPoint());
-        holder.imgLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-
-                }
-            }
-        });
+        ratingContent.CheckCurrentUserLike(holder.cbLike);
         holder.imgOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-
         return convertView;
     }
 }

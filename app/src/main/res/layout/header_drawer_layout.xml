@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="250dp"
     android:gravity="center"
@@ -9,7 +10,9 @@
         android:id="@+id/imageViewPhoto"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/ic_user_image" />
+        android:src="@drawable/ic_user_image"
+        app:civ_border_color="#fff"
+        app:civ_border_width="2dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,22 +25,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/grey"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imageViewSex"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginLeft="5dp"
             android:src="@mipmap/ic_male_female"
-            android:tint="@color/theme_app" />
+            android:tint="@color/grey_50" />
 
         <TextView
+            android:id="@+id/textViewRole"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="top"
-            android:textColor="#ff0000"
-            android:id="@+id/textViewRole"/>
+            android:textColor="@color/theme_app" />
 
 
     </LinearLayout>
@@ -49,7 +53,7 @@
         android:layout_marginTop="@dimen/spacing_cell"
         android:drawableLeft="@mipmap/ic_diamond"
         android:drawablePadding="@dimen/half_spacing_cell"
-        android:textColor="#000"
+        android:textColor="@color/super_black"
         android:textSize="20sp" />
 
     <Button

@@ -4,7 +4,7 @@ import com.thm.hoangminh.multimediamarket.models.Card;
 import com.thm.hoangminh.multimediamarket.models.RechargeHistory;
 import com.thm.hoangminh.multimediamarket.views.RechargeHistoryViews.RechargeHistoryView;
 
-public class RechargeHistoryPresenter implements RechargeHistoryListener{
+public class RechargeHistoryPresenter implements RechargeHistoryListener {
 
     private RechargeHistoryView listener;
     private RechargeHistoryInteractor interactor;

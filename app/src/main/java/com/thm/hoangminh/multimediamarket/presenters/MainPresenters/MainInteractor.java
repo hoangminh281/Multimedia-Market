@@ -14,7 +14,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.thm.hoangminh.multimediamarket.models.Category;
 import com.thm.hoangminh.multimediamarket.models.User;
+
+import java.util.ArrayList;
 
 public class MainInteractor {
 
@@ -36,6 +39,27 @@ public class MainInteractor {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     listener.onLoadUserProfileSuccess(dataSnapshot.getValue(User.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void LoadCategory() {
+        mRef.child("categories").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                    ArrayList<Category> categories = new ArrayList<>();
+                    for (DataSnapshot item : iterable) {
+                        categories.add(item.getValue(Category.class));
+                    }
+                    listener.onLoadCategorySuccess(categories);
                 }
             }
 

@@ -8,6 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <!--<item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif
+        </item>-->
     </style>
 
     <style name="separate_line">
@@ -24,6 +27,20 @@
         <item name="android:background">@color/grey_5</item>
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
+    </style>
+
+    <style name="progressbarRating" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleY">2</item>
+        <item name="android:minHeight">8dp</item>
+        <item name="android:maxHeight">8dp</item>
+    </style>
+
+    <style name="separate_space">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:background">@color/grey_10</item>
     </style>
 
 </resources>

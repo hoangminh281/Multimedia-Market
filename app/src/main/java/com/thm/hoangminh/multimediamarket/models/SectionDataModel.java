@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SectionDataModel {
-
+    private String cate_id;
     private String section_id;
     private String headerTitle;
-    private ArrayList<Game> allItemsInSection;
-    private List<String> game_id_arr;
+    private ArrayList<Product> allItemsInSection;
+    private List<String> product_id_arr;
     private boolean request_deny;
 
     public SectionDataModel() {
         this.allItemsInSection = new ArrayList<>();
     }
 
-    public SectionDataModel(String headerTitle, ArrayList<Game> allItemsInSection) {
+    public SectionDataModel(String headerTitle, ArrayList<Product> allItemsInSection) {
         this.headerTitle = headerTitle;
         this.allItemsInSection = allItemsInSection;
     }
 
-    public SectionDataModel(String section_id, String headerTitle, ArrayList<Game> allItemsInSection) {
+    public SectionDataModel(String section_id, String headerTitle, ArrayList<Product> allItemsInSection) {
         this.section_id = section_id;
         this.headerTitle = headerTitle;
         this.allItemsInSection = allItemsInSection;
@@ -42,24 +42,24 @@ public class SectionDataModel {
         this.headerTitle = headerTitle;
     }
 
-    public ArrayList<Game> getAllItemsInSection() {
+    public ArrayList<Product> getAllItemsInSection() {
         return allItemsInSection;
     }
 
-    public void setAllItemsInSection(ArrayList<Game> allItemsInSection) {
+    public void setAllItemsInSection(ArrayList<Product> allItemsInSection) {
         this.allItemsInSection = allItemsInSection;
     }
 
-    public void addItemInSection(Game game) {
-        this.allItemsInSection.add(game);
+    public void addItemInSection(Product product) {
+        this.allItemsInSection.add(product);
     }
 
-    public List<String> getGame_id_arr() {
-        return game_id_arr;
+    public List<String> getProduct_id_arr() {
+        return product_id_arr;
     }
 
-    public void setGame_id_arr(List<String> game_id_arr) {
-        this.game_id_arr = game_id_arr;
+    public void setProduct_id_arr(List<String> product_id_arr) {
+        this.product_id_arr = product_id_arr;
     }
 
     public boolean isRequest_deny() {
@@ -68,5 +68,13 @@ public class SectionDataModel {
 
     public void setRequest_deny(boolean request_deny) {
         this.request_deny = request_deny;
+    }
+
+    public String getCate_id() {
+        return cate_id;
+    }
+
+    public void setCate_id(String cate_id) {
+        this.cate_id = cate_id;
     }
 }

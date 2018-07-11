@@ -10,28 +10,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.models.Section;
 import com.thm.hoangminh.multimediamarket.models.SectionDataModel;
-import com.thm.hoangminh.multimediamarket.presenters.HomePresenters.HomePresenter;
-import com.thm.hoangminh.multimediamarket.views.GameViews.GameActivity;
-import com.thm.hoangminh.multimediamarket.views.HomeViews.HomeView;
+import com.thm.hoangminh.multimediamarket.presenters.SectionPresenters.SectionPresenter;
+import com.thm.hoangminh.multimediamarket.views.ProductViews.ProductActivity;
+import com.thm.hoangminh.multimediamarket.views.SectionViews.SectionView;
 
 import java.util.ArrayList;
 
-public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.ItemRowHolder> implements HomeView {
+public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.ItemRowHolder> implements SectionView {
 
     private ArrayList<SectionDataModel> dataList;
     private Context mContext;
-    private HomePresenter presenter;
+    private SectionPresenter presenter;
     private SectionListDataAdapter itemListDataAdapter;
 
     public AllSectionsAdapter(Context context, ArrayList<SectionDataModel> dataList) {
         this.dataList = dataList;
         this.mContext = context;
-        this.presenter = new HomePresenter(this);
+        this.presenter = new SectionPresenter(this);
     }
 
     @Override
@@ -42,6 +41,8 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
 
     @Override
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
+        final String cateId = dataList.get(i).getCate_id();
+
         final String sectionId = dataList.get(i).getSection_id();
 
         final String sectionName = dataList.get(i).getHeaderTitle();
@@ -69,7 +70,7 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
                 super.onScrolled(recyclerView, dx, dy);
                 Boolean isBottomReached = !recyclerView.canScrollHorizontally(1);
                 if (isBottomReached) {
-                    presenter.LoadGamesBySectionPaging(dataList.get(i));
+                    presenter.LoadProductsBySectionPaging(dataList.get(i));
                 }
             }
         });
@@ -77,11 +78,12 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
         itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent moveToGameActivity = new Intent(mContext, GameActivity.class);
+                Intent moveToProductActivity = new Intent(mContext, ProductActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("section_id", sectionId);
-                moveToGameActivity.putExtras(bundle);
-                mContext.startActivity(moveToGameActivity);
+                bundle.putString("cate_id", cateId);
+                moveToProductActivity.putExtras(bundle);
+                mContext.startActivity(moveToProductActivity);
             }
         });
 

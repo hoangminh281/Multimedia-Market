@@ -1,11 +1,13 @@
 package com.thm.hoangminh.multimediamarket.models;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,8 +20,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.views.ProfileViews.ProfileView;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Calendar;
 
 /**
  * Created by Dell on 5/7/2018.
@@ -30,6 +38,8 @@ public class User {
     private int sex; // 0: male, 1: female
     private double balance;
     private int role; // 0: Admin, 1: mode, 2: user
+
+    private final String DEFAULT_IMG_KEY = "user.png";
 
     private static User instance;
 
@@ -207,6 +217,79 @@ public class User {
 
             }
         });
+    }
+
+    public void LoadUserImageGender(ImageView img) {
+        if (sex == 0) {
+            img.setImageResource(R.mipmap.ic_male);
+        } else if (sex == 1) {
+            img.setImageResource(R.mipmap.ic_female);
+        } else {
+            img.setImageResource(R.mipmap.ic_male_female);
+        }
+    }
+
+    public void UpdateImageCurrentUser(final Context context, Bitmap bitmap) {
+        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+        final StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+
+        final String newImage = "image" + Calendar.getInstance().getTimeInMillis() + ".png";
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        final byte[] data = baos.toByteArray();
+
+        if (image.equals(DEFAULT_IMG_KEY)) {
+            mStorageRef.child("users/" + newImage).putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    mRef.child("users/" + id + "/image").setValue(newImage).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(context, R.string.info_editSuccess, Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mStorageRef.child("users/" + newImage).delete();
+                            Toast.makeText(context, R.string.infor_failure, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(context, R.string.infor_failure, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            mStorageRef.child("users/" + image).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    mStorageRef.child("users/" + newImage).putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            mRef.child("users/" + id + "/image").setValue(newImage).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(context, R.string.info_editSuccess, Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    mStorageRef.child("users/" + newImage).delete();
+                                    Toast.makeText(context, R.string.infor_failure, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(context, R.string.infor_failure, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        }
     }
 
 }

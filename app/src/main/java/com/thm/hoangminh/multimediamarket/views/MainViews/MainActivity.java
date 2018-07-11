@@ -1,6 +1,8 @@
 package com.thm.hoangminh.multimediamarket.views.MainViews;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -19,18 +21,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.thm.hoangminh.multimediamarket.models.Category;
+import com.thm.hoangminh.multimediamarket.BookmarkActivity;
+import com.thm.hoangminh.multimediamarket.views.ModifyProductViews.ModifyProductActivity;
+import com.thm.hoangminh.multimediamarket.views.ProfileViews.ProfileActivity;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.references.Tools;
 import com.thm.hoangminh.multimediamarket.views.RechargeViews.RechargeActivity;
 import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.presenters.MainPresenters.MainPresenter;
-import com.thm.hoangminh.multimediamarket.views.HomeViews.HomeFragment;
+import com.thm.hoangminh.multimediamarket.views.SectionViews.SectionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MainView {
+public class MainActivity extends AppCompatActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -44,6 +49,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private ImageView imgSex;
     private MainPresenter presenter;
 
+    public final static String HOME_KEY = "home";
+    public static ArrayList<Category> categories;
+
+    public final static String BUNDLE_KEY = "keyMode";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +63,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         initPresenter();
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         setupNavigationView();
 
         presenter.LoadUserProfile();
-
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
-
-        setEvents();
+        presenter.LoadCategory();
     }
 
     public void initPresenter() {
@@ -72,13 +80,22 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void updateUI(User user) {
         user.LoadUserImageView(imgUser, this);
         user.LoadUserRole(txtRole);
+        user.LoadUserImageGender(imgSex);
         txtUserName.setText(user.getName());
-        if (user.getSex() == 0) {
-            imgSex.setImageResource(R.mipmap.ic_male);
-        } else if (user.getSex() == 1) {
-            imgSex.setImageResource(R.mipmap.ic_female);
-        }
-        txtBalance.setText(Tools.FormatDecimal(user.getBalance()) + "đ");
+        txtBalance.setText(Tools.FormatMoney(user.getBalance()));
+    }
+
+    @Override
+    public void showCategory(ArrayList<Category> categories) {
+        MainActivity.categories = categories;
+
+        navigationView.setNavigationItemSelectedListener(this); // this must be below to avoid user click toggle when categories null
+
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+        setupTabIcons();
+
+        setEvents();
     }
 
     @Override
@@ -94,8 +111,24 @@ public class MainActivity extends AppCompatActivity implements MainView {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.menu_profile:
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_profile:
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_bookmark:
+                intent = new Intent(MainActivity.this, BookmarkActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_modifyProduct:
+                intent = new Intent(MainActivity.this, ModifyProductActivity.class);
+                startActivity(intent);
                 break;
             case R.id.menu_setting:
 
@@ -110,18 +143,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
                 break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void setupNavigationView() {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(drawerToggle);
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
         View headerView = navigationView.inflateHeaderView(R.layout.header_drawer_layout);
+
 
         btnRecharge = headerView.findViewById(R.id.buttonRecharge);
         imgUser = headerView.findViewById(R.id.imageViewPhoto);
@@ -133,43 +163,49 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HomeFragment(), "Home");
-        /*adapter.addFragment(new HomePageResActivity(), "Store");
-        adapter.addFragment(new CategoryFragment(), "Category");
-        adapter.addFragment(new SavedProductFragment(), "SavedProduct");
-        adapter.addFragment(new UserActivity(), "User");*/
+
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_KEY, HOME_KEY);
+        SectionFragment homeFragment = new SectionFragment();
+        homeFragment.setArguments(bundle);
+        adapter.addFragment(homeFragment, "Home");
+
+        for (Category category : categories) {
+            bundle = new Bundle();
+            bundle.putString(BUNDLE_KEY, category.getCate_id());
+            SectionFragment fragment = new SectionFragment();
+            fragment.setArguments(bundle);
+            adapter.addFragment(fragment, category.getName());
+        }
+
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(1);
+        viewPager.setOffscreenPageLimit(1 + categories.size());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        /*for (int i=0; i< tabLayout.getTabCount(); i++) {
-            if (i==tabLayout.getSelectedTabPosition()) continue;
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            if (i == tabLayout.getSelectedTabPosition()) continue;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 tabLayout.getTabAt(i).getIcon().setTint(getResources().getColor(R.color.separate_line));
             }
-        }*/
+        }
     }
 
     private void setupTabIcons() {
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            tabLayout.getTabAt(0).setIcon(R.mipmap.ic_home).getIcon().setTint(getResources().getColor(R.color.themeApp));
-            tabLayout.getTabAt(1).setIcon(R.mipmap.ic_store).getIcon();
-            tabLayout.getTabAt(2).setIcon(R.mipmap.ic_cook).getIcon();
-            tabLayout.getTabAt(3).setIcon(R.mipmap.ic_save).getIcon();
-            tabLayout.getTabAt(4).setIcon(R.mipmap.ic_person).getIcon();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tabLayout.getTabAt(0).setIcon(R.mipmap.ic_home).getIcon().setTint(getResources().getColor(R.color.theme_app));
+            tabLayout.getTabAt(1).setIcon(R.mipmap.ic_game).getIcon().setTint(getResources().getColor(R.color.separate_line));
+            tabLayout.getTabAt(2).setIcon(R.mipmap.ic_image).getIcon().setTint(getResources().getColor(R.color.separate_line));
+            tabLayout.getTabAt(3).setIcon(R.mipmap.ic_video).getIcon().setTint(getResources().getColor(R.color.separate_line));
+            tabLayout.getTabAt(4).setIcon(R.mipmap.ic_music).getIcon().setTint(getResources().getColor(R.color.separate_line));
         }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     tab.getIcon().setTint(getResources().getColor(R.color.theme_app));
-                }
-                if (tab.getPosition() == 2) {
-                    toolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
-                    tabLayout.setBackgroundColor(getResources().getColor(R.color.toolbar));
                 }
             }
 
@@ -178,17 +214,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     tab.getIcon().setTint(getResources().getColor(R.color.separate_line));
                 }
-                if (tab.getPosition() == 2) {
-                    toolbar.setBackgroundColor(getResources().getColor(R.color.theme_app));
-                    tabLayout.setBackgroundColor(getResources().getColor(R.color.tablayout));
-                }
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });*/
+        });
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -216,17 +248,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            return "";
         }
 
-    }
-
-    void setControls() {
-        toolbar = findViewById(R.id.toolbarHome);
-        tabLayout = findViewById(R.id.tablayoutHome);
-        viewPager = findViewById(R.id.viewPagerHome);
-        drawerLayout = findViewById(R.id.activity_main_drawer);
-        navigationView = findViewById(R.id.navView);
     }
 
     private void setEvents() {
@@ -237,6 +261,14 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 startActivity(intent);
             }
         });
+    }
+
+    void setControls() {
+        toolbar = findViewById(R.id.toolbarHome);
+        tabLayout = findViewById(R.id.tablayoutHome);
+        viewPager = findViewById(R.id.viewPagerHome);
+        drawerLayout = findViewById(R.id.activity_main_drawer);
+        navigationView = findViewById(R.id.navView);
     }
 
 }

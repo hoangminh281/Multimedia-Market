@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:drawableLeft="@mipmap/ic_lock"
+        android:drawableLeft="@mipmap/ic_person_2"
+        android:drawableTint="@color/theme_app"
         android:drawablePadding="20dp"
         android:hint="@string/hint_username"
         android:padding="25dp"
@@ -29,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:drawableLeft="@mipmap/ic_person"
+        android:drawableLeft="@mipmap/ic_mail"
         android:drawablePadding="20dp"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
@@ -43,27 +44,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:drawableLeft="@mipmap/ic_lock"
+        android:drawableLeft="@mipmap/ic_lock_2"
         android:drawablePadding="20dp"
         android:hint="@string/hint_password"
         android:padding="25dp"
         android:textSize="14sp"
         android:textColor="#fff"
         android:textColorHint="#fff"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:fontFamily="sans-serif"/>
     <EditText
         android:id="@+id/edtPasswordConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:drawableLeft="@mipmap/ic_lock"
+        android:drawableLeft="@mipmap/ic_lock_2"
         android:drawablePadding="20dp"
         android:hint="@string/hint_repassword"
         android:padding="25dp"
         android:textSize="14sp"
         android:textColor="#fff"
         android:textColorHint="#fff"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:fontFamily="sans-serif"/>
 
     <TextView
         android:layout_width="match_parent"

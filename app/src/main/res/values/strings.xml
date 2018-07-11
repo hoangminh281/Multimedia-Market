@@ -6,7 +6,7 @@
     <string name="hint_email" translatable="false">Email</string>
     <string name="hint_password">Enter minimum 6 digit password</string>
     <string name="hint_repassword">Password Confirm</string>
-    <string name="hint_username">User Name</string>
+    <string name="hint_username">Username</string>
     <string name="btn_google">Sign in with Google</string>
     <string name="txt_or">OR</string>
     <string name="btn_facebook">Sign in with Facebook</string>
@@ -63,4 +63,86 @@
     <string name="txt_unRecharge">Unrecharge</string>
     <string name="txt_failure">Failure</string>
     <string name="txt_cardDetail">Card detail</string>
+    <string name="txt_allowCheckout">Checkout by ONE-Click</string>
+    <string name="txt_NotAllowCheckout">The Wallet need more energy!!! Recharge now</string>
+    <string name="btn_checkout">Checkout</string>
+    <string name="btn_install">Install</string>
+    <string name="info_buyingSuccess">Congratulation!!! You successfully checkout</string>
+    <string name="info_saved">Marked this content</string>
+    <string name="info_unSaved">Unmarked this content</string>
+    <string name="hint_birthday">Birthday</string>
+    <string name="hint_gender">Gender</string>
+    <string name="info_male">Male</string>
+    <string name="info_female">Female</string>
+    <string name="txt_game">Game</string>
+    <string name="txt_image">Image</string>
+    <string name="txt_video" translatable="false">Video</string>
+    <string name="txt_music">Music</string>
+    <string name="menu_edit">Edit</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_save">Save</string>
+    <string name="hint_enter_username">Enter your username</string>
+    <string name="info_editSuccess">Successfully updated!</string>
+    <string name="hint_enter_email">Enter your email</string>
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Others</item>
+    </string-array>
+    <string name="info_others">Others</string>
+    <string name="txt_password">Password</string>
+    <string name="err_passnotsame">Password is not matching</string>
+    <string name="err_notlength">"Password must be at least 6 characters "</string>
+    <string name="txt_pathFile">File</string>
+    <string name="hint_file">Choose your file</string>
+    <string name="hint_video">Enter youtube link</string>
+    <string name="txt_description">Description</string>
+    <string name="hint_description">Enter description</string>
+    <string name="txt_intro">Introduction</string>
+    <string name="hint_intro">Enter introduction</string>
+    <string name="txt_ageLimit">Age limit</string>
+    <string name="txt_price">Price</string>
+    <string name="txt_title">Title</string>
+    <string name="hint_price">Enter amount of money</string>
+    <string name="hint_title">Enter the amazing title</string>
+    <string name="hint_ageLimit">Choose age limit</string>
+    <string name="txt_Category">Category</string>
+    <string name="hint_category">Choose category</string>
+    <string name="menu_remove">Remove</string>
+    <string name="menu_pickImage">Pick a image</string>
+    <string name="menu_takeImage">Take a image</string>
+    <string name="menu_bookmark">Favorite list</string>
+    <string name="menu_upload">Upload</string>
+    <string-array name="thanksTickers">
+        <item>tk_thanks1</item>
+        <item>tk_thanks2</item>
+        <item>tk_thanks3</item>
+        <item>tk_thanks4</item>
+        <item>tk_thanks5</item>
+        <item>tk_thanks6</item>
+        <item>tk_thanks7</item>
+        <item>tk_thanks8</item>
+        <item>tk_thanks9</item>
+        <item>tk_thanks10</item>
+    </string-array>
+    <string name="menu_update">Update</string>
+    <string name="menu_delete">Delete</string>
+    <string name="btn_ok">Ok</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="info_delete">Are you sure you want to delete this item?</string>
+    <string name="dialog_successfully_delete_section">Deleted successfully old sections</string>
+    <string name="dialog_successfully_update_section">Updated successfully new sections</string>
+    <string name="dialog_successfully_update_product">Updated successfully product</string>
+    <string name="dialog_successfully_update_product_detail">Updated successfully product detail</string>
+    <string name="dialog_successfully_update_image_product">Updated successfully product image</string>
+    <string name="dialog_successfully_update_image_product_detail">Updated successfully product detail image</string>
+    <string name="dialog_successfully_upload_file">Uploaded successfully file</string>
+    <string name="dialog_failure_update_image_product">Update failed product image</string>
+    <string name="dialog_failure_update_image_product_detail">Update failed product detail image</string>
+    <string name="dialog_failure_update_product">Update failed product</string>
+    <string name="dialog_failure_delete_section_product">Deleted failed product section</string>
+    <string name="dialog_failure_update_section_product">Updated failed product section</string>
+    <string name="dialog_failure_delete_file">Uploaded failed file</string>
+    <string name="dialog_successfully_delete_product">Deleted successfully product</string>
+    <string name="dialog_failure_delete_product">Deleted failure product</string>
 </resources>

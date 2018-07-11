@@ -1,6 +1,7 @@
 package com.thm.hoangminh.multimediamarket.views.RechargeViews;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.models.Card;
 import com.thm.hoangminh.multimediamarket.presenters.RechargePresenters.RechargePresenter;
 import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.views.RechargeHistoryViews.RechargeHistoryActivity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -53,7 +55,7 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
     }
 
     private void initPresenter() {
-        presenter = new RechargePresenter(this, this);
+        presenter = new RechargePresenter(this);
     }
 
     public void onClicked_btnNext(View view) {
@@ -131,7 +133,7 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
                             rbCardValueList.get(checkedPositionCardValue).setTextColor(getResources().getColor(R.color.black));
                         }
                         checkedPositionCardValue = rbCardValueList.indexOf(rb);
-                        txtTotal.setText(Tools.FormatDecimal(balance + Card.cardValueList[checkedPositionCardValue]) + "đ");
+                        txtTotal.setText(Tools.FormatMoney(balance + Card.cardValueList[checkedPositionCardValue]));
 
                     }
                 }
@@ -158,7 +160,7 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
     public void showTotal(double balance) {
         this.balance = balance;
         double total = balance + (checkedPositionCardValue == -1 ? 0 : Card.cardValueList[checkedPositionCardValue]);
-        String value = Tools.FormatDecimal(total) + "đ";
+        String value = Tools.FormatMoney(total);
         txtTotal.setText(value);
     }
 
@@ -170,5 +172,17 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showMessageFromResource(int resource) {
+        Toast.makeText(this, getResources().getString(resource), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startRechargeHistoryActivity(Bundle bundle) {
+        Intent intent = new Intent(this, RechargeHistoryActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

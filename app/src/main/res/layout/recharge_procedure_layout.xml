@@ -282,7 +282,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:elevation="10dp">
 
         <TextView
             style="@style/separate_line"

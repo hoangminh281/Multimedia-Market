@@ -14,10 +14,8 @@ import java.util.ArrayList;
 public class RechargePresenter implements RechargeListener {
     private RechargeView listener;
     private RechargeInteractor interactor;
-    private Context context;
 
-    public RechargePresenter(Context context, RechargeView listener) {
-        this.context = context;
+    public RechargePresenter(RechargeView listener) {
         this.listener = listener;
         this.interactor = new RechargeInteractor(this);
     }
@@ -33,21 +31,19 @@ public class RechargePresenter implements RechargeListener {
 
     @Override
     public void onRechargeCardSuccess(String trans_id) {
-        Intent intent = new Intent(context, RechargeHistoryActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("trans_code", trans_id);
-        intent.putExtras(bundle);
-        context.startActivity(intent);
+        listener.startRechargeHistoryActivity(bundle);
     }
 
     @Override
     public void onRechargeCardFailure() {
-        listener.showMessage(context.getResources().getString(R.string.infor_failure));
+        listener.showMessageFromResource(R.string.infor_failure);
     }
 
     @Override
     public void onRechargeCardWrong() {
-        listener.showMessage(context.getResources().getString(R.string.info_wrong));
+        listener.showMessageFromResource(R.string.info_wrong);
     }
 
     public void RechargeCard(Card card, int category, int value) {

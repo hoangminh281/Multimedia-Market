@@ -13,21 +13,22 @@ import android.widget.TextView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.thm.hoangminh.multimediamarket.R;
-import com.thm.hoangminh.multimediamarket.models.Game;
-import com.thm.hoangminh.multimediamarket.views.GameDetailViews.GameDetailActivity;
+import com.thm.hoangminh.multimediamarket.models.Product;
+import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.views.ProductDetailViews.ProductDetailActivity;
 
 import java.util.ArrayList;
 
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
 
-    private ArrayList<Game> itemsList;
+    private ArrayList<Product> itemsList;
     private Context mContext;
     private StorageReference mStorageRef;
 
-    public SectionListDataAdapter(Context context, ArrayList<Game> itemsList) {
+    public SectionListDataAdapter(Context context, ArrayList<Product> itemsList) {
         this.itemsList = itemsList;
         this.mContext = context;
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        this.mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
     @Override
@@ -39,12 +40,12 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
     @Override
     public void onBindViewHolder(final SingleItemRowHolder holder, int i) {
-        Game game = itemsList.get(i);
-        game.setBitmapImage(holder.img, mContext);
-        holder.tvTitle.setText(game.getTitle());
-        holder.tvPrice.setText(game.getPrice().toString());
-        holder.tvRate.setText(game.getRating() + "");
-        holder.game = game;
+        Product product = itemsList.get(i);
+        product.setBitmapImage(holder.img, mContext);
+        holder.tvTitle.setText(product.getTitle());
+        holder.tvPrice.setText(Tools.FormatMoney(product.getPrice()));
+        holder.tvRate.setText(product.getRating() + "");
+        holder.product = product;
     }
 
     @Override
@@ -55,7 +56,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     public class SingleItemRowHolder extends RecyclerView.ViewHolder {
         private TextView tvTitle, tvRate, tvPrice;
         private ImageView img;
-        private Game game;
+        private Product product;
 
         private SingleItemRowHolder(View view) {
             super(view);
@@ -66,9 +67,9 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GameDetailActivity.class);
+                    Intent intent = new Intent(mContext, ProductDetailActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("game_object", game);
+                    bundle.putSerializable("product_object", product);
                     intent.putExtras(bundle);
                     mContext.startActivity(intent);
                 }

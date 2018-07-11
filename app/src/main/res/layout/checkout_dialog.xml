@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayoutDialog">
+
+        <ImageView
+            android:id="@+id/imageViewLogo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="#fff"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_cell"
+            android:layout_marginRight="@dimen/spacing_cell"
+            android:layout_toLeftOf="@id/textViewPrice"
+            android:layout_toRightOf="@+id/imageViewLogo"
+            android:lines="2"
+            android:textColor="@color/super_black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textViewPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/theme_app"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textViewContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageViewLogo"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:textSize="15sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/textViewWallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewContent"
+            android:drawableLeft="@mipmap/ic_diamond"
+            android:textColor="@color/super_black"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/buttonCheckout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/textViewContent"
+            android:background="@drawable/blue_radius_button"
+            android:minHeight="35dp"
+            android:minWidth="120dp"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/progressBarDialog"/>
+
+</RelativeLayout>

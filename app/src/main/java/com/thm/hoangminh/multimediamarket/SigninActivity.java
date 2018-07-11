@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -48,6 +49,9 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
         SetControl();
         //mAuth.signOut();
         CreateClientLoginGG();
+
+        progressDialog.setMessage("Loading...");
+        progressDialog.setIndeterminate(true);
     }
 
 
@@ -77,8 +81,6 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
     }
 
     public void Signin(View view) {
-        progressDialog.setMessage("Loading...");
-        progressDialog.setIndeterminate(true);
         progressDialog.show();
 
         String username = edtUsername.getText().toString().trim();
@@ -98,6 +100,8 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(SigninActivity.this, "Đăng nhập thất bại.", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Đăng nhập thất bại. " + e.getMessage());
                 }
             });
@@ -110,7 +114,9 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
         progressDialog.dismiss();
         final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), "user.png", firebaseUser.getEmail(), firebaseUser.getPhoneNumber(), "",2, 2, 0).createUserOnFirebase();
+            new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), "user.png"
+                    , firebaseUser.getEmail(), firebaseUser.getPhoneNumber(), "",2
+                    , 0, 0).createUserOnFirebase();
             Intent in = new Intent(SigninActivity.this, MainActivity.class);
             startActivity(in);
             finish();
@@ -118,6 +124,7 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
     }
 
     public void SigninGG(View view) {
+        progressDialog.show();
         CHECK_AUTHENTICATION = 2222;
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);

@@ -3,6 +3,7 @@
     package="com.thm.hoangminh.multimediamarket">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -19,10 +20,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".views.GameViews.GameActivity" />
-        <activity android:name=".views.GameDetailViews.GameDetailActivity" />
+        <activity android:name=".views.ProductViews.ProductActivity" />
+        <activity
+            android:name=".views.ProductDetailViews.ProductDetailActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".views.RechargeViews.RechargeActivity" />
-        <activity android:name=".views.RechargeHistoryViews.RechargeHistoryActivity"></activity>
+        <activity android:name=".views.RechargeHistoryViews.RechargeHistoryActivity" />
+        <activity android:name=".RatingActivity" />
+        <activity android:name=".views.ProfileViews.ProfileActivity" />
+        <activity
+            android:name=".views.fragments.ModifyProductFragment"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".BookmarkActivity" />
+        <activity android:name=".views.ModifyProductViews.ModifyProductActivity" />
+        <activity android:name=".views.UpdateProductViews.UpdateProductActivity"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

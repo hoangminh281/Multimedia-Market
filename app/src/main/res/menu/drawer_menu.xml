@@ -4,6 +4,12 @@
         android:id="@+id/menu_profile"
         android:title="@string/btn_profile" />
     <item
+        android:id="@+id/menu_bookmark"
+        android:title="@string/menu_bookmark" />
+    <item
+        android:id="@+id/menu_modifyProduct"
+        android:title="@string/menu_upload" />
+    <item
         android:id="@+id/menu_setting"
         android:title="@string/btn_setting" />
     <item
