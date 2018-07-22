@@ -8,7 +8,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/theme_app"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
 
@@ -107,7 +107,8 @@
                         android:minHeight="35dp"
                         android:minWidth="120dp"
                         android:textAllCaps="false"
-                        android:textColor="#fff" />
+                        android:textColor="#fff"
+                        android:enabled="false"/>
 
                     <TextView style="@style/separate_line" />
 

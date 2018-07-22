@@ -1,46 +1,67 @@
-package com.thm.hoangminh.multimediamarket;
+package com.thm.hoangminh.multimediamarket.views.BookmarkViews;
 
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.adapters.ViewPagerAdapter;
 import com.thm.hoangminh.multimediamarket.models.Category;
+import com.thm.hoangminh.multimediamarket.models.User;
+import com.thm.hoangminh.multimediamarket.presenters.BookmarkPresenters.BookmarkPresenter;
+import com.thm.hoangminh.multimediamarket.views.CardViews.CardActivity;
 import com.thm.hoangminh.multimediamarket.views.MainViews.MainActivity;
 import com.thm.hoangminh.multimediamarket.views.fragments.ProductFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookmarkActivity extends AppCompatActivity {
-    private Toolbar toolbar;
+public class BookmarkActivity extends AppCompatActivity implements BookmarkView {
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private ViewPagerAdapter adapter;
+    private Toolbar toolbar;
+    private BookmarkPresenter presenter;
+
+    public final static String bookmarkKey = "bookmark_cate_id";
+    public final static String productAdminKey = "productAdmin";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmark);
-
         setControls();
-
-        showCategoriesTabLayout();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
 
-
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.getString(MainActivity.BUNDLE_KEY).equals("admin")) {
+            showCategoriesTabLayout(productAdminKey);
+            getSupportActionBar().setTitle(getResources().getString(R.string.menu_product_admin) + "");
+            initPresenter();
+            presenter.findCurrentUserRole();
+        } else {
+            showCategoriesTabLayout(bookmarkKey);
+            getSupportActionBar().setTitle(getResources().getString(R.string.menu_bookmark) + "");
+        }
         setEvents();
+    }
+
+    private void initPresenter() {
+        presenter = new BookmarkPresenter(this);
     }
 
     @Override
@@ -54,20 +75,17 @@ public class BookmarkActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showCategoriesTabLayout() {
+    public void showCategoriesTabLayout(String key) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
         for (Category category : MainActivity.categories) {
             Bundle bundle = new Bundle();
-            bundle.putString("bookmark_cate_id", category.getCate_id());
+            bundle.putString(key, category.getCate_id());
             ProductFragment productFragment = new ProductFragment();
             productFragment.setArguments(bundle);
             adapter.addFragment(productFragment, category.getName());
         }
-
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(MainActivity.categories.size());
-
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
     }
@@ -99,6 +117,29 @@ public class BookmarkActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void bindingUserRole(Integer role_id) {
+        if (role_id != User.ADMIN) {
+            Handler handler = new Handler();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(BookmarkActivity.this, R.string.info_fail_role, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null)
+            presenter.RemoveListener();
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -135,8 +176,8 @@ public class BookmarkActivity extends AppCompatActivity {
     }
 
     private void setControls() {
-        toolbar = findViewById(R.id.toolbarHome);
         tabLayout = findViewById(R.id.tablayoutHome);
         viewPager = findViewById(R.id.viewPagerHome);
+        toolbar = findViewById(R.id.toolbar);
     }
 }

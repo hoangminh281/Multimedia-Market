@@ -1,6 +1,12 @@
 package com.thm.hoangminh.multimediamarket.presenters.ProductDetailPresenters;
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -14,10 +20,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.thm.hoangminh.multimediamarket.models.Product;
 import com.thm.hoangminh.multimediamarket.models.ProductDetail;
 import com.thm.hoangminh.multimediamarket.models.RatingContent;
 import com.thm.hoangminh.multimediamarket.models.User;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +46,7 @@ public class ProductDetailInteractor {
     }
 
     public void LoadProductDetailById(String product_id) {
-        mRef.child("product_detail/" + product_id).addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.child("product_detail/" + product_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -70,18 +79,18 @@ public class ProductDetailInteractor {
         });
     }
 
-    public void LoadProductTransactionHistory(String product_id) {
-        mRef.child("purchased_product/" + firebaseUser.getUid() + "/" + product_id).addValueEventListener(new ValueEventListener() {
+    public void LoadProductTransactionHistory(String cate_id, String product_id) {
+        mRef.child("purchased_product/" + firebaseUser.getUid() + "/" + cate_id + "/" + product_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists())
                     listener.onLoadProductTransactionHistorySuccess();
-                }
+                else listener.onLoadProductTransactionHistoryFailure();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                listener.onLoadProductTransactionHistoryFailure();
             }
         });
     }
@@ -213,7 +222,7 @@ public class ProductDetailInteractor {
         });
     }
 
-    public synchronized void CheckoutProductbyId(final String product_id) {
+    public synchronized void CheckoutProductbyId(final String cate_id, final String product_id, final String owner_id) {
         mRef.child("users/" + firebaseUser.getUid() + "/balance").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -223,21 +232,50 @@ public class ProductDetailInteractor {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
-                                double price = dataSnapshot.getValue(double.class);
+                                final double price = dataSnapshot.getValue(double.class);
                                 double refund = balance - price;
                                 if (refund > -1) {
                                     mRef.child("users/" + firebaseUser.getUid() + "/balance").setValue(refund).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-
                                             SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
-
-                                            mRef.child("purchased_product/" + firebaseUser.getUid() + "/" + product_id + "/time")
+                                            mRef.child("purchased_product/" + firebaseUser.getUid() + "/" + cate_id + "/" + product_id + "/time")
                                                     .setValue(dateFormatter.format(Calendar.getInstance().getTime()))
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
-                                                            listener.onCheckoutProductbyIdSuccess();
+                                                            mRef.child("users/" + owner_id + "/balance").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                    mRef.child("users/" + owner_id + "/balance").setValue(dataSnapshot.getValue(double.class) + price).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                        @Override
+                                                                        public void onSuccess(Void aVoid) {
+                                                                            mRef.child("product_detail/" + product_id + "/downloaded").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                @Override
+                                                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                                    mRef.child("product_detail/" + product_id + "/downloaded").setValue(dataSnapshot.getValue(int.class) + 1);
+                                                                                }
+
+                                                                                @Override
+                                                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                                                }
+                                                                            });
+                                                                            listener.onCheckoutProductbyIdSuccess();
+                                                                        }
+                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            listener.onCheckoutProductbyIdFailure();
+                                                                        }
+                                                                    });
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(DatabaseError databaseError) {
+                                                                    listener.onCheckoutProductbyIdFailure();
+                                                                }
+                                                            });
                                                         }
                                                     }).addOnFailureListener(new OnFailureListener() {
                                                 @Override
@@ -289,16 +327,81 @@ public class ProductDetailInteractor {
         });
     }
 
-    public void DeleteProduct(String id) {
-        mRef.child("products/" + id + "/status").setValue(0).addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void ActiveProduct(String id, int status) {
+        mRef.child("products/" + id + "/status").setValue(status);
+    }
+
+    public void FindCurrentUser() {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        mRef.child("users/" + user.getUid() + "/role").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                listener.onDeleteProductSuccess();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                    listener.onFindCurrentUserSuccess(dataSnapshot.getValue(int.class), user.getUid());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void downLoadProduct(final Context context, final String fileName) {
+        if (fileName == null || fileName.equals("")) {
+            listener.onDownloadProductFailure();
+            return;
+        }
+        String[] splitFileName = fileName.split("\\.");
+        final File localFile;
+        try {
+            if (splitFileName.length == 1)
+                localFile = File.createTempFile(splitFileName[0], "");
+            else
+                localFile = File.createTempFile(splitFileName[0], "." + splitFileName[1]);
+        } catch (IOException e) {
+            listener.onDownloadProductFailure();
+            return;
+        }
+        if (localFile == null) {
+            listener.onDownloadProductFailure();
+            return;
+        }
+        mStorageRef.child("files/" + fileName).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                DownloadManager.Request request = new DownloadManager.Request(uri);
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS.toString(), fileName);
+                DownloadManager downloadManager = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
+                final Long refid = downloadManager.enqueue(request);
+                BroadcastReceiver onComplete = new BroadcastReceiver() {
+                    public void onReceive(Context ctxt, Intent intent) {
+                        if (refid != 0)
+                            listener.onDownloadProductSuccess();
+                    }
+                };
+                context.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                listener.onDeleteProductFailure(e);
+                listener.onDownloadProductFailure();
+            }
+        });
+    }
+
+    public void LoadProductById(String product_id) {
+        mRef.child("products/" + product_id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                    listener.onLoadProductByIdSuccess(dataSnapshot.getValue(Product.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

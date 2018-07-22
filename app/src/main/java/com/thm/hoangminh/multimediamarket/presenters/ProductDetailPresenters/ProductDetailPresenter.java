@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.models.Product;
 import com.thm.hoangminh.multimediamarket.models.ProductDetail;
 import com.thm.hoangminh.multimediamarket.models.RatingContent;
 import com.thm.hoangminh.multimediamarket.models.User;
@@ -32,14 +33,13 @@ public class ProductDetailPresenter implements ProductDetailListener {
         interactor.LoadBookmarkContent(cate_id, product_id);
     }
 
-    public void LoadProductTransactionHistory(String product_id) {
-        interactor.LoadProductTransactionHistory(product_id);
+    public void LoadProductTransactionHistory(String cate_id, String product_id) {
+        interactor.LoadProductTransactionHistory(cate_id, product_id);
     }
 
     @Override
     public void onLoadProductTransactionHistorySuccess() {
         listener.EnableInstall();
-
     }
 
     public void LoadRating(String product_id) {
@@ -114,9 +114,9 @@ public class ProductDetailPresenter implements ProductDetailListener {
         listener.hideDialogProgressbar();
     }
 
-    public void CheckoutProduct(String product_id) {
+    public void CheckoutProduct(String cate_id, String product_id, String owner_id) {
         listener.showDialogProgressbar();
-        interactor.CheckoutProductbyId(product_id);
+        interactor.CheckoutProductbyId(cate_id, product_id, owner_id);
     }
 
     @Override
@@ -149,18 +149,46 @@ public class ProductDetailPresenter implements ProductDetailListener {
         listener.showMessageFromResource(R.string.info_unSaved);
     }
 
-    public void DeleteProduct(String id) {
-        interactor.DeleteProduct(id);
+    public void ActiveProduct(String id, int status) {
+        interactor.ActiveProduct(id, status);
     }
 
     @Override
-    public void onDeleteProductSuccess() {
-        listener.showMessageFromResource(R.string.dialog_successfully_delete_product);
+    public void onFindCurrentUserSuccess(int role, String user_id) {
+        listener.onLoadCurrentUserSuccess(role, user_id);
     }
 
     @Override
-    public void onDeleteProductFailure(Exception e) {
-        listener.showMessageFromResource(R.string.dialog_failure_delete_product);
+    public void onDownloadProductSuccess() {
+        listener.showMessage(R.string.info_downloadFileSuccess);
+        listener.EnableInstall();
     }
 
+    @Override
+    public void onDownloadProductFailure() {
+        listener.showMessage(R.string.info_downloadFireFailure);
+        listener.EnableInstall();
+    }
+
+    @Override
+    public void onLoadProductTransactionHistoryFailure() {
+        listener.EnableButtonBuy();
+    }
+
+    @Override
+    public void onLoadProductByIdSuccess(Product value) {
+        listener.showProduct(value);
+    }
+
+    public void LoadCurrentUser() {
+        interactor.FindCurrentUser();
+    }
+
+    public void downLoadProduct(Context context , String fileName) {
+        interactor.downLoadProduct(context, fileName);
+    }
+
+    public void LoadProductById(String product_id) {
+        interactor.LoadProductById(product_id);
+    }
 }

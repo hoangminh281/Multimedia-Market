@@ -35,6 +35,7 @@ dependencies {
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    compile 'com.miguelcatalan:materialsearchview:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

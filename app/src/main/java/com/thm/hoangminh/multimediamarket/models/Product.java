@@ -6,6 +6,11 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -16,7 +21,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product implements Serializable {
+public class Product {
     private String product_id;
     private String cate_id;
     private String title;
@@ -105,19 +110,21 @@ public class Product implements Serializable {
     public static List<Product> initializeGame() {
         List<Product> data = new ArrayList<>();
         data.add(new Product("-LDlhVwX9fzrFxtdewJo", "-LGAQqsSdhMt2bTudm1L", "Don't starve: Pocket Edition", "dont-starve.png", 4.4, 110000, 1));
-        data.add(new Product("-LDlhVwesbhJsBsFVmEt", "-LGAQqsSdhMt2bTudm1L", "Angry Bird 2", "angry-birds-2.png", 4.6, 0,1));
-        data.add(new Product("-LDlhVwfP9wYLVhHgqI6", "-LGAQqsSdhMt2bTudm1L", "Ice Crush 2018 - A new Puzzle Matching Adventure", "ice-crush-2018.png", 4.6, 0,1));
-        data.add(new Product("-LDlhVwgwHDj__CE6gIz", "-LGAQqsSdhMt2bTudm1L", "My Town : ICEE™ Amusement Park", "my-town.png", 4.7, 22000,1));
-        data.add(new Product("-LDlhVwh2F9hNBas5vHD", "-LGAQqsSdhMt2bTudm1L", "Stickman Legends", "stickman.png", 4.3, 6000,1));
-        data.add(new Product("-LDlhVwj9j3tU89adLiE", "-LGAQqsSdhMt2bTudm1L", "Maze Planet 3D Pro", "maze-planet.png", 4.5, 27000,1));
-        data.add(new Product("-LDlhVwkEMtWv1ttsEVs", "-LGAQqsSdhMt2bTudm1L", "Mystic Guardian VIP : Old School Action RPG", "mystic-guardian.png", 4.3, 80000,1));
-        data.add(new Product("-LDlhVwlraRt24dXSmyx", "-LGAQqsSdhMt2bTudm1L", "Shadow of Death: Stickman Fighting - Dark Knight", "shadow-of-death.png", 4.6, 9000,1));
-        data.add(new Product("-LDlhVwmIEuMkLPNA9EK", "-LGAQqsSdhMt2bTudm1L", "CashKnight ( Soul Event Version )", "cashknight.png", 4.5, 213000,1));
-        data.add(new Product("-LDlhVwnkVIDaZrdnmhy", "-LGAQqsSdhMt2bTudm1L", "Monument Valley", "monyment-valley.png", 4.8, 86000,1));
+        data.add(new Product("-LDlhVwesbhJsBsFVmEt", "-LGAQqsSdhMt2bTudm1L", "Angry Bird 2", "angry-birds-2.png", 4.6, 0, 1));
+        data.add(new Product("-LDlhVwfP9wYLVhHgqI6", "-LGAQqsSdhMt2bTudm1L", "Ice Crush 2018 - A new Puzzle Matching Adventure", "ice-crush-2018.png", 4.6, 0, 1));
+        data.add(new Product("-LDlhVwgwHDj__CE6gIz", "-LGAQqsSdhMt2bTudm1L", "My Town : ICEE™ Amusement Park", "my-town.png", 4.7, 22000, 1));
+        data.add(new Product("-LDlhVwh2F9hNBas5vHD", "-LGAQqsSdhMt2bTudm1L", "Stickman Legends", "stickman.png", 4.3, 6000, 1));
+        data.add(new Product("-LDlhVwj9j3tU89adLiE", "-LGAQqsSdhMt2bTudm1L", "Maze Planet 3D Pro", "maze-planet.png", 4.5, 27000, 1));
+        data.add(new Product("-LDlhVwkEMtWv1ttsEVs", "-LGAQqsSdhMt2bTudm1L", "Mystic Guardian VIP : Old School Action RPG", "mystic-guardian.png", 4.3, 80000, 1));
+        data.add(new Product("-LDlhVwlraRt24dXSmyx", "-LGAQqsSdhMt2bTudm1L", "Shadow of Death: Stickman Fighting - Dark Knight", "shadow-of-death.png", 4.6, 9000, 1));
+        data.add(new Product("-LDlhVwmIEuMkLPNA9EK", "-LGAQqsSdhMt2bTudm1L", "CashKnight ( Soul Event Version )", "cashknight.png", 4.5, 213000, 1));
+        data.add(new Product("-LDlhVwnkVIDaZrdnmhy", "-LGAQqsSdhMt2bTudm1L", "Monument Valley", "monyment-valley.png", 4.8, 86000, 1));
         return data;
     }
 
     public void setBitmapImage(final ImageView img, final Context context) {
+        if (this.getStatus() == 0) img.setColorFilter(R.color.white_transparent);
+        else img.clearColorFilter();
         if (image_url != null) {
             Picasso.with(context)
                     .load(image_url)
@@ -136,5 +143,21 @@ public class Product implements Serializable {
                 }
             });
         }
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+        mRef.child("products/" + this.getProduct_id() + "/status").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    if (dataSnapshot.getValue(int.class) == 0)
+                        img.setColorFilter(R.color.white_transparent);
+                    else img.clearColorFilter();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

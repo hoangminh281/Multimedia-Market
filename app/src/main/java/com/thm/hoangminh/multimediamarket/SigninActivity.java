@@ -1,10 +1,15 @@
 package com.thm.hoangminh.multimediamarket;
 
+import android.Manifest;
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -26,8 +31,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.views.MainViews.MainActivity;
 
@@ -39,6 +47,7 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
     private GoogleApiClient apiClient;
     private final int RC_SIGN_IN = 1111;
     private int CHECK_AUTHENTICATION = 0;
+    private final int REQUEST_WRITE_EXTERNAL_STORAGE = 1111;
 
     final String TAG = "SigninActivity";
 
@@ -46,6 +55,10 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signin_layout);
+        int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
         SetControl();
         //mAuth.signOut();
         CreateClientLoginGG();
@@ -54,6 +67,16 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
         progressDialog.setIndeterminate(true);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_WRITE_EXTERNAL_STORAGE:
+                if ((grantResults.length > 0) && (grantResults[0] != PackageManager.PERMISSION_GRANTED)) {
+                    this.finish();
+                }
+                break;
+        }
+    }
 
     public void CreateClientLoginGG() {
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder()
@@ -95,14 +118,12 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
             mAuth.signInWithEmailAndPassword(username, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(AuthResult authResult) {
-                    Log.d(TAG, "Đăng nhập thành công.");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     progressDialog.dismiss();
-                    Toast.makeText(SigninActivity.this, "Đăng nhập thất bại.", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "Đăng nhập thất bại. " + e.getMessage());
+                    Toast.makeText(SigninActivity.this, R.string.info_failure_signin, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -114,13 +135,45 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
         progressDialog.dismiss();
         final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), "user.png"
-                    , firebaseUser.getEmail(), firebaseUser.getPhoneNumber(), "",2
-                    , 0, 0).createUserOnFirebase();
-            Intent in = new Intent(SigninActivity.this, MainActivity.class);
-            startActivity(in);
+            Intent login = new Intent(SigninActivity.this, MainActivity.class);
+            startActivity(login);
             finish();
+            mRef.child("users/" + firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.exists()) {
+                        final User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), "user.png"
+                                , firebaseUser.getEmail(), firebaseUser.getPhoneNumber(), "", 2
+                                , 0, 2, 1);
+                        mRef.child("users/" + user.getId()).setValue(user);
+                        Intent in = new Intent(SigninActivity.this, MainActivity.class);
+                        startActivity(in);
+                        finish();
+                    } else {
+                        mRef.child("users/" + firebaseUser.getUid() + "/status").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    if (dataSnapshot.getValue(int.class) == 0) {
+                                        FirebaseAuth.getInstance().signOut();
+                                        Toast.makeText(SigninActivity.this, R.string.info_logout, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
         }
+
     }
 
     public void SigninGG(View view) {

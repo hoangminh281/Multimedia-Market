@@ -69,7 +69,7 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 Boolean isBottomReached = !recyclerView.canScrollHorizontally(1);
-                if (isBottomReached) {
+                if (isBottomReached && i < dataList.size()) {
                     presenter.LoadProductsBySectionPaging(dataList.get(i));
                 }
             }
@@ -82,6 +82,7 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
                 Bundle bundle = new Bundle();
                 bundle.putString("section_id", sectionId);
                 bundle.putString("cate_id", cateId);
+                bundle.putString("sectionTitle", sectionName);
                 moveToProductActivity.putExtras(bundle);
                 mContext.startActivity(moveToProductActivity);
             }

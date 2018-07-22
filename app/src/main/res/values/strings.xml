@@ -21,7 +21,7 @@
     <string name="txt_readless">READ LESS</string>
     <string name="txt_infor_rating">Rating this content</string>
     <string name="btn_submit">SUBMIT</string>
-    <string name="txt_downloaded">Downloaded</string>
+    <string name="txt_downloaded">Paid</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="btn_recharge">Recharge</string>
@@ -66,7 +66,7 @@
     <string name="txt_allowCheckout">Checkout by ONE-Click</string>
     <string name="txt_NotAllowCheckout">The Wallet need more energy!!! Recharge now</string>
     <string name="btn_checkout">Checkout</string>
-    <string name="btn_install">Install</string>
+    <string name="btn_install">Download</string>
     <string name="info_buyingSuccess">Congratulation!!! You successfully checkout</string>
     <string name="info_saved">Marked this content</string>
     <string name="info_unSaved">Unmarked this content</string>
@@ -109,8 +109,8 @@
     <string name="txt_Category">Category</string>
     <string name="hint_category">Choose category</string>
     <string name="menu_remove">Remove</string>
-    <string name="menu_pickImage">Pick a image</string>
-    <string name="menu_takeImage">Take a image</string>
+    <string name="menu_pickImage">Pick an image</string>
+    <string name="menu_takeImage">Take an image</string>
     <string name="menu_bookmark">Favorite list</string>
     <string name="menu_upload">Upload</string>
     <string-array name="thanksTickers">
@@ -126,10 +126,8 @@
         <item>tk_thanks10</item>
     </string-array>
     <string name="menu_update">Update</string>
-    <string name="menu_delete">Delete</string>
     <string name="btn_ok">Ok</string>
     <string name="btn_cancel">Cancel</string>
-    <string name="info_delete">Are you sure you want to delete this item?</string>
     <string name="dialog_successfully_delete_section">Deleted successfully old sections</string>
     <string name="dialog_successfully_update_section">Updated successfully new sections</string>
     <string name="dialog_successfully_update_product">Updated successfully product</string>
@@ -143,6 +141,32 @@
     <string name="dialog_failure_delete_section_product">Deleted failed product section</string>
     <string name="dialog_failure_update_section_product">Updated failed product section</string>
     <string name="dialog_failure_delete_file">Uploaded failed file</string>
-    <string name="dialog_successfully_delete_product">Deleted successfully product</string>
-    <string name="dialog_failure_delete_product">Deleted failure product</string>
+    <string name="menu_user_admin">User management tool</string>
+    <string name="menu_active">Active</string>
+    <string name="menu_inactive">Inactive</string>
+    <string name="info_failure_signin">Failure signin</string>
+    <string name="info_notfind_user">Cannot find user account</string>
+    <string name="info_logout">You was logged out because the account didn\'t meet our requirement</string>
+    <string name="err_username">Username required</string>
+    <string name="err_email">Email required</string>
+    <string name="err_password">Password required</string>
+    <string name="menu_balance">Rechange balance</string>
+    <string name="hint_balance">Enter amount of money</string>
+    <string name="menu_role">Update role</string>
+    <string name="info_fail_role">The account didn\'t meet out requirement to process this action</string>
+    <string name="err_signup">Cannot sign up with your information.</string>
+    <string name="info_downloadFileSuccess">Product successfully downloaded</string>
+    <string name="info_downloadFireFailure">Product failure downloaded</string>
+    <string name="btn_loading">Downloading...</string>
+    <string name="menu_card_admin">Card management tool</string>
+    <string name="menu_addCard">Add new card</string>
+    <string name="info_successfully_create_card">Created Successfully card</string>
+    <string name="info_failure_create_card">Created failure card</string>
+    <string name="menu_editCard">Edit card</string>
+    <string name="info_failure_edit_card">Edited successfully card</string>
+    <string name="info_success_edit_card">Edited successfully card</string>
+    <string name="info_successUpdateProduct">Updated successfully product</string>
+    <string name="txt_search">Search</string>
+    <string name="err_ageExceed">Do not allow the negative age</string>
+    <string name="menu_product_admin">Product management tool</string>
 </resources>

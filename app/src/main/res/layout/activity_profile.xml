@@ -132,6 +132,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:onClick="ShowImagesPurchased"
                     android:orientation="vertical">
 
                     <TextView
@@ -159,6 +160,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:onClick="ShowVideosPurchased"
                     android:orientation="vertical">
 
                     <TextView
@@ -186,6 +188,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:onClick="ShowMusicsPurchased"
                     android:orientation="vertical">
 
                     <TextView
@@ -208,16 +211,32 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textviewBalance"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/spacing_cell"
-                android:drawableLeft="@mipmap/ic_diamond"
-                android:drawablePadding="@dimen/half_spacing_cell"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/spacing_cell">
+
+                <TextView
+                    android:id="@+id/textviewBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_diamond"
+                    android:drawablePadding="@dimen/half_spacing_cell"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="EditBalance"
+                    android:src="@mipmap/ic_pencil"
+                    android:visibility="gone"
+                    android:id="@+id/imageViewBalance"
+                    android:layout_marginLeft="@dimen/half_spacing_cell"/>
+
+            </LinearLayout>
+
 
             <TextView style="@style/separate_space" />
 

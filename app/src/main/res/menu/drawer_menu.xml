@@ -7,17 +7,21 @@
         android:id="@+id/menu_bookmark"
         android:title="@string/menu_bookmark" />
     <item
-        android:id="@+id/menu_modifyProduct"
-        android:title="@string/menu_upload" />
+        android:id="@+id/menu_upload"
+        android:title="@string/menu_upload"
+        android:visible="false" />
     <item
-        android:id="@+id/menu_setting"
-        android:title="@string/btn_setting" />
+        android:id="@+id/menu_user_admin"
+        android:title="@string/menu_user_admin"
+        android:visible="false" />
     <item
-        android:id="@+id/menu_help"
-        android:title="@string/btn_help" />
+        android:id="@+id/menu_card_admin"
+        android:title="@string/menu_card_admin"
+        android:visible="false" />
     <item
-        android:id="@+id/menu_about"
-        android:title="@string/btn_about" />
+        android:id="@+id/menu_product_admin"
+        android:title="@string/menu_product_admin"
+        android:visible="false" />
     <item
         android:id="@+id/menu_logout"
         android:title="@string/btn_logout" />

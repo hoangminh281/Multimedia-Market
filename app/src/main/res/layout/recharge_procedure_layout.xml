@@ -1,289 +1,306 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@color/theme_app"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/grey_10"
-            android:padding="15dp"
-            android:text="@string/txt_cardCategory"
-            android:textColor="@color/black"
-            android:textSize="18sp" /> <!--section "card category"-->
-
-        <TextView
-            style="@style/separate_line"
-            android:layout_margin="0dp" />
-
-        <RadioGroup
-            android:id="@+id/radioGroupCardCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:clipToPadding="false"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="15dp">
-
-            <RadioButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@drawable/custom_btn_radio_viettel"
-                android:button="@android:color/transparent"
-                android:checked="true"/>
-
-            <RadioButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/custom_btn_radio_mobiphone"
-                android:button="@android:color/transparent" />
-
-            <RadioButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/custom_btn_radio_vinaphone"
-                android:button="@android:color/transparent" />
-
-            <RadioButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/custom_btn_radio_vietnammobi"
-                android:button="@android:color/transparent" />
-
-            <RadioButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/custom_btn_radio_garena"
-                android:button="@android:color/transparent" />
-
-        </RadioGroup> <!--Card category-->
-
-        <TextView
-            style="@style/separate_line"
-            android:layout_margin="0dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/grey_10"
-            android:padding="15dp"
-            android:text="@string/txt_cardValue"
-            android:textColor="@color/black"
-            android:textSize="18sp" /> <!--section "value"-->
-
-        <TextView
-            style="@style/separate_line"
-            android:layout_margin="0dp" />
-
-        <TableRow
-            android:id="@+id/radioGroupCardValue1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingTop="20dp">
-
-            <RadioButton
-                android:id="@+id/radioButtonCardValue1"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:background="@drawable/radio_button_custom"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/txt_10k"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <RadioButton
-                android:id="@+id/radioButtonCardValue2"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="15dp"
-                android:background="@drawable/radio_button_custom"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/txt_20k"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <RadioButton
-                android:id="@+id/radioButtonCardValue3"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="15dp"
-                android:background="@drawable/radio_button_custom"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/txt_50k"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-        </TableRow> <!--Card value #1-->
-
-        <TableRow
-            android:id="@+id/radioGroupCardValue2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="20dp"
-            android:paddingTop="20dp">
-
-            <RadioButton
-                android:id="@+id/radioButtonCardValue4"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:background="@drawable/radio_button_custom"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/txt_100k"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <RadioButton
-                android:id="@+id/radioButtonCardValue5"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="15dp"
-                android:background="@drawable/radio_button_custom"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/txt_200k"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <RadioButton
-                android:id="@+id/radioButtonCardValue6"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="15dp"
-                android:background="@drawable/radio_button_custom"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/txt_500k"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-        </TableRow> <!--Card value #2-->
-
-        <TextView
-            style="@style/separate_line"
-            android:layout_margin="0dp" />
-
-        <TextView
-            style="@style/separate_line"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="@dimen/activity_horizontal_margin" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="horizontal">
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="100dp"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="@string/txt_cardNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_10"
+                android:padding="15dp"
+                android:text="@string/txt_cardCategory"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="18sp" /> <!--section "card category"-->
 
             <TextView
-                style="@style/separate_line_vertical"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="10dp" />
+                style="@style/separate_line"
+                android:layout_margin="0dp" />
 
-            <EditText
+            <RadioGroup
+                android:id="@+id/radioGroupCardCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:clipToPadding="false"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <RadioButton
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/custom_btn_radio_viettel"
+                    android:button="@android:color/transparent"
+                    android:id="@+id/radioButtonCardCategory1"/>
+
+                <RadioButton
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/custom_btn_radio_mobiphone"
+                    android:button="@android:color/transparent"
+                    android:id="@+id/radioButtonCardCategory2"/>
+
+                <RadioButton
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/custom_btn_radio_vinaphone"
+                    android:button="@android:color/transparent"
+                    android:id="@+id/radioButtonCardCategory3"/>
+
+                <RadioButton
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/custom_btn_radio_vietnammobi"
+                    android:button="@android:color/transparent"
+                    android:id="@+id/radioButtonCardCategory4"/>
+
+                <RadioButton
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/custom_btn_radio_garena"
+                    android:button="@android:color/transparent"
+                    android:id="@+id/radioButtonCardCategory5"/>
+
+            </RadioGroup> <!--Card category-->
+
+            <TextView
+                style="@style/separate_line"
+                android:layout_margin="0dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_10"
+                android:padding="15dp"
+                android:text="@string/txt_cardValue"
+                android:textColor="@color/black"
+                android:textSize="18sp" /> <!--section "value"-->
+
+            <TextView
+                style="@style/separate_line"
+                android:layout_margin="0dp" />
+
+            <TableRow
+                android:id="@+id/radioGroupCardValue1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="20dp">
+
+                <RadioButton
+                    android:id="@+id/radioButtonCardValue1"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/radio_button_custom"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/txt_10k"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonCardValue2"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/radio_button_custom"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/txt_20k"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonCardValue3"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/radio_button_custom"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/txt_50k"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </TableRow> <!--Card value #1-->
+
+            <TableRow
+                android:id="@+id/radioGroupCardValue2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp">
+
+                <RadioButton
+                    android:id="@+id/radioButtonCardValue4"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/radio_button_custom"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/txt_100k"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonCardValue5"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/radio_button_custom"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/txt_200k"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonCardValue6"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/radio_button_custom"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/txt_500k"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </TableRow> <!--Card value #2-->
+
+            <TextView
+                style="@style/separate_line"
+                android:layout_margin="0dp" />
+
+            <TextView
+                style="@style/separate_line"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:hint="@string/hint_cardNumber"
-                android:inputType="number"
-                android:maxLines="1"
-                android:padding="10dp"
-                android:textColor="#000"
-                android:textSize="22sp"
-                android:id="@+id/editTextCardNumber"
-                android:maxLength="13"
-                android:text="123456"/>
+                android:orientation="horizontal">
 
-        </LinearLayout> <!--Card number-->
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/txt_cardNumber"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
-        <TextView
-            style="@style/separate_line"
-            android:layout_margin="0dp" />
+                <TextView
+                    style="@style/separate_line_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="10dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/editTextCardNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="@string/hint_cardNumber"
+                    android:inputType="number"
+                    android:maxLength="13"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textColor="#000"
+                    android:textSize="22sp" />
+
+            </LinearLayout> <!--Card number-->
 
             <TextView
-                android:layout_width="100dp"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="@string/txt_cardSeri"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                style="@style/separate_line"
+                android:layout_margin="0dp" />
 
-            <TextView
-                style="@style/separate_line_vertical"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="10dp" />
-
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:hint="@string/hint_cardSeri"
-                android:inputType="textNoSuggestions|textVisiblePassword"
-                android:maxLines="1"
-                android:padding="10dp"
-                android:textColor="#000"
-                android:textSize="22sp"
-                android:id="@+id/editTextCardSeri"
-                android:maxLength="15"
-                android:text="seri123"/>
+                android:orientation="horizontal">
 
-        </LinearLayout> <!--Card seri-->
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/txt_cardSeri"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
-        <TextView
-            style="@style/separate_line"
-            android:layout_margin="0dp" />
+                <TextView
+                    style="@style/separate_line_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="10dp" />
 
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/editTextCardSeri"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="@string/hint_cardSeri"
+                    android:inputType="textNoSuggestions|textVisiblePassword"
+                    android:maxLength="15"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textColor="#000"
+                    android:textSize="22sp" />
+
+            </LinearLayout> <!--Card seri-->
+
+            <TextView
+                style="@style/separate_line"
+                android:layout_margin="0dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:background="@color/white"
+        android:elevation="15dp"
         android:orientation="vertical"
-        android:elevation="10dp">
+        android:id="@+id/WalletLayout">
 
         <TextView
             style="@style/separate_line"
@@ -293,7 +310,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:orientation="horizontal">
 
             <TextView
@@ -322,6 +341,7 @@
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:background="@drawable/grey_radius_background"
             android:enabled="false"
             android:onClick="onClicked_btnNext"
@@ -330,4 +350,4 @@
 
     </LinearLayout> <!--check out-->
 
-</RelativeLayout>
+</LinearLayout>

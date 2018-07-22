@@ -1,5 +1,6 @@
 package com.thm.hoangminh.multimediamarket.views.ProductDetailViews;
 
+import com.thm.hoangminh.multimediamarket.models.Product;
 import com.thm.hoangminh.multimediamarket.models.ProductDetail;
 import com.thm.hoangminh.multimediamarket.models.RatingContent;
 import com.thm.hoangminh.multimediamarket.models.User;
@@ -45,5 +46,13 @@ public interface ProductDetailView {
     public void NotAllowCheckout(double balance);
 
     public void EnableInstall();
+
+    void onLoadCurrentUserSuccess(int role, String user_id);
+
+    void showMessage(int messageId);
+
+    void EnableButtonBuy();
+
+    void showProduct(Product value);
 
 }

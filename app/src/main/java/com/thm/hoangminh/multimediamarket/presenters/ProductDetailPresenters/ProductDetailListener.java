@@ -1,5 +1,6 @@
 package com.thm.hoangminh.multimediamarket.presenters.ProductDetailPresenters;
 
+import com.thm.hoangminh.multimediamarket.models.Product;
 import com.thm.hoangminh.multimediamarket.models.ProductDetail;
 import com.thm.hoangminh.multimediamarket.models.RatingContent;
 import com.thm.hoangminh.multimediamarket.models.User;
@@ -35,7 +36,13 @@ public interface ProductDetailListener {
 
     public void onUnSavedProductBookmarkSuccess();
 
-    void onDeleteProductSuccess();
+    void onFindCurrentUserSuccess(int role, String user_id);
 
-    void onDeleteProductFailure(Exception e);
+    void onDownloadProductSuccess();
+
+    void onDownloadProductFailure();
+
+    void onLoadProductTransactionHistoryFailure();
+
+    void onLoadProductByIdSuccess(Product value);
 }

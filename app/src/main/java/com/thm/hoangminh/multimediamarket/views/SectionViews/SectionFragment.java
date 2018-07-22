@@ -46,7 +46,6 @@ public class SectionFragment extends Fragment implements SectionView {
 
         if (getArguments() != null) {
             keyMode = getArguments().getString(MainActivity.BUNDLE_KEY);
-            Log.d("bug", "Start activity " + keyMode);
             presenter.LoadSectionPaging(keyMode);
         }
 
@@ -169,6 +168,14 @@ public class SectionFragment extends Fragment implements SectionView {
         /*pgbBottom.setVisibility(View.GONE);*/
     }
 
+    public void refresh() {
+        if (keyMode != null) {
+            allSampleData.clear();
+            initPresenter();
+            presenter.LoadSectionPaging(keyMode);
+        }
+    }
+
     private void setEvents() {
         myRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             //Listener handle dragging bottom of list's event
@@ -182,8 +189,6 @@ public class SectionFragment extends Fragment implements SectionView {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 Boolean isBottomReached = recyclerView.canScrollVertically(1);
-                Log.d("bug", myRecyclerView.computeVerticalScrollOffset() + " " + keyMode);
-                Log.d("bug", "onScrolled " + keyMode);
                 if (!isBottomReached) {
                     presenter.LoadSectionPaging(keyMode);
                 }

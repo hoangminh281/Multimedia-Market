@@ -14,20 +14,14 @@ public class ProfilePresenter implements ProfileListener {
 
     private final String PASSWORD_KEY = "password";
 
-    public ProfilePresenter(ProfileView listener) {
+    public ProfilePresenter(ProfileView listener, String user_id) {
         this.listener = listener;
-        this.interactor = new ProfileInteractor(this);
+        this.interactor = new ProfileInteractor(this, user_id);
     }
 
     public void LoadCurrentUserInformation() {
         interactor.LoadCurrentUserInformation();
-    }
-
-    public void LoadCurrentUserMultimedia() {
         interactor.LoadCurrentUserMultimedia();
-    }
-
-    public void CheckCurrentUserProvider() {
         interactor.CheckCurrentUserProvider();
     }
 
@@ -64,6 +58,10 @@ public class ProfilePresenter implements ProfileListener {
         }
     }
 
+    public void setBalance(double balance) {
+        interactor.updateBalanceByUserId(balance);
+    }
+
     public void EditUsername(String username) {
         listener.showProgresbarDialog();
         interactor.EditUsername(username);
@@ -85,7 +83,7 @@ public class ProfilePresenter implements ProfileListener {
     }
 
     public void EditGender(int i) {
-        listener.showProgresbarDialog();
+
         interactor.EditGender(i);
     }
 
@@ -93,6 +91,7 @@ public class ProfilePresenter implements ProfileListener {
     public void onEditSuccess() {
         listener.showMessageFromResource(R.string.info_editSuccess);
         listener.dismissDialog();
+        listener.editable();
     }
 
     @Override
@@ -100,4 +99,5 @@ public class ProfilePresenter implements ProfileListener {
         listener.showMessageFromResource(R.string.infor_failure);
         listener.hideProgresbarDialog();
     }
+
 }

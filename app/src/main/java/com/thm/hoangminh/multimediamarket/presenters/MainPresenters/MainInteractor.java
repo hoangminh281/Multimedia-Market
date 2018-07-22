@@ -18,6 +18,8 @@ import com.thm.hoangminh.multimediamarket.models.Category;
 import com.thm.hoangminh.multimediamarket.models.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainInteractor {
 
@@ -70,4 +72,24 @@ public class MainInteractor {
         });
     }
 
+    public void LoadProductSuggestions() {
+        mRef.child("products/").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, String> suggestions = new HashMap<>();
+                Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                for (DataSnapshot item : iterable) {
+                    if (User.getInstance().getRole() == User.ADMIN || item.child("status").getValue(int.class) == 1) {
+                        suggestions.put(item.getKey(), item.child("title").getValue(String.class));
+                    }
+                }
+                listener.onLoadProductSuggestionsSuccess(suggestions);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

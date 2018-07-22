@@ -65,8 +65,8 @@ public class RechargeHistoryActivity extends AppCompatActivity implements Rechar
     @Override
     public void onLoadCardDetailSuccess(Card card) {
         txtSeriNum.setText(card.getSeri());
-        txtStatus.setText(card.getStatus() == 0 ? getResources().getString(R.string.txt_unRecharge) : getResources().getString(R.string.txt_recharged));
-        txtStatusHeader.setText(card.getStatus() == 0 ? getResources().getString(R.string.txt_failure) : getResources().getString(R.string.txt_success));
+        txtStatus.setText(card.getStatus() == 1 ? getResources().getString(R.string.txt_unRecharge) : getResources().getString(R.string.txt_recharged));
+        txtStatusHeader.setText(card.getStatus() == 1 ? getResources().getString(R.string.txt_failure) : getResources().getString(R.string.txt_success));
     }
 
     private void setEvents() {

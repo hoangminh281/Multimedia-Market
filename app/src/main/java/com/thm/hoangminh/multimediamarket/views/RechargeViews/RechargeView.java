@@ -11,8 +11,6 @@ public interface RechargeView {
 
     public void showTotal(double balance);
 
-    public void onBackScreen();
-
     public void showMessage(String message);
 
     public void showMessageFromResource(int resource);

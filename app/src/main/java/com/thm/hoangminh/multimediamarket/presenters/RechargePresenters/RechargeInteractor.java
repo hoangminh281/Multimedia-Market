@@ -51,37 +51,31 @@ public class RechargeInteractor {
                     Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                     for (final DataSnapshot item : iterable) {
                         Card card1 = item.getValue(Card.class);
-                        if (card1.getStatus() == 1) continue;
+                        if (card1.getStatus() == 0) continue;
                         if (card.compareTo(card1)) {
-                            mRef.child("cards/" + category + "/" + value + "/" + item.getKey() + "/status").setValue(1).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            mRef.child("cards/" + category + "/" + value + "/" + item.getKey() + "/status").setValue(0).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     mRef.child("users/" + firebaseUser.getUid() + "/balance").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(final DataSnapshot dataSnapshot) {
                                             if (dataSnapshot.exists()) {
-
                                                 mRef.child("users/" + firebaseUser.getUid() + "/balance").setValue(dataSnapshot.getValue(double.class) + Card.cardValueList[value]).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-
                                                         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
-
                                                         final DatabaseReference mRefTmp = mRef.child("recharge_histories/" + firebaseUser.getUid()).push();
-
                                                         mRefTmp.setValue(new RechargeHistory(mRefTmp.getKey(), item.getKey(), category, value,
                                                                 dateFormatter.format(Calendar.getInstance().getTime()))).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
-
                                                                 listener.onRechargeCardSuccess(mRefTmp.getKey());
-
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
                                                                 mRef.child("users/" + firebaseUser.getUid() + "/balance").setValue(dataSnapshot.getValue(double.class));
-                                                                mRef.child("cards/" + category + "/" + value + "/" + item.getKey() + "/status").setValue(0);
+                                                                mRef.child("cards/" + category + "/" + value + "/" + item.getKey() + "/status").setValue(1);
                                                                 listener.onRechargeCardFailure();
                                                             }
                                                         });
@@ -90,7 +84,7 @@ public class RechargeInteractor {
                                                 }).addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        mRef.child("cards/" + category + "/" + value + "/" + item.getKey() + "/status").setValue(0);
+                                                        mRef.child("cards/" + category + "/" + value + "/" + item.getKey() + "/status").setValue(1);
                                                         listener.onRechargeCardFailure();
                                                     }
                                                 });
@@ -99,7 +93,7 @@ public class RechargeInteractor {
 
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
-                                            mRef.child("cards/" + category + "/" + value + "/" + item.getKey() + "/status").setValue(0);
+                                            mRef.child("cards/" + category + "/" + value + "/" + item.getKey() + "/status").setValue(1);
                                             listener.onRechargeCardFailure();
                                         }
                                     });
@@ -122,7 +116,7 @@ public class RechargeInteractor {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                listener.onRechargeCardWrong();
             }
         });
     }

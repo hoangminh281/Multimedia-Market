@@ -2,6 +2,8 @@ package com.thm.hoangminh.multimediamarket.views.MainViews;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -11,31 +13,41 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.thm.hoangminh.multimediamarket.models.Category;
-import com.thm.hoangminh.multimediamarket.BookmarkActivity;
-import com.thm.hoangminh.multimediamarket.views.ModifyProductViews.ModifyProductActivity;
-import com.thm.hoangminh.multimediamarket.views.ProfileViews.ProfileActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.thm.hoangminh.multimediamarket.views.BookmarkViews.BookmarkActivity;
 import com.thm.hoangminh.multimediamarket.R;
-import com.thm.hoangminh.multimediamarket.references.Tools;
-import com.thm.hoangminh.multimediamarket.views.RechargeViews.RechargeActivity;
+import com.thm.hoangminh.multimediamarket.SigninActivity;
+import com.thm.hoangminh.multimediamarket.models.Category;
 import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.presenters.MainPresenters.MainPresenter;
+import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.views.CardViews.CardActivity;
+import com.thm.hoangminh.multimediamarket.views.ModifyProductViews.ModifyProductActivity;
+import com.thm.hoangminh.multimediamarket.views.ProductViews.ProductActivity;
+import com.thm.hoangminh.multimediamarket.views.ProfileViews.ProfileActivity;
+import com.thm.hoangminh.multimediamarket.views.RechargeViews.RechargeActivity;
 import com.thm.hoangminh.multimediamarket.views.SectionViews.SectionFragment;
+import com.thm.hoangminh.multimediamarket.views.UserViews.UserActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements MainView, NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -48,12 +60,14 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
     private TextView txtUserName, txtBalance, txtRole;
     private ImageView imgSex;
     private MainPresenter presenter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private MaterialSearchView searchView;
 
     public final static String HOME_KEY = "home";
     public static ArrayList<Category> categories;
 
     public final static String BUNDLE_KEY = "keyMode";
-
+    private Map<String, String> suggestions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
 
         presenter.LoadUserProfile();
         presenter.LoadCategory();
+        presenter.LoadProductSuggestions();
     }
+
 
     public void initPresenter() {
         presenter = new MainPresenter(this);
@@ -78,24 +94,66 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
 
     @Override
     public void updateUI(User user) {
-        user.LoadUserImageView(imgUser, this);
-        user.LoadUserRole(txtRole);
-        user.LoadUserImageGender(imgSex);
-        txtUserName.setText(user.getName());
-        txtBalance.setText(Tools.FormatMoney(user.getBalance()));
+        if (user.getStatus() == 0) {
+            Handler handler = new Handler();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    FirebaseAuth.getInstance().signOut();
+                    Toast.makeText(MainActivity.this, R.string.info_logout, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), SigninActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        } else {
+            Menu menu = navigationView.getMenu();
+            switch (user.getRole()) {
+                case User.ADMIN:
+                    menu.findItem(R.id.menu_user_admin).setVisible(true);
+                    menu.findItem(R.id.menu_card_admin).setVisible(true);
+                    menu.findItem(R.id.menu_product_admin).setVisible(true);
+                    menu.findItem(R.id.menu_upload).setVisible(true);
+                    break;
+                case User.MOD:
+                    menu.findItem(R.id.menu_user_admin).setVisible(false);
+                    menu.findItem(R.id.menu_card_admin).setVisible(false);
+                    menu.findItem(R.id.menu_product_admin).setVisible(false);
+                    menu.findItem(R.id.menu_upload).setVisible(true);
+                    break;
+                case User.USER:
+                    menu.findItem(R.id.menu_user_admin).setVisible(false);
+                    menu.findItem(R.id.menu_card_admin).setVisible(false);
+                    menu.findItem(R.id.menu_product_admin).setVisible(false);
+                    menu.findItem(R.id.menu_upload).setVisible(false);
+                    break;
+            }
+
+            user.LoadUserImageView(imgUser, this);
+            user.LoadUserRole(txtRole);
+            user.LoadUserImageGender(imgSex);
+            txtUserName.setText(user.getName());
+            txtBalance.setText(Tools.FormatMoney(user.getBalance()));
+        }
     }
 
     @Override
     public void showCategory(ArrayList<Category> categories) {
         MainActivity.categories = categories;
-
-        navigationView.setNavigationItemSelectedListener(this); // this must be below to avoid user click toggle when categories null
-
+        // this must be below to avoid user click toggle when categories null
+        navigationView.setNavigationItemSelectedListener(this);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
-
         setEvents();
+    }
+
+    @Override
+    public void showSuggestions(Map<String, String> suggestions) {
+        this.suggestions = suggestions;
+        searchView.setSuggestions(suggestions.values().toArray(new String[suggestions.size()]));
+        searchView.showSuggestions();
     }
 
     @Override
@@ -106,13 +164,32 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.search_view:
+                searchView.showSuggestions();
+                searchView.showSearch();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (searchView.isSearchOpen()) {
+            searchView.closeSearch();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -126,21 +203,30 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
                 intent = new Intent(MainActivity.this, BookmarkActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.menu_modifyProduct:
+            case R.id.menu_upload:
                 intent = new Intent(MainActivity.this, ModifyProductActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.menu_setting:
-
+            case R.id.menu_user_admin:
+                intent = new Intent(MainActivity.this, UserActivity.class);
+                startActivity(intent);
                 break;
-            case R.id.menu_help:
-
-                break;
-            case R.id.menu_about:
-
-                break;
+            case R.id.menu_card_admin:
+                intent = new Intent(MainActivity.this, CardActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.menu_product_admin:
+                intent = new Intent(MainActivity.this, BookmarkActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(BUNDLE_KEY, "admin");
+                intent.putExtras(bundle);
+                startActivity(intent);
+                return true;
             case R.id.menu_logout:
-
+                FirebaseAuth.getInstance().signOut();
+                intent = new Intent(MainActivity.this, SigninActivity.class);
+                startActivity(intent);
+                finish();
                 break;
         }
         return true;
@@ -223,6 +309,16 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         });
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -261,6 +357,37 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
                 startActivity(intent);
             }
         });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                for (Fragment fragment : adapter.mFragmentList) {
+                    ((SectionFragment) fragment).refresh();
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                ArrayList<String> searchResults = new ArrayList<>();
+                for (Map.Entry<String, String> row : suggestions.entrySet()) {
+                    if (row.getValue().toLowerCase().startsWith(query.toString().toLowerCase())) {
+                        searchResults.add(row.getKey());
+                    }
+                }
+                Intent intent = new Intent(MainActivity.this, ProductActivity.class);
+                intent.putExtra("searchResults", searchResults.toArray(new String[searchResults.size()]));
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     void setControls() {
@@ -269,6 +396,8 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         viewPager = findViewById(R.id.viewPagerHome);
         drawerLayout = findViewById(R.id.activity_main_drawer);
         navigationView = findViewById(R.id.navView);
+        swipeRefreshLayout = findViewById(R.id.swiperefresh);
+        searchView = findViewById(R.id.search_view);
     }
 
 }

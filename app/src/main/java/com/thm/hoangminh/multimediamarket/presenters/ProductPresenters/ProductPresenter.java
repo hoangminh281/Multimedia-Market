@@ -4,6 +4,7 @@ import com.thm.hoangminh.multimediamarket.models.Product;
 import com.thm.hoangminh.multimediamarket.views.ProductViews.ProductView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProductPresenter implements ProductListener {
@@ -23,12 +24,16 @@ public class ProductPresenter implements ProductListener {
         interactor.LoadProductBySection(cate_id, section_id);
     }
 
-    public void LoadProductByUserPaging(String user_id) {
-        interactor.LoadProductByUser(user_id);
+    public void LoadProductByUserPaging(String user_id, String cate_id) {
+        interactor.LoadProductByUser(user_id, cate_id);
     }
 
     public void LoadProductByBookmarkCateIdPaging(String bookmark_cate_id) {
         interactor.LoadProductByBookmarkCateIdPaging(bookmark_cate_id);
+    }
+
+    public void LoadProductByKeys(String[] searchResults) {
+        onLoadProductIdListSuccess(new ArrayList<>(Arrays.asList(searchResults)));
     }
 
     public void LoadProductNexttoScroll() {
@@ -50,5 +55,9 @@ public class ProductPresenter implements ProductListener {
         listener.addProducttoAdapter(product);
         listener.refreshAdapter();
         request_deny = false;
+    }
+
+    public void LoadProductByAdmin(String productAdminKey) {
+        interactor.LoadProductByAdmin(productAdminKey);
     }
 }

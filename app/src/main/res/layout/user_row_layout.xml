@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/spacing_cell">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageViewAvatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+    <ImageView
+        android:id="@+id/imageViewSex"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="-20dp"
+        android:layout_toRightOf="@id/imageViewAvatar"
+        android:src="@mipmap/ic_male_female"
+        android:tint="@color/theme_app" />
+
+    <ImageView
+        android:id="@+id/imageViewStatus"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_below="@id/imageViewAvatar"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="-10dp"
+        android:layout_toRightOf="@id/imageViewAvatar"
+        android:src="@mipmap/ic_filledcircle" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="@dimen/spacing_cell"
+        android:layout_toRightOf="@id/imageViewAvatar"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/textViewUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/textViewRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/half_spacing_cell"
+            android:layout_toRightOf="@id/textViewUsername" />
+
+        <TextView
+            android:id="@+id/textViewEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewUsername"
+            android:layout_marginTop="@dimen/half_spacing_cell"
+            android:textColor="@color/grey_50" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

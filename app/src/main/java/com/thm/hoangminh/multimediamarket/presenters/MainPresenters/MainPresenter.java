@@ -5,6 +5,7 @@ import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.views.MainViews.MainView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainPresenter implements MainListener {
     private MainView listener;
@@ -25,7 +26,7 @@ public class MainPresenter implements MainListener {
 
     @Override
     public void onLoadUserProfileSuccess(User user) {
-        User.getInstance(user);
+        User.setInstance(user);
         listener.updateUI(user);
     }
 
@@ -34,4 +35,12 @@ public class MainPresenter implements MainListener {
         listener.showCategory(categories);
     }
 
+    @Override
+    public void onLoadProductSuggestionsSuccess(Map<String, String> suggestions) {
+        listener.showSuggestions(suggestions);
+    }
+
+    public void LoadProductSuggestions() {
+        interactor.LoadProductSuggestions();
+    }
 }

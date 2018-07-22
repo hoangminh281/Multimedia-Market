@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -19,7 +21,9 @@ import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.models.Card;
 import com.thm.hoangminh.multimediamarket.presenters.RechargePresenters.RechargePresenter;
 import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.views.CardViews.CardActivity;
 import com.thm.hoangminh.multimediamarket.views.RechargeHistoryViews.RechargeHistoryActivity;
+import com.thm.hoangminh.multimediamarket.views.UserViews.UserActivity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -35,6 +39,8 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
     private TextView txtTotal;
     private double balance = 0;
     private boolean flag_num, flag_seri;
+    private Toolbar toolbar;
+    private ArrayList<RadioButton> rbCardCategoryList;
 
     @SuppressLint("ResourceType")
     @Override
@@ -44,13 +50,19 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
 
         setControls();
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle(getResources().getString(R.string.btn_recharge) + "");
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
+
         initPresenter();
 
         presenter.LoadUserWallet();
 
         setEvents();
 
-        rgCardCategory.check(1);
+        rbCardCategoryList.get(0).setChecked(true);
         rbCardValueList.get(0).setChecked(true);
     }
 
@@ -58,8 +70,18 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
         presenter = new RechargePresenter(this);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return false;
+    }
+
     public void onClicked_btnNext(View view) {
-        presenter.RechargeCard(new Card(Tools.md5(edtCardNumber.getText().toString()), edtCardSeri.getText().toString()), checkPositionCardCategory - 1, checkedPositionCardValue);
+        presenter.RechargeCard(new Card(Tools.md5(edtCardNumber.getText().toString()), edtCardSeri.getText().toString()), checkPositionCardCategory, checkedPositionCardValue);
     }
 
     private void isOpenBtnNext() {
@@ -118,7 +140,12 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
         rgCardCategory.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                checkPositionCardCategory = i;
+                for (int j = 0; j < rbCardCategoryList.size(); j++) {
+                    if (rbCardCategoryList.get(j).isChecked()) {
+                        checkPositionCardCategory = j;
+                        break;
+                    }
+                }
             }
         });
 
@@ -143,6 +170,14 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
 
     private void setControls() {
         rgCardCategory = findViewById(R.id.radioGroupCardCategory);
+
+        rbCardCategoryList = new ArrayList<>();
+        rbCardCategoryList.add((RadioButton) findViewById(R.id.radioButtonCardCategory1));
+        rbCardCategoryList.add((RadioButton) findViewById(R.id.radioButtonCardCategory2));
+        rbCardCategoryList.add((RadioButton) findViewById(R.id.radioButtonCardCategory3));
+        rbCardCategoryList.add((RadioButton) findViewById(R.id.radioButtonCardCategory4));
+        rbCardCategoryList.add((RadioButton) findViewById(R.id.radioButtonCardCategory5));
+
         rbCardValueList = new ArrayList<>();
         rbCardValueList.add((RadioButton) findViewById(R.id.radioButtonCardValue1));
         rbCardValueList.add((RadioButton) findViewById(R.id.radioButtonCardValue2));
@@ -154,6 +189,7 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
         edtCardSeri = findViewById(R.id.editTextCardSeri);
         btnNext = findViewById(R.id.buttonNext);
         txtTotal = findViewById(R.id.textViewTotal);
+        toolbar = findViewById(R.id.toolbar);
     }
 
     @Override
@@ -162,11 +198,6 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
         double total = balance + (checkedPositionCardValue == -1 ? 0 : Card.cardValueList[checkedPositionCardValue]);
         String value = Tools.FormatMoney(total);
         txtTotal.setText(value);
-    }
-
-    @Override
-    public void onBackScreen() {
-
     }
 
     @Override

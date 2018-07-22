@@ -8,10 +8,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.models.Product;
+import com.thm.hoangminh.multimediamarket.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ProductInteractor {
     private ProductListener listener;
@@ -54,7 +54,7 @@ public class ProductInteractor {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        if (dataSnapshot.child("status").getValue(int.class).equals(1))
+                        if (User.getInstance().getRole() == User.ADMIN || dataSnapshot.child("status").getValue(int.class).equals(1))
                             listener.onLoadProductPagingSuccess(dataSnapshot.getValue(Product.class));
                     }
                 }
@@ -68,8 +68,8 @@ public class ProductInteractor {
         }
     }
 
-    public void LoadProductByUser(String user_id) {
-        mRef.child("purchased_product/" + user_id).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void LoadProductByUser(String user_id, String cate_id) {
+        mRef.child("purchased_product/" + user_id + "/" + cate_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -110,4 +110,25 @@ public class ProductInteractor {
         });
     }
 
+    public void LoadProductByAdmin(final String productAdminKey) {
+        mRef.child("products/").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    ArrayList<String> productIds = new ArrayList<>();
+                    Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                    for (DataSnapshot item : iterable) {
+                        if (item.child("cate_id").getValue(String.class).equals(productAdminKey))
+                            productIds.add(item.getKey());
+                    }
+                    listener.onLoadProductIdListSuccess(productIds);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

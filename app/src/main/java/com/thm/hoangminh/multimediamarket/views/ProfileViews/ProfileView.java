@@ -28,4 +28,5 @@ public interface ProfileView {
 
     public void hideProgresbarDialog();
 
+    void editable();
 }

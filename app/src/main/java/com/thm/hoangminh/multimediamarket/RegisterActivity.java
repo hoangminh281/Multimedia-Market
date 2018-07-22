@@ -17,6 +17,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.views.MainViews.MainActivity;
 
@@ -53,16 +58,16 @@ public class RegisterActivity extends AppCompatActivity {
         String nhaplaimatkhau = edtPasswordConfirm.getText().toString();
 
         if (username.trim().length() == 0) {
-            Toast.makeText(this, "Username required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.err_username, Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         } else if (email.trim().length() == 0) {
-            Toast.makeText(this, "Email required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.err_email, Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         } else if (password.trim().length() == 0) {
-            Toast.makeText(this, "Pass required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.err_password, Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         } else if (!nhaplaimatkhau.equals(password)) {
-            Toast.makeText(this, "Password not same", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.err_passnotsame, Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         } else {
             firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -70,19 +75,31 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         progressDialog.dismiss();
+                        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
                         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                        new User(firebaseUser.getUid(), username, "user.png", email, "", "", 2, 2, 0).createUserOnFirebase();
+                        final User user = new User(firebaseUser.getUid(), username, "user.png", email, "", "", 2, 0, 2, 1);
+                        mRef.child("users/" + user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (!dataSnapshot.exists()) {
+                                    mRef.child("users/" + user.getId()).setValue(user);
+                                }
+                                Intent login = new Intent(RegisterActivity.this, MainActivity.class);
+                                startActivity(login);
+                                finish();
+                            }
 
-                        Intent login = new Intent(RegisterActivity.this, MainActivity.class);
-                        startActivity(login);
-                        finish();
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     progressDialog.dismiss();
-                    Log.d("RegisterActivity", "Signup failure. " + e.getMessage());
+                    Toast.makeText(RegisterActivity.this, R.string.err_signup, Toast.LENGTH_SHORT).show();
                 }
             });
         }

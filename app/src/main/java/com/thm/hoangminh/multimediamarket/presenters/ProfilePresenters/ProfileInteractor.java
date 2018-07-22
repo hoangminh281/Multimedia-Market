@@ -1,15 +1,11 @@
 package com.thm.hoangminh.multimediamarket.presenters.ProfilePresenters;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -17,27 +13,27 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.thm.hoangminh.multimediamarket.models.User;
+import com.thm.hoangminh.multimediamarket.views.MainViews.MainActivity;
 
-import java.io.ByteArrayOutputStream;
-import java.util.Calendar;
 
 public class ProfileInteractor {
     private ProfileListener listener;
-    private FirebaseUser user;
     private DatabaseReference mRef;
+    private String user_id;
+    private FirebaseUser currentUser;
 
-    public ProfileInteractor(ProfileListener listener) {
+    public ProfileInteractor(ProfileListener listener, String user_id) {
         this.listener = listener;
-        user = FirebaseAuth.getInstance().getCurrentUser();
         mRef = FirebaseDatabase.getInstance().getReference();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (user_id.equals("")) {
+            this.user_id = currentUser.getUid();
+        } else this.user_id = user_id;
     }
 
     public void LoadCurrentUserInformation() {
-        mRef.child("users/" + user.getUid()).addValueEventListener(new ValueEventListener() {
+        mRef.child("users/" + user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -53,7 +49,7 @@ public class ProfileInteractor {
     }
 
     public void LoadCurrentUserMultimedia() {
-        mRef.child("purchased_product/" + user.getUid()).addValueEventListener(new ValueEventListener() {
+        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(0).getCate_id()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -61,7 +57,6 @@ public class ProfileInteractor {
                     int size = 0;
                     for (DataSnapshot item : iterable) {
                         size++;
-
                     }
                     listener.onLoadCurrentUserProductSuccess(size);
                 }
@@ -72,7 +67,7 @@ public class ProfileInteractor {
 
             }
         });
-        mRef.child("purchased_image/" + user.getUid()).addValueEventListener(new ValueEventListener() {
+        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(1).getCate_id()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -90,7 +85,7 @@ public class ProfileInteractor {
 
             }
         });
-        mRef.child("purchased_video/" + user.getUid()).addValueEventListener(new ValueEventListener() {
+        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(2).getCate_id()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -108,7 +103,7 @@ public class ProfileInteractor {
 
             }
         });
-        mRef.child("purchased_music/" + user.getUid()).addValueEventListener(new ValueEventListener() {
+        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(3).getCate_id()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -129,11 +124,26 @@ public class ProfileInteractor {
     }
 
     public void CheckCurrentUserProvider() {
-        listener.onCheckCurrentUserProviderSuccess(user.getProviders().get(0));
+        if (user_id.equals(currentUser.getUid()))
+            listener.onCheckCurrentUserProviderSuccess(currentUser.getProviders().get(0));
+    }
+
+    public void updateBalanceByUserId(double balance) {
+        mRef.child("users/" + user_id + "/balance").setValue(balance).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onEditSuccess();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onExistError();
+            }
+        });
     }
 
     public void EditUsername(String username) {
-        mRef.child("users/" + user.getUid() + "/name").setValue(username).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mRef.child("users/" + user_id + "/name").setValue(username).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 listener.onEditSuccess();
@@ -147,10 +157,10 @@ public class ProfileInteractor {
     }
 
     public void EditEmail(final String email) {
-        user.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+        currentUser.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                mRef.child("users/" + user.getUid() + "/email").setValue(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mRef.child("users/" + user_id + "/email").setValue(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         listener.onEditSuccess();
@@ -171,7 +181,7 @@ public class ProfileInteractor {
     }
 
     public void EditPassword(String password) {
-        user.updatePassword(password).addOnSuccessListener(new OnSuccessListener<Void>() {
+        currentUser.updatePassword(password).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 listener.onEditSuccess();
@@ -180,13 +190,12 @@ public class ProfileInteractor {
             @Override
             public void onFailure(@NonNull Exception e) {
                 listener.onExistError();
-                Log.d("EditEmail", e.getMessage());
             }
         });
     }
 
     public void EditBirthday(int year, int month, int day) {
-        mRef.child("users/" + user.getUid() + "/birthday").setValue(day + "/" + month + "/" + year).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mRef.child("users/" + user_id + "/birthday").setValue(day + "/" + month + "/" + year).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 listener.onEditSuccess();
@@ -200,7 +209,7 @@ public class ProfileInteractor {
     }
 
     public void EditGender(int i) {
-        mRef.child("users/" + user.getUid() + "/sex").setValue(i).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mRef.child("users/" + user_id + "/sex").setValue(i).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 listener.onEditSuccess();
@@ -212,7 +221,5 @@ public class ProfileInteractor {
             }
         });
     }
-
-
 
 }

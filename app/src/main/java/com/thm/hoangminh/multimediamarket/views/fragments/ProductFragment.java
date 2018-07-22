@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.thm.hoangminh.multimediamarket.views.BookmarkViews.BookmarkActivity;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.adapters.ProductAdapter;
 import com.thm.hoangminh.multimediamarket.models.Product;
@@ -30,30 +30,25 @@ public class ProductFragment extends Fragment implements ProductView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.gridview_layout, container, false);
-
+        View view = inflater.inflate(R.layout.gridview_fragment_layout, container, false);
         setControls(view);
         initPresenter();
         initAdapter();
-
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         Bundle bundle = getArguments();
         if (bundle != null) {
-            if (bundle.getString("cate_id")!=null && bundle.getString("section_id") != null) {
-                presenter.LoadProductBySectionPaging(bundle.getString("section_id"), bundle.getString("section_id"));
-            } else if (bundle.getString("user_id") != null) {
-                presenter.LoadProductByUserPaging(bundle.getString("user_id"));
-            } else if (bundle.getString("bookmark_cate_id") !=null) {
-                presenter.LoadProductByBookmarkCateIdPaging(bundle.getString("bookmark_cate_id"));
+            if (bundle.getString(BookmarkActivity.bookmarkKey) != null) {
+                presenter.LoadProductByBookmarkCateIdPaging(bundle.getString(BookmarkActivity.bookmarkKey));
+            }
+            else if (bundle.getString(BookmarkActivity.productAdminKey) != null) {
+                presenter.LoadProductByAdmin(bundle.getString(BookmarkActivity.productAdminKey));
             }
         }
-
         setEvents();
     }
 
@@ -91,7 +86,8 @@ public class ProductFragment extends Fragment implements ProductView {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("product_object", productsList.get(i));
+                bundle.putString("cate_id", productsList.get(i).getCate_id());
+                bundle.putString("product_id", productsList.get(i).getProduct_id());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

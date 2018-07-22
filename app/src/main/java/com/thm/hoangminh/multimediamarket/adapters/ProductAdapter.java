@@ -59,7 +59,6 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         holder.txtRate.setText(product.getRating() + "");
         holder.txtPrice.setText(Tools.FormatMoney(product.getPrice()));
         product.setBitmapImage(holder.img, context);
-
         return convertView;
     }
 }

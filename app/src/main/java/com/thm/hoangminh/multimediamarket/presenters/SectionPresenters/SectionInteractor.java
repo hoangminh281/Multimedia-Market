@@ -1,6 +1,5 @@
 package com.thm.hoangminh.multimediamarket.presenters.SectionPresenters;
 
-import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -11,8 +10,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.models.Product;
 import com.thm.hoangminh.multimediamarket.models.Section;
 import com.thm.hoangminh.multimediamarket.models.SectionDataModel;
+import com.thm.hoangminh.multimediamarket.models.User;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 public class SectionInteractor {
@@ -33,7 +34,7 @@ public class SectionInteractor {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        if (dataSnapshot.child("status").getValue(int.class).equals(1))
+                        if (User.getInstance().getRole() == User.ADMIN || dataSnapshot.child("status").getValue(int.class).equals(1))
                             sectionDataModel.addItemInSection(dataSnapshot.getValue(Product.class));
                         listener.onLoadProductBySectionSuccess(sectionDataModel);
                     }
@@ -65,9 +66,13 @@ public class SectionInteractor {
                         for (DataSnapshot item : iterable) {
                             Section section = item.getValue(Section.class);
                             section.setSection_id(section.getSection_id());
-                            for (Map.Entry<String, Integer> product_id : section.getProduct_id().entrySet()) {
-                                if (product_id.getValue() == 0)
-                                    section.getProduct_id().remove(product_id.getKey());
+                            if (section.getProduct_id() != null) {
+                                Iterator<Map.Entry<String, Integer>> ite = section.getProduct_id().entrySet().iterator();
+                                while (ite.hasNext()) {
+                                    Map.Entry<String, Integer> productId = ite.next();
+                                    if (productId.getValue() == 0)
+                                        ite.remove();
+                                }
                             }
                             sectionArr.add(section);
                         }

@@ -2,8 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_update"
-        android:title="@string/menu_update" />
+        android:title="@string/menu_update"
+        android:visible="false"/>
     <item
-        android:id="@+id/menu_delete"
-        android:title="@string/menu_delete" />
+        android:id="@+id/menu_active"
+        android:title="@string/menu_active"
+        android:visible="false"/>
+    <item
+        android:id="@+id/menu_inactive"
+        android:title="@string/menu_inactive"
+        android:visible="false"/>
 </menu>

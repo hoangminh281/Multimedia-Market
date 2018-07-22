@@ -29,6 +29,7 @@ import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.models.File;
 import com.thm.hoangminh.multimediamarket.models.Product;
 import com.thm.hoangminh.multimediamarket.models.ProductDetail;
+import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.presenters.ModifyProductPresenters.ModifyProductPresenter;
 import com.thm.hoangminh.multimediamarket.presenters.UpdateProductPresenters.UpdateProductPresenter;
 import com.thm.hoangminh.multimediamarket.presenters.UpdateProductPresenters.UpdateProductPresenterImpl;
@@ -86,12 +87,20 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
             product_id = bundle.getString("product_id");
             cate_id = bundle.getString("cate_id");
 
+            if (cate_id.equals(MainActivity.categories.get(1).getCate_id()) || cate_id.equals(MainActivity.categories.get(3).getCate_id())) {
+                hideEdtYoutube();
+            }
+
             presenter = new UpdateProductPresenterImpl(this);
             presenter.LoadProductById(cate_id, product_id);
             presenter.LoadSectionById(cate_id);
 
             setEvents();
         }
+    }
+
+    private void hideEdtYoutube() {
+        videoLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -114,6 +123,10 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
     }
 
     public void SaveContent() {
+        if (User.getInstance().getId() != pDetail.getOwner_id() && User.getInstance().getRole()!= User.ADMIN) {
+            Toast.makeText(this, R.string.info_fail_role, Toast.LENGTH_SHORT).show();
+            return;
+        }
         String title = edtTitle.getText().toString().trim();
         if (edtTitle.getVisibility() == View.VISIBLE && title.length() == 0) {
             edtTitle.setError(this.getResources().getString(R.string.err_empty));
@@ -267,7 +280,8 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
                                 @Override
                                 public void run() {
                                     progressDialog.dismiss();
-                                    Toast.makeText(UpdateProductActivity.this, "Congratulation! Successfully progress", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UpdateProductActivity.this, R.string.info_successUpdateProduct, Toast.LENGTH_SHORT).show();
+                                    finish();
                                 }
                             });
                         }
@@ -371,7 +385,7 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
                 .setPositiveButton(R.string.button_save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        if (mSelectedItems.size()!=0) {
+                        if (mSelectedItems.size() != 0) {
                             String[] stArr = categoryList.values().toArray(new String[categoryList.size()]);
                             String st = stArr[mSelectedItems.get(0)];
                             for (int i = 1; i < mSelectedItems.size(); i++) {

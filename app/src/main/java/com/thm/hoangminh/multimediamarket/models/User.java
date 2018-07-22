@@ -37,7 +37,12 @@ public class User {
     private String id, name, image, email, phone, birthday;
     private int sex; // 0: male, 1: female
     private double balance;
-    private int role; // 0: Admin, 1: mode, 2: user
+    private int role; // 0: Admin, 1: mod, 2: user
+    private int status; //0: inactive, 1: active
+
+    public static final int ADMIN = 0;
+    public static final int MOD = 1;
+    public static final int USER = 2;
 
     private final String DEFAULT_IMG_KEY = "user.png";
 
@@ -48,7 +53,7 @@ public class User {
         return instance;
     }
 
-    public static User getInstance(User user) {
+    public static User setInstance(User user) {
         instance = new User(user);
         return instance;
     }
@@ -68,7 +73,7 @@ public class User {
         this.role = user.role;
     }
 
-    public User(String name, String image, String email, String phone, String birthday, int sex, int role, int balance) {
+    public User(String name, String image, String email, String phone, String birthday, int sex, int role, int balance, int status) {
         this.name = name;
         this.image = image;
         this.email = email;
@@ -77,9 +82,10 @@ public class User {
         this.sex = sex;
         this.balance = balance;
         this.role = role;
+        this.status = status;
     }
 
-    public User(String id, String name, String image, String email, String phone, String birthday, int sex, double balance, int role) {
+    public User(String id, String name, String image, String email, String phone, String birthday, int sex, double balance, int role, int status) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -89,6 +95,7 @@ public class User {
         this.sex = sex;
         this.balance = balance;
         this.role = role;
+        this.status = status;
     }
 
     public String getName() {
@@ -163,20 +170,18 @@ public class User {
         this.role = role;
     }
 
-    public void createUserOnFirebase() {
-        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-        mRef.child("users/" + id).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()) {
-                    mRef.child("users/" + id).setValue(User.this);
-                }
-            }
+    public int getStatus() {
+        return status;
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void createUserOnFirebase(final Context context) {
+        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+
+
     }
 
     public void LoadUserImageView(final ImageView img, final Context context) {
@@ -193,22 +198,71 @@ public class User {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                if (firebaseUser.getPhotoUrl() != null)
-                    Picasso.with(context)
-                            .load(firebaseUser.getPhotoUrl().toString())
-                            .error(R.mipmap.icon_app_2)
-                            .into(img);
             }
         });
     }
 
     public void LoadUserRole(final TextView txt) {
         final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-        mRef.child("roles/" + role).addValueEventListener(new ValueEventListener() {
+        mRef.child("roles/" + role).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     txt.setText(dataSnapshot.getValue(String.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void LoadUserRoleWithColor(final TextView txt, final Context context) {
+        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+        mRef.child("roles/" + role).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String roleName = dataSnapshot.getValue(String.class);
+                    txt.setText(roleName);
+                    switch (role) {
+                        case ADMIN:
+                            txt.setTextColor(context.getResources().getColor(R.color.red));
+                            break;
+                        case MOD:
+                            txt.setTextColor(context.getResources().getColor(R.color.green));
+                            break;
+                        case USER:
+                            txt.setTextColor(context.getResources().getColor(R.color.purple_50));
+                            break;
+                    }
+                    mRef.child("users/" + id + "/role").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists())
+                                switch (dataSnapshot.getValue(int.class)) {
+                                    case ADMIN:
+                                        txt.setText("admin");
+                                        txt.setTextColor(context.getResources().getColor(R.color.red));
+                                        break;
+                                    case MOD:
+                                        txt.setText("mod");
+                                        txt.setTextColor(context.getResources().getColor(R.color.green));
+                                        break;
+                                    case USER:
+                                        txt.setText("user");
+                                        txt.setTextColor(context.getResources().getColor(R.color.purple_50));
+                                        break;
+                                }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }
 
@@ -292,4 +346,23 @@ public class User {
         }
     }
 
+    public void LoadUserStatus(final ImageView imgStatus) {
+        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+        mRef.child("users/" + id + "/status").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    status = dataSnapshot.getValue(int.class);
+                    if (status == 1)
+                        imgStatus.setColorFilter(R.color.theme_app);
+                    else imgStatus.clearColorFilter();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

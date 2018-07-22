@@ -76,7 +76,11 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     private Toolbar toolbar;
 
     public static final String googleApiKey = "AIzaSyBzvhnvsvpM2Kpy6_2ceRthi59uJx2Lyxg";
-
+    private String owner_id;
+    private Menu menu;
+    private String fileName;
+    private String user_id;
+    private int role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,14 +103,14 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            product = (Product) bundle.getSerializable("product_object");
+            String cate_id = bundle.getString("cate_id");
+            String product_id = bundle.getString("product_id");
 
-            setContents();
-
-            presenter.LoadProductDetailById(product.getProduct_id());
-            presenter.LoadBookmarkContent(product.getCate_id(), product.getProduct_id());
-            presenter.LoadProductTransactionHistory(product.getProduct_id());
-            presenter.LoadRating(product.getProduct_id());
+            presenter.LoadProductById(product_id);
+            presenter.LoadProductDetailById(product_id);
+            presenter.LoadBookmarkContent(cate_id, product_id);
+            presenter.LoadProductTransactionHistory(cate_id, product_id);
+            presenter.LoadRating(product_id);
 
         }
         setEvents();
@@ -115,12 +119,17 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.product_detail_menu, menu);
+        this.menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                finish();
+                break;
             case R.id.menu_update:
                 Intent intent = new Intent(this, UpdateProductActivity.class);
                 Bundle bundle = new Bundle();
@@ -129,28 +138,18 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case R.id.menu_delete:
-                DeleteContent();
+            case R.id.menu_active:
+                ActiveContent(1);
+                return true;
+            case R.id.menu_inactive:
+                ActiveContent(0);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void DeleteContent() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-// Add the buttons
-        builder.setTitle(R.string.menu_delete)
-                .setMessage(R.string.info_delete)
-                .setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        presenter.DeleteProduct(product.getProduct_id());
-                    }
-                });
-        builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
-            }
-        }).show();
+    public void ActiveContent(final int status) {
+        presenter.ActiveProduct(product.getProduct_id(), status);
     }
 
     private void initPresenter() {
@@ -179,16 +178,11 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         };
     }
 
-    private void setContents() {
-        product.setBitmapImage(imgProduct, this);
-        txtTitle.setText(product.getTitle());
-        txtRating.setText(product.getRating() + "");
-        ratingBar.setRating((float) product.getRating());
-        btnBuy.setText(Tools.FormatMoney(product.getPrice()));
-    }
-
     @Override
     public void showProductDetail(ProductDetail productDetail) {
+        fileName = productDetail.getDownloadLink();
+        owner_id = productDetail.getOwner_id();
+        presenter.LoadCurrentUser();
         video_id = productDetail.getVideo();
         youtubeView.initialize(googleApiKey, onInitializedListener);
         txtAgelimit.setText(productDetail.getAgeLimit() + "+");
@@ -298,11 +292,13 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        if (dialog != null && dialog.isShowing()) dialog.dismiss();
     }
 
     @Override
     public void showMessageFromResource(int resource) {
         Toast.makeText(this, getResources().getString(resource), Toast.LENGTH_SHORT).show();
+        if (dialog != null && dialog.isShowing()) dialog.dismiss();
     }
 
     @Override
@@ -345,7 +341,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.CheckoutProduct(product.getProduct_id());
+                presenter.CheckoutProduct(product.getCate_id(), product.getProduct_id(), owner_id);
             }
         });
     }
@@ -367,13 +363,68 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     @Override
     public void EnableInstall() {
+        btnBuy.setEnabled(true);
+        btnBuy.setBackgroundColor(getResources().getColor(R.color.theme_app));
         btnBuy.setText(R.string.btn_install);
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                btnBuy.setEnabled(false);
+                btnBuy.setBackgroundColor(getResources().getColor(R.color.grey_50));
+                btnBuy.setText(R.string.btn_loading);
+                presenter.downLoadProduct(ProductDetailActivity.this, fileName);
             }
         });
+    }
+
+    @Override
+    public void onLoadCurrentUserSuccess(int role, String user_id) {
+        this.role = role;
+        this.user_id = user_id;
+        if (owner_id.equals(user_id) || role == User.ADMIN) {
+            menu.findItem(R.id.menu_update).setVisible(true);
+        } else {
+            menu.findItem(R.id.menu_update).setVisible(false);
+        }
+        EnableModifyProduct();
+    }
+
+    @Override
+    public void showMessage(int messageId) {
+        Toast.makeText(this, getResources().getString(messageId), Toast.LENGTH_SHORT).show();
+        if (dialog != null && dialog.isShowing()) dialog.dismiss();
+    }
+
+    @Override
+    public void EnableButtonBuy() {
+        btnBuy.setEnabled(true);
+    }
+
+    @Override
+    public void showProduct(Product value) {
+        this.product = value;
+        product.setBitmapImage(imgProduct, this);
+        txtTitle.setText(product.getTitle());
+        txtRating.setText(product.getRating() + "");
+        ratingBar.setRating((float) product.getRating());
+        btnBuy.setText(Tools.FormatMoney(product.getPrice()));
+        EnableModifyProduct();
+    }
+
+    private void EnableModifyProduct() {
+        if (product == null || owner_id == null) return;
+        if (owner_id.equals(user_id) || role == User.ADMIN) {
+            if (product.getStatus() == 0) {
+                menu.findItem(R.id.menu_inactive).setVisible(false);
+                menu.findItem(R.id.menu_active).setVisible(true);
+            } else {
+                menu.findItem(R.id.menu_inactive).setVisible(true);
+                menu.findItem(R.id.menu_active).setVisible(false);
+            }
+        } else {
+            menu.findItem(R.id.menu_inactive).setVisible(false);
+            menu.findItem(R.id.menu_active).setVisible(false);
+        }
     }
 
     private void setEvents() {

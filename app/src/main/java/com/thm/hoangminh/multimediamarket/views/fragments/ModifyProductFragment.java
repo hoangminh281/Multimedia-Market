@@ -30,10 +30,13 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.models.File;
 import com.thm.hoangminh.multimediamarket.models.Product;
 import com.thm.hoangminh.multimediamarket.models.ProductDetail;
+import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.presenters.ModifyProductPresenters.ModifyProductPresenter;
 import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
 import com.thm.hoangminh.multimediamarket.references.Tools;
@@ -144,6 +147,7 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
 
     public void showCategoryDialog() {
         mSelectedItems.clear();
+        txtCategory.setText("");
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         // Set the dialog title
@@ -168,7 +172,7 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
                 .setPositiveButton(R.string.button_save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        if (mSelectedItems.size()!=0) {
+                        if (mSelectedItems.size() != 0) {
                             String[] stArr = categoryList.values().toArray(new String[categoryList.size()]);
                             String st = stArr[mSelectedItems.get(0)];
                             for (int i = 1; i < mSelectedItems.size(); i++) {
@@ -224,14 +228,11 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         if (key_category.equals(MainActivity.categories.get(0).getCate_id())) {
             intent.setType("application/vnd.android.package-archive");
-        }
-        else if (key_category.equals(MainActivity.categories.get(1).getCate_id())) {
+        } else if (key_category.equals(MainActivity.categories.get(1).getCate_id())) {
             intent.setType("image/*");
-        }
-        else if (key_category.equals(MainActivity.categories.get(2).getCate_id())) {
+        } else if (key_category.equals(MainActivity.categories.get(2).getCate_id())) {
             intent.setType("video/*");
-        }
-        else if (key_category.equals(MainActivity.categories.get(3).getCate_id())) {
+        } else if (key_category.equals(MainActivity.categories.get(3).getCate_id())) {
             intent.setType("audio/*");
         }
         startActivityForResult(intent, REQUEST_CODE_PICKFILE);
@@ -298,6 +299,11 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
     }
 
     public void SaveContent() {
+        if (User.getInstance().getRole() == User.USER) {
+            Toast.makeText(getContext(), R.string.info_fail_role, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         int imgStatus = ((int[]) imgArr[0].getTag())[1];
         if (imgStatus == TAG_UNCLICKIMAGE) {
             AnimationSupport.shake(getContext(), imgArr[0]);
@@ -390,6 +396,7 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
                                 public void run() {
                                     progressDialog.dismiss();
                                     Toast.makeText(getContext(), "Congratulation! Successfully progress", Toast.LENGTH_SHORT).show();
+                                    getActivity().onBackPressed();
                                 }
                             });
                         }

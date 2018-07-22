@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ImageViewCompat;
@@ -32,7 +33,10 @@ import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.presenters.ProfilePresenters.ProfilePresenter;
 import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.views.MainViews.MainActivity;
+import com.thm.hoangminh.multimediamarket.views.ProductDetailViews.ProductDetailActivity;
 import com.thm.hoangminh.multimediamarket.views.ProductViews.ProductActivity;
+import com.thm.hoangminh.multimediamarket.views.UserViews.UserActivity;
 
 public class ProfileActivity extends AppCompatActivity implements ProfileView {
     private Toolbar toolbar;
@@ -43,20 +47,29 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     private AlertDialog dialog;
     private LinearLayout layoutEdit;
     private ProgressBar pgbDialog;
+    private ImageView imgBalance;
+    private String user_id;
 
     private final int REQUEST_CODE_TAKEPHOTO = 1;
     private final int REQUEST_CODE_PICKPHOTO = 2;
+    private boolean editable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         setControls();
-        initPresenter();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            user_id = bundle.getString("user_id");
+            initPresenter(user_id);
+            imgBalance.setVisibility(View.VISIBLE); // allow admin edit balance user
+        } else {
+            initPresenter("");
+        }
 
         presenter.LoadCurrentUserInformation();
-        presenter.LoadCurrentUserMultimedia();
-        presenter.CheckCurrentUserProvider();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -68,16 +81,15 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         img.setLongClickable(false);
     }
 
-    private void initPresenter() {
-        presenter = new ProfilePresenter(this);
+    private void initPresenter(String user_id) {
+        presenter = new ProfilePresenter(this, user_id);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.onBackPressed();
+                onBackPressed();
                 finish();
                 break;
         }
@@ -134,6 +146,9 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
     @Override
     public void ShowCurrentUserInformation(User user) {
+        if (user.getRole() == User.ADMIN) {
+            imgBalance.setVisibility(View.VISIBLE); // allow admin edit balance user
+        }
         this.currentUser = user;
         user.LoadUserImageView(img, this);
         user.LoadUserRole(txtRole);
@@ -221,6 +236,50 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     public void hideProgresbarDialog() {
         pgbDialog.setVisibility(View.INVISIBLE);
         layoutEdit.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void editable() {
+        editable = true;
+    }
+
+    public void EditBalance(View view) {
+        View viewDialog = getLayoutInflater().inflate(R.layout.edit_dialog, null);
+
+        TextView txtTitle = viewDialog.findViewById(R.id.textViewTitle);
+        txtTitle.setText(R.string.menu_balance);
+
+        final EditText edt = viewDialog.findViewById(R.id.editText);
+        edt.setHint(R.string.hint_balance);
+        if (currentUser.getBalance() != 0)
+            edt.setText(currentUser.getBalance() + "");
+
+        edt.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        dialog = new AlertDialog.Builder(this)
+                .setView(viewDialog)
+                .setPositiveButton(R.string.button_save, null)
+                .create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button b = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        String balance = edt.getText().toString().trim();
+                        if (balance.length() == 0) {
+                            edt.setError(getResources().getString(R.string.err_empty));
+                            return;
+                        }
+                        presenter.setBalance(Double.valueOf(balance));
+                    }
+                });
+            }
+        });
+        dialog.show();
     }
 
     public void EditUsername(final View view) {
@@ -393,7 +452,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         txtTitle.setText(R.string.hint_birthday);
 
         final DatePicker datePicker = viewDialog.findViewById(R.id.datePicker);
-        if (currentUser.getBirthday() != null) {
+        if (currentUser.getBirthday() != null && !currentUser.getBirthday().equals("")) {
             String[] dateArr = currentUser.getBirthday().split("/");
             datePicker.updateDate(Integer.valueOf(dateArr[2]), Integer.valueOf(dateArr[1]) - 1, Integer.valueOf(dateArr[0]));
         }
@@ -414,6 +473,12 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
                     @Override
                     public void onClick(View view) {
+                        try {
+                            Tools.getAge(datePicker.getDayOfMonth(), datePicker.getMonth() + 1, datePicker.getYear());
+                        } catch (IllegalArgumentException e) {
+                            Toast.makeText(ProfileActivity.this, R.string.err_ageExceed, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         presenter.EditBirthday(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
                     }
                 });
@@ -441,6 +506,38 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("user_id", currentUser.getId());
+        bundle.putString("cateProduct", MainActivity.categories.get(0).getCate_id());
+        bundle.putString("cateTitle", MainActivity.categories.get(0).getName());
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void ShowImagesPurchased(View view) {
+        Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("user_id", currentUser.getId());
+        bundle.putString("cateProduct", MainActivity.categories.get(1).getCate_id());
+        bundle.putString("cateTitle", MainActivity.categories.get(1).getName());
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void ShowVideosPurchased(View view) {
+        Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("user_id", currentUser.getId());
+        bundle.putString("cateProduct", MainActivity.categories.get(2).getCate_id());
+        bundle.putString("cateTitle", MainActivity.categories.get(2).getName());
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void ShowMusicsPurchased(View view) {
+        Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("user_id", currentUser.getId());
+        bundle.putString("cateProduct", MainActivity.categories.get(3).getCate_id());
+        bundle.putString("cateTitle", MainActivity.categories.get(3).getName());
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -467,6 +564,16 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         txtMusic = findViewById(R.id.textViewMusic);
         imgEmail = findViewById(R.id.imageViewEmail);
         imgPass = findViewById(R.id.imageViewPassword);
+        imgBalance = findViewById(R.id.imageViewBalance);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (editable) {
+            Intent intent = new Intent();
+            intent.putExtra("result", 1);
+            setResult(RESULT_OK, intent);
+        }
+        finish();
+    }
 }

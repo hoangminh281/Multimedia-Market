@@ -57,7 +57,10 @@ public class ModifyProductPresenter implements ModifyProductListener {
         photoNames = new ArrayList<>();
         photoNames.add(photoId);
         for (int i = 1; i < bitmaps.size(); i++) {
-            photoNames.add(Tools.createImageNameRandom());
+            String photoId = Tools.createImageNameRandom();
+            while (photoNames.contains(photoId))
+                photoId = Tools.createImageNameRandom();
+            photoNames.add(photoId);
         }
         interactor.CreateProductDetailById(new ProductDetail(id, intro, description, (int) file.getSize().getValue(), 0, ageLimit, owner_id, video, downloadLink), photoNames);
         interactor.UploadFile(file);

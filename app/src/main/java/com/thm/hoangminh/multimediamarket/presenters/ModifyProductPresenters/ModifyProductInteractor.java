@@ -66,10 +66,8 @@ public class ModifyProductInteractor {
     }
 
     public void CreateNewProduct(String title, String key_cate, String photo_id, double price, final String intro, final String desc, final int age_limit, final String video, final File file) {
-
         DatabaseReference mRefTmp = mRef.child("products").push();
         final String id = mRefTmp.getKey();
-
         mRefTmp.setValue(new Product(id, key_cate, title, photo_id, 5, price, 1)).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -128,12 +126,9 @@ public class ModifyProductInteractor {
     public void UploadFile(File file) {
         StorageReference riversRef = mStorageRef.child("files/" + file.getName());
         UploadTask uploadTask = riversRef.putFile(file.getUri());
-
-// Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override

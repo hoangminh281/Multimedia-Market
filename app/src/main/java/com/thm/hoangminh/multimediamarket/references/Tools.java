@@ -71,7 +71,7 @@ public class Tools {
         return format.format(value) + " đ";
     }
 
-    public static int getAge(int day, int month, int year) {
+    public static int getAge(int day, int month, int year) throws IllegalArgumentException {
         final Calendar birthDay = Calendar.getInstance();
         birthDay.set(year, month, day);
         final Calendar current = Calendar.getInstance();
