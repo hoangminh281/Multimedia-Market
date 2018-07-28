@@ -32,10 +32,10 @@ public class UserInteractor {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Iterable iterable = dataSnapshot.getChildren();
                     ArrayList<User> users = new ArrayList<>();
                     for (DataSnapshot item : dataSnapshot.getChildren()) {
-                        if (item.child("role").getValue(int.class) == User.ADMIN || item.getKey().equals(currentUser.getUid()))
+                        if (item.child("role").getValue(int.class) == User.ADMIN
+                                || item.getKey().equals(currentUser.getUid()))
                             continue;
                         users.add(item.getValue(User.class));
                     }
@@ -58,8 +58,11 @@ public class UserInteractor {
         mRef.child("roles").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists())
-                    listener.onFindRolesSuccess((ArrayList<String>) dataSnapshot.getValue());
+                if (dataSnapshot.exists()) {
+                    ArrayList<String> roleNames = (ArrayList<String>) dataSnapshot.getValue();
+                    roleNames.remove(0);
+                    listener.onFindRolesSuccess(roleNames);
+                }
             }
 
             @Override

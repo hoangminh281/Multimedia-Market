@@ -1,30 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_profile"
-        android:title="@string/btn_profile" />
+        android:title="@string/btn_profile"
+        android:icon="@mipmap/ic_profile" />
     <item
         android:id="@+id/menu_bookmark"
-        android:title="@string/menu_bookmark" />
+        android:title="@string/menu_bookmark"
+        android:icon="@mipmap/ic_bookmark_menu"/>
     <item
         android:id="@+id/menu_upload"
         android:title="@string/menu_upload"
-        android:visible="false" />
+        android:visible="false"
+        android:icon="@mipmap/ic_upload"/>
     <item
         android:id="@+id/menu_user_admin"
         android:title="@string/menu_user_admin"
-        android:visible="false" />
+        android:visible="false"
+        android:icon="@mipmap/ic_user_admin"/>
     <item
         android:id="@+id/menu_card_admin"
         android:title="@string/menu_card_admin"
-        android:visible="false" />
+        android:visible="false"
+        android:icon="@mipmap/ic_card_admin"/>
     <item
         android:id="@+id/menu_product_admin"
         android:title="@string/menu_product_admin"
-        android:visible="false" />
+        android:visible="false"
+        android:icon="@mipmap/ic_product_admin"/>
     <item
         android:id="@+id/menu_logout"
-        android:title="@string/btn_logout" />
-
-
+        android:title="@string/btn_logout"
+        android:icon="@mipmap/ic_logout"/>
 </menu>

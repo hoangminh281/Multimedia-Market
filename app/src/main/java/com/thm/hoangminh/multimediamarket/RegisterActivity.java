@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,16 +28,21 @@ import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.views.MainViews.MainActivity;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText edtEmail, edtPassword, edtPasswordConfirm, edtUsername;
-    FirebaseAuth firebaseAuth;
-    ProgressDialog progressDialog;
+    private EditText edtEmail, edtPassword, edtPasswordConfirm, edtUsername;
+    private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
-
         setControls();
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
     }
 
     void setControls() {
@@ -45,6 +52,17 @@ public class RegisterActivity extends AppCompatActivity {
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
         edtPasswordConfirm = findViewById(R.id.edtPasswordConfirm);
+        toolbar = findViewById(R.id.toolbar);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void Signup(View view) {

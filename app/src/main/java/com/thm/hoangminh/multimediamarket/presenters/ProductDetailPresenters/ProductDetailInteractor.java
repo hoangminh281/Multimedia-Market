@@ -171,7 +171,8 @@ public class ProductDetailInteractor {
     }
 
     public void createNewRating(final String product_id, RatingContent ratingContent) {
-        mRef.child("rating/" + product_id + "/" + firebaseUser.getUid()).setValue(ratingContent).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mRef.child("rating/" + product_id + "/" + firebaseUser.getUid()).setValue(ratingContent)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 mRef.child("rating/" + product_id).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -184,7 +185,9 @@ public class ProductDetailInteractor {
                                 RatingContent rating = item.getValue(RatingContent.class);
                                 ratingArr[rating.getPoint() - 1]++;
                             }
-                            double ratingPoint = (double) (5 * ratingArr[4] + 4 * ratingArr[3] + 3 * ratingArr[2] + 2 * ratingArr[1] + ratingArr[0]) / (ratingArr[4] + ratingArr[3] + ratingArr[2] + ratingArr[1] + ratingArr[0]);
+                            double ratingPoint = (double) (5 * ratingArr[4] + 4 * ratingArr[3]
+                                    + 3 * ratingArr[2] + 2 * ratingArr[1] + ratingArr[0]) / (ratingArr[4]
+                                    + ratingArr[3] + ratingArr[2] + ratingArr[1] + ratingArr[0]);
                             ratingPoint *= 10;
                             ratingPoint = Math.round(ratingPoint);
                             ratingPoint /= 10;
@@ -223,37 +226,46 @@ public class ProductDetailInteractor {
     }
 
     public synchronized void CheckoutProductbyId(final String cate_id, final String product_id, final String owner_id) {
-        mRef.child("users/" + firebaseUser.getUid() + "/balance").addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.child("users/" + firebaseUser.getUid() + "/balance")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     final double balance = dataSnapshot.getValue(double.class);
-                    mRef.child("products/" + product_id + "/price").addListenerForSingleValueEvent(new ValueEventListener() {
+                    mRef.child("products/" + product_id + "/price")
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 final double price = dataSnapshot.getValue(double.class);
                                 double refund = balance - price;
                                 if (refund > -1) {
-                                    mRef.child("users/" + firebaseUser.getUid() + "/balance").setValue(refund).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    mRef.child("users/" + firebaseUser.getUid() + "/balance").setValue(refund)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
-                                            mRef.child("purchased_product/" + firebaseUser.getUid() + "/" + cate_id + "/" + product_id + "/time")
+                                            mRef.child("purchased_product/" + firebaseUser.getUid() + "/" + cate_id
+                                                    + "/" + product_id + "/time")
                                                     .setValue(dateFormatter.format(Calendar.getInstance().getTime()))
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
-                                                            mRef.child("users/" + owner_id + "/balance").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            mRef.child("users/" + owner_id + "/balance")
+                                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                    mRef.child("users/" + owner_id + "/balance").setValue(dataSnapshot.getValue(double.class) + price).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    mRef.child("users/" + owner_id + "/balance")
+                                                                            .setValue(dataSnapshot.getValue(double.class) + price)
+                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override
                                                                         public void onSuccess(Void aVoid) {
-                                                                            mRef.child("product_detail/" + product_id + "/downloaded").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                            mRef.child("product_detail/" + product_id + "/downloaded")
+                                                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
                                                                                 @Override
                                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                    mRef.child("product_detail/" + product_id + "/downloaded").setValue(dataSnapshot.getValue(int.class) + 1);
+                                                                                    mRef.child("product_detail/" + product_id + "/downloaded")
+                                                                                            .setValue(dataSnapshot.getValue(int.class) + 1);
                                                                                 }
 
                                                                                 @Override

@@ -34,7 +34,8 @@ public class SectionInteractor {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        if (User.getInstance().getRole() == User.ADMIN || dataSnapshot.child("status").getValue(int.class).equals(1))
+                        if (User.getInstance().getRole() == User.ADMIN || dataSnapshot.child("status")
+                                .getValue(int.class).equals(1))
                             sectionDataModel.addItemInSection(dataSnapshot.getValue(Product.class));
                         listener.onLoadProductBySectionSuccess(sectionDataModel);
                     }
@@ -53,9 +54,8 @@ public class SectionInteractor {
         Query mQuery;
         if (begin_id != null)
             mQuery = mRef.child("sections/" + keyMode).orderByKey().startAt(begin_id).limitToFirst(count);
-        else {
+        else
             mQuery = mRef.child("sections/" + keyMode).orderByKey().limitToFirst(count);
-        }
         if (mQuery != null) {
             mQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

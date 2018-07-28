@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
         setControls();
-
         initPresenter();
 
         setSupportActionBar(toolbar);
@@ -235,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
     private void setupNavigationView() {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(drawerToggle);
-
+        navigationView.setItemIconTintList(null);
         View headerView = navigationView.inflateHeaderView(R.layout.header_drawer_layout);
 
 

@@ -11,14 +11,15 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:scaleType="centerInside"
-        android:src="@drawable/icon_app_3" />
+        android:src="@drawable/icon_app_3"
+        android:tint="@color/white"/>
 
     <EditText
         android:id="@+id/edtEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:drawableLeft="@mipmap/ic_person"
+        android:drawableLeft="@mipmap/ic_person_white"
         android:drawablePadding="20dp"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
@@ -32,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:drawableLeft="@mipmap/ic_lock"
+        android:drawableLeft="@mipmap/ic_lock_white"
         android:drawablePadding="20dp"
         android:hint="@string/hint_password"
         android:inputType="textPassword"
@@ -40,11 +41,6 @@
         android:textColor="@color/white"
         android:textColorHint="@color/white"
         android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/separate_line" />
 
     <Button
         android:layout_width="match_parent"
@@ -94,7 +90,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1"
-            android:background="@color/separate_line" />
+            android:background="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -108,7 +104,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1"
-            android:background="@color/separate_line" />
+            android:background="@color/white" />
 
     </LinearLayout>
 
@@ -116,12 +112,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@null"
         android:onClick="SigninGG"
         android:text="@string/btn_google"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:background="@drawable/blue_radius_background"/>
 
 </LinearLayout>
 

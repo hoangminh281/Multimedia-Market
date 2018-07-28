@@ -90,9 +90,11 @@ public class ModifyCardActivity extends AppCompatActivity implements ModifyCardV
                 return true;
             case R.id.menu_save:
                 String number = edtCardNumber.getText().toString().trim();
-                if (number.length() == 0) {
-                    edtCardNumber.setError(getResources().getString(R.string.err_empty));
-                    return true;
+                if (mode == 1) {
+                    if (number.length() == 0) {
+                        edtCardNumber.setError(getResources().getString(R.string.err_empty));
+                        return true;
+                    }
                 }
                 String seri = edtCardSeri.getText().toString().trim();
                 if (seri.length() == 0) {
@@ -101,8 +103,10 @@ public class ModifyCardActivity extends AppCompatActivity implements ModifyCardV
                 }
                 if (mode == 1) {
                     presenter.createNewCard(new Card(checkPositionCardCategory, checkedPositionCardValue, Tools.md5(number), seri, 1));
-                } else if (mode == 0){
-                    presenter.editCard(new Card(card.getId(),checkPositionCardCategory, checkedPositionCardValue, Tools.md5(number), seri, 1), card);
+                } else if (mode == 0) {
+                    if (number == null || number.equals("")) number = card.getNumber();
+                    else number =  Tools.md5(number);
+                    presenter.editCard(new Card(card.getId(), checkPositionCardCategory, checkedPositionCardValue, number, seri, 1), card);
                 }
                 return true;
         }
@@ -113,7 +117,7 @@ public class ModifyCardActivity extends AppCompatActivity implements ModifyCardV
         rgCardCategory.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                for (int j = 0; j < rbCardCategoryList.size() ; j++) {
+                for (int j = 0; j < rbCardCategoryList.size(); j++) {
                     if (rbCardCategoryList.get(j).isChecked()) {
                         checkPositionCardCategory = j;
                         break;

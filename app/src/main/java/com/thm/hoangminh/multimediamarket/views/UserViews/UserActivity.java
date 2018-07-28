@@ -104,7 +104,7 @@ public class UserActivity extends AppCompatActivity implements UserView {
                 .setItems(roles.toArray(new CharSequence[roles.size()]), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.setRoles(user_id, i);
+                        presenter.setRoles(user_id, i + 1);
                     }
                 });
         dialog = builder.create();

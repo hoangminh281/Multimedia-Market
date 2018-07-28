@@ -37,23 +37,16 @@ public class SectionFragment extends Fragment implements SectionView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_layout, null);
         createDummyData();
-
         setControls(view);
-
         initPresenter();
-
         initAdapter();
-
         if (getArguments() != null) {
             keyMode = getArguments().getString(MainActivity.BUNDLE_KEY);
             presenter.LoadSectionPaging(keyMode);
         }
-
         setEvents();
-
         return view;
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
