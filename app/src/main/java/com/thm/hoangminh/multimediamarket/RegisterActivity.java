@@ -100,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (!dataSnapshot.exists()) {
-                                    mRef.child("users/" + user.getId()).setValue(user);
+                                    mRef.child("users/" + user.getId()).setValue(user);// Nếu không tồn tại sẽ tạo user mới
                                 }
                                 Intent login = new Intent(RegisterActivity.this, MainActivity.class);
                                 startActivity(login);

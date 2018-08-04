@@ -144,7 +144,7 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
                     if (!dataSnapshot.exists()) {
                         final User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), "user.png"
                                 , firebaseUser.getEmail(), firebaseUser.getPhoneNumber(), "", 2
-                                , 0, 2, 1);
+                                , 0, 2, 1);//Nếu không tồn tại, tạo user mới
                         mRef.child("users/" + user.getId()).setValue(user);
                         Intent in = new Intent(SigninActivity.this, MainActivity.class);
                         startActivity(in);
@@ -155,7 +155,7 @@ public class SigninActivity extends AppCompatActivity implements FirebaseAuth.Au
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     if (dataSnapshot.getValue(int.class) == 0) {
-                                        FirebaseAuth.getInstance().signOut();
+                                        FirebaseAuth.getInstance().signOut();//kiểm tra trạng thái nếu không hoạt động sẽ không được login
                                         Toast.makeText(SigninActivity.this, R.string.info_logout, Toast.LENGTH_SHORT).show();
                                     }
                                 }

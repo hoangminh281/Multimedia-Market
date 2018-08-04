@@ -63,7 +63,7 @@ public class SectionInteractor {
                     if (dataSnapshot.exists()) {
                         Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                         ArrayList<Section> sectionArr = new ArrayList<>();
-                        for (DataSnapshot item : iterable) {
+                        for (DataSnapshot item : iterable) { //Láy danh sách section có chứa danh sách id sản phẩm
                             Section section = item.getValue(Section.class);
                             section.setSection_id(section.getSection_id());
                             if (section.getProduct_id() != null) {
@@ -79,13 +79,10 @@ public class SectionInteractor {
                         listener.onLoadSectionSuccess(sectionArr);
                     }
                 }
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
         }
     }
-
 }
