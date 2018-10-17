@@ -10,11 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.models.Product;
-import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.repository.ProductStorageRepository;
+import com.thm.hoangminh.multimediamarket.repository.implement.ProductStorageRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 
 import java.util.List;
 
@@ -22,14 +23,13 @@ public class ProductAdapter extends ArrayAdapter<Product> {
     private Context context;
     private int resource;
     private List<Product> objects;
-    private StorageReference mStorageRef;
-
+    private ProductStorageRepository productStorageRepository;
     public ProductAdapter(@NonNull Context context, int resource, @NonNull List<Product> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
         this.objects = objects;
-        this.mStorageRef = FirebaseStorage.getInstance().getReference();
+        productStorageRepository = new ProductStorageRepositoryImpl();
     }
 
     private class ViewHolder {
@@ -40,7 +40,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(this.resource, null);
@@ -53,12 +53,13 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
         Product product = objects.get(position);
         holder.txtTitle.setText(product.getTitle());
         holder.txtRate.setText(product.getRating() + "");
-        holder.txtPrice.setText(Tools.FormatMoney(product.getPrice()));
-        product.setBitmapImage(holder.img, context);
+        holder.txtPrice.setText(MoneyFormular.format(product.getPrice()));
+        Validate.validateImageProduct(holder.img, product.getStatus());
+        ImageLoader.loadImageProduct(productStorageRepository, context, holder.img, product.getPhotoId());
+
         return convertView;
     }
 }

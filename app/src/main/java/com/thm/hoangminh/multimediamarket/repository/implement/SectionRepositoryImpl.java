@@ -37,7 +37,20 @@ public class SectionRepositoryImpl implements SectionRepository<Section, String,
 
     @Override
     public void remove(Section item) {
+    
+    }
 
+    @Override
+    public void findAll(String cateId, Pageable pageable, ValueEventListener event) {
+        Query mQuery = mRef.child(ROUTE.SECTION(cateId)).orderByKey();
+        if (pageable.getFirstId() != null) {
+            mQuery = mQuery.startAt(pageable.getFirstId());
+        }
+        if (pageable.getCount() != 0)
+            mQuery = mQuery.limitToFirst(pageable.getCount());
+        if (mQuery != null) {
+            mQuery.addListenerForSingleValueEvent(event);
+        }
     }
 
     @Override

@@ -23,6 +23,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.models.File;
@@ -59,8 +60,7 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
     private File pickedFile;
     private int imgPosition;
     private ProductDetail pDetail;
-    private HashMap<String, String> imageList;
-    private ArrayList<Integer> mSelectedItems;
+    private ArrayList<Integer> selectedProductSections;
     private UpdateProductPresenter presenter;
 
     @Override
@@ -72,14 +72,13 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);/*
-        getSupportActionBar().setTitle(getResources().getString(R.string.menu_upload) + "");*/
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle(R.string.menu_upload);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             presenter.extractBundle(bundle);
-
 
             setEvents();
         }
@@ -103,12 +102,12 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                getFragmentManager().popBackStack();
-                return true;
-            case R.id.menu_save:
-                saveAction();
-                return true;
+        case android.R.id.home:
+            getFragmentManager().popBackStack();
+            return true;
+        case R.id.menu_save:
+            saveAction();
+            return true;
         }
         return false;
     }
@@ -122,75 +121,82 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
         boolean txtValidate = Validate.validateTextViews(this, txtAgeLimit);
 
         if (edtValidate && txtValidate) {
-        if (edtTitle.getVisibility() == View.VISIBLE && title.length() == 0) {
-            edtTitle.setError(this.getResources().getString(R.string.err_empty));
-            return;
-        }
-
-        if (edtPrice.getVisibility() == View.VISIBLE && price.length() == 0) {
-            edtPrice.setError(this.getResources().getString(R.string.err_empty));
-            return;
-        }
-
-        if (edtIntro.getVisibility() == View.VISIBLE && intro.length() == 0) {
-            edtIntro.setError(this.getResources().getString(R.string.err_empty));
-            return;
-        }
-
-        if (edtDes.getVisibility() == View.VISIBLE && desc.length() == 0) {
-            edtDes.setError(this.getResources().getString(R.string.err_empty));
-            return;
-        }
-
-        if (videoLayout.getVisibility() == View.VISIBLE && video.length() == 0) {
-            edtVideo.setError(this.getResources().getString(R.string.err_empty));
-            return;
-        }
-
-        Bitmap productImage = null;
-        if (((int[]) imgArr[0].getTag())[1] == Constants.HasImageTag) {
-            productImage = ((BitmapDrawable) imgArr[0].getDrawable()).getBitmap();
-        }
-
-        Map<Integer, Bitmap> productDetailBitmaps = new HashMap();
-        for (int i = 1; i < imgArr.length; i++) {
-            if (((int[]) imgArr[i].getTag())[1] == Constants.HasImageTag) {
-                productDetailBitmaps.put(i - 1, ((BitmapDrawable) imgArr[i].getDrawable()).getBitmap());
-            }
-        }
-
-        progressDialog = new ProgressDialog(this);
-
-        ArrayList<String> newProductSections;
-        if (mSelectedItems.size() == 0) {
-            progressDialog.setMessage("Creating product...");
-            progressDialog.setMax(2 + (productImage != null ? 1 : 0) + productDetailBitmaps.size() + (pickedFile != null ? 1 : 0));
-        } else {
-            progressDialog.setMessage("Updating sections...");
-            progressDialog.setMax(4 + (productImage != null ? 1 : 0) + productDetailBitmaps.size() + (pickedFile != null ? 1 : 0));
-            newProductSections = new ArrayList<>();
-            for (int i : mSelectedItems) {
-                newProductSections.add((String) sectionCategories.keySet().toArray()[i]);
+            if (edtTitle.getVisibility() == View.VISIBLE && title.length() == 0) {
+                edtTitle.setError(this.getResources().getString(R.string.err_empty));
+                return;
             }
 
+            if (edtPrice.getVisibility() == View.VISIBLE && price.length() == 0) {
+                edtPrice.setError(this.getResources().getString(R.string.err_empty));
+                return;
+            }
+
+            if (edtIntro.getVisibility() == View.VISIBLE && intro.length() == 0) {
+                edtIntro.setError(this.getResources().getString(R.string.err_empty));
+                return;
+            }
+
+            if (edtDes.getVisibility() == View.VISIBLE && desc.length() == 0) {
+                edtDes.setError(this.getResources().getString(R.string.err_empty));
+                return;
+            }
+
+            boolean edtValidate = Validate.validateEditTextsToString(this, edtTitle, edtPrice, edtIntro, edtDesc,
+                    edtVideo);
+            boolean txtValidate = Validate.validateTextViewsToString(this, txtAgeLimit, txtFile, txtCategory);
+            if (!edtValidate || !txtValidate) {
+                return;
+            }
+
+            Bitmap productImage = null;
+            if (((int[]) imgArr[0].getTag())[1] == Constants.HasImageTag) {
+                productImage = ((BitmapDrawable) imgArr[0].getDrawable()).getBitmap();
+            }
+
+            Map<Integer, Bitmap> productDetailBitmaps = new HashMap();
+            for (int i = 1; i < imgArr.length; i++) {
+                if (((int[]) imgArr[i].getTag())[1] == Constants.HasImageTag) {
+                    productDetailBitmaps.put(i - 1, ((BitmapDrawable) imgArr[i].getDrawable()).getBitmap());
+                }
+            }
+
+            progressDialog = new ProgressDialog(this);
+
+            ArrayList<String> newProductSections;
+            if (mSelectedItems.size() == 0) {
+                progressDialog.setMessage("Creating product...");
+                progressDialog.setMax(2 + (productImage != null ? 1 : 0) + productDetailBitmaps.size()
+                        + (pickedFile != null ? 1 : 0));
+            } else {
+                progressDialog.setMessage("Updating sections...");
+                progressDialog.setMax(4 + (productImage != null ? 1 : 0) + productDetailBitmaps.size()
+                        + (pickedFile != null ? 1 : 0));
+                newProductSections = new ArrayList<>();
+                for (int i : mSelectedItems) {
+                    newProductSections.add((String) sectionCategories.keySet().toArray()[i]);
+                }
+
+            }
+
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setTitle("Update");
+            progressDialog.setProgress(0);
+            progressDialog.show();
+
+            product.setTitle(title);
+            product.setPrice(Double.valueOf(price));
+
+            if (pDetail.getImageList() == null)
+                pDetail.setImageList(new HashMap<String, String>());
+            pDetail.setIntro(intro);
+            pDetail.setDescription(desc);
+            pDetail.setAgeLimit(Integer.parseInt(ageLimit.replace("+", "")));
+            pDetail.setVideo(video);
+
+            presenter.UpdateProduct(productSections, newProductSections, product, pDetail, productImage,
+                    productDetailBitmaps, pickedFile);
         }
-
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setTitle("Update");
-        progressDialog.setProgress(0);
-        progressDialog.show();
-
-        product.setTitle(title);
-        product.setPrice(Double.valueOf(price));
-
-        if (pDetail.getImageList() == null) pDetail.setImageList(new HashMap<String, String>());
-        pDetail.setIntro(intro);
-        pDetail.setDescription(desc);
-        pDetail.setAgeLimit(Integer.parseInt(ageLimit.replace("+", "")));
-        pDetail.setVideo(video);
-
-        presenter.UpdateProduct(productSections, newProductSections, product, pDetail, productImage, productDetailBitmaps, pickedFile);
     }
 
     @Override
@@ -198,22 +204,26 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
         this.product = product;
         edtTitle.setText(product.getTitle());
         edtPrice.setText(product.getPrice() + "");
-        product.setBitmapImage(imgArr[0], this);
+        Validate.validateImageProduct(imgArr[0], product.getStatus());
     }
 
     @Override
-    public void UpdateProductDetailUI(ProductDetail pDetail) {
+    public void loadProductImageByUri(Uri uri) {
+        Picasso.with(this).load(uri).error(R.mipmap.icon_app_2).into(imgArr[0]);
+    }
+
+    @Override
+    public void setTagImageView(int i, int hasOrNotHasImageTag) {
+        imgArr[i].setTag(new int[] { i, hasOrNotHasImageTag });
+    }
+
+    @Override
+    public void UpdateProductDetailUI(ProductDetail pDetail, final String cateId) {
         this.pDetail = pDetail;
         edtIntro.setText(pDetail.getIntro());
         edtDes.setText(pDetail.getDescription());
         edtVideo.setText(pDetail.getVideo());
-        if (pDetail.getImageList() != null) {
-            imageList = pDetail.getImageList();
-            int minSize = imageList.size() < imgArr.length ? imageList.size() : imgArr.length;
-            for (int i = 1; i < minSize + 1; i++) {
-                pDetail.setBitmapImage(imgArr[i], String.valueOf(imageList.values().toArray()[i - 1]), this);
-            }
-        }
+        presenter.loadProductDetailImages(this, imgArr);
         txtAgeLimit.setText(pDetail.getAgeLimit() + "+");
         txtAgeLimit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,7 +235,7 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
         txtFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showFilePicker();
+                showFilePicker(cateId);
             }
         });
     }
@@ -261,7 +271,8 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
                                 @Override
                                 public void run() {
                                     progressDialog.dismiss();
-                                    Toast.makeText(EditProductActivity.this, R.string.info_successUpdateProduct, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditProductActivity.this, R.string.info_successUpdateProduct,
+                                            Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                             });
@@ -284,28 +295,29 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         this.getMenuInflater().inflate(R.menu.img_dialog_menu, menu);
-        if (((int[]) imgArr[imgPosition].getTag())[1] == TAG_UNCLICKIMAGE)
-            menu.findItem(R.id.menuRemove).setVisible(false);
+        if (imgArr[imgPosition] != null)
+            if (((int[]) imgArr[imgPosition].getTag())[1] == Constants.HasImageTag)
+                menu.findItem(R.id.menuRemove).setVisible(true);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menuTakepic:
-                Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePhoto, REQUEST_CODE_TAKEPHOTO);
-                return true;
-            case R.id.menuChoosepic:
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto, REQUEST_CODE_PICKPHOTO);
-                return true;
-            case R.id.menuRemove:
-                imgArr[imgPosition].setImageResource(R.mipmap.add_new_image);
-                imgArr[imgPosition].setTag(new int[]{imgPosition, TAG_UNCLICKIMAGE});
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+        case R.id.menuTakepic:
+            Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(takePhoto, REQUEST_CODE_TAKEPHOTO);
+            return true;
+        case R.id.menuChoosepic:
+            Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(pickPhoto, REQUEST_CODE_PICKPHOTO);
+            return true;
+        case R.id.menuRemove:
+            imgArr[imgPosition].setImageResource(R.mipmap.add_new_image);
+            setTagImageView(imgPosition, Constants.NotHasImageTag);
+            return true;
+        default:
+            return super.onContextItemSelected(item);
         }
     }
 
@@ -313,30 +325,30 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case REQUEST_CODE_TAKEPHOTO:
-                if (resultCode == this.RESULT_OK && data != null) {
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    imgArr[imgPosition].setImageBitmap(bitmap);
-                    imgArr[imgPosition].setTag(new int[]{imgPosition, TAG_CLICKEDIMAGE});
+        case REQUEST_CODE_TAKEPHOTO:
+            if (resultCode == this.RESULT_OK && data != null) {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                imgArr[imgPosition].setImageBitmap(bitmap);
+                setTagImageView(imgPosition, Constants.HasImageTag);
+            }
+            break;
+        case REQUEST_CODE_PICKPHOTO:
+            if (resultCode == this.RESULT_OK && data != null) {
+                Uri selectedImage = data.getData();
+                imgArr[imgPosition].setImageURI(selectedImage);
+                setTagImageView(imgPosition, Constants.HasImageTag);
+            }
+            break;
+        case REQUEST_CODE_PICKFILE:
+            if (resultCode == this.RESULT_OK && data != null) {
+                Uri selectedFile = data.getData();
+                if (selectedFile != null) {
+                    pickedFile = new File(this, selectedFile);
+                    File.Size size = pickedFile.getAbsoluteSize();
+                    txtFile.setText(pickedFile.getName() + " [" + size.getValue() + size.getUnit() + "]");
                 }
                 break;
-            case REQUEST_CODE_PICKPHOTO:
-                if (resultCode == this.RESULT_OK && data != null) {
-                    Uri selectedImage = data.getData();
-                    imgArr[imgPosition].setImageURI(selectedImage);
-                    imgArr[imgPosition].setTag(new int[]{imgPosition, TAG_CLICKEDIMAGE});
-                }
-                break;
-            case REQUEST_CODE_PICKFILE:
-                if (resultCode == this.RESULT_OK && data != null) {
-                    Uri selectedFile = data.getData();
-                    if (selectedFile != null) {
-                        pickedFile = new File(this, selectedFile);
-                        File.Size size = pickedFile.getAbsoluteSize();
-                        txtFile.setText(pickedFile.getName() + " [" + size.getValue() + size.getUnit() + "]");
-                    }
-                    break;
-                }
+            }
         }
     }
 
@@ -351,8 +363,7 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
                 .setMultiChoiceItems(sectionCategories.values().toArray(new String[sectionCategories.size()]), null,
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which,
-                                                boolean isChecked) {
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                                 if (isChecked) {
                                     // If the user checked the item, add it to the selected items
                                     mSelectedItems.add(which);
@@ -375,8 +386,7 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
                             txtCategory.setText(st);
                         }
                     }
-                })
-                .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                }).setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                     }
@@ -396,10 +406,8 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
             numberPicker.setValue(Integer.valueOf(txtAgeLimit.getText().toString().replace("+", "")));
         numberPicker.setWrapSelectorWheel(false);
 
-        final AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(viewDialog)
-                .setPositiveButton(R.string.button_save, null)
-                .create();
+        final AlertDialog dialog = new AlertDialog.Builder(this).setView(viewDialog)
+                .setPositiveButton(R.string.button_save, null).create();
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
             @Override
@@ -418,7 +426,7 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
         dialog.show();
     }
 
-    public void showFilePicker() {
+    public void showFilePicker(String cateId) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         if (cateId.equals(MainActivity.categories.get(0).getCateId())) {
             intent.setType("application/vnd.android.package-archive");
@@ -437,7 +445,7 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
         for (final ImageView img : imgArr) {
             registerForContextMenu(img);
             img.setLongClickable(false);
-            img.setTag(new int[]{pos++, TAG_UNCLICKIMAGE});
+            setTagImageView(pos++, Constants.NotHasImageTag);
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -464,7 +472,7 @@ public class EditProductActivity extends AppCompatActivity implements UpdateProd
         txtAgeLimit = findViewById(R.id.textViewAgeLimit);
         txtFile = findViewById(R.id.textViewFile);
         toolbar = findViewById(R.id.toolbar);
-        mSelectedItems = new ArrayList();          // Where we track the selected items
+        mSelectedItems = new ArrayList(); // Where we track the selected items
         videoLayout = findViewById(R.id.videoLayout);
     }
 }

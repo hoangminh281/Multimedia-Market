@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.fomular.MoneyFormular;
 import com.thm.hoangminh.multimediamarket.models.Card;
 import com.thm.hoangminh.multimediamarket.models.RechargeHistory;
 import com.thm.hoangminh.multimediamarket.presenters.RechargeHistoryPresenters.RechargeHistoryPresenter;
@@ -22,18 +24,15 @@ public class RechargeHistoryActivity extends AppCompatActivity implements Rechar
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recharge_history_layout);
-
         setControls();
 
         initPresenter();
 
         Bundle bundle = getIntent().getExtras();
-
         if (bundle != null) {
-            trans_code = bundle.getString("trans_code");
+            trans_code = bundle.getString(Constants.TransactionKey);
             presenter.LoadRechargeHistory(trans_code);
         }
-
         setEvents();
     }
 

@@ -6,5 +6,6 @@
     <item android:id="@+id/menuTakepic"
         android:title="@string/menu_takeImage"/>
     <item android:id="@+id/menuRemove"
-        android:title="@string/menu_remove"/>
+        android:title="@string/menu_remove"
+        android:visible="false"/>
 </menu>

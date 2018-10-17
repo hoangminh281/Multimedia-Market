@@ -2,31 +2,32 @@ package com.thm.hoangminh.multimediamarket.view.ProfileViews;
 
 import com.thm.hoangminh.multimediamarket.models.User;
 
-public interface ProfileView {
+public interface ProfileView  extends BundleBaseView {
+     void ShowCurrentUserInformation(User user);
 
-    public void ShowCurrentUserInformation(User user);
+     void showGameNumber(int size);
 
-    public void showGameNumber(int size);
+     void showImageNumber(int size);
 
-    public void showImageNumber(int size);
+     void showVideoNumber(int size);
 
-    public void showVideoNumber(int size);
+     void showMusicNumber(int size);
 
-    public void showMusicNumber(int size);
+     void EnableChangeCurrentUserEmail();
 
-    public void EnableChangeCurrentUserEmail();
+     void EnableChangeCurrentUserPassword();
 
-    public void EnableChangeCurrentUserPassword();
+     void showMessage(int messageId);
 
-    public void showMessage(String message);
+     void dismissDialog();
 
-    public void showMessageFromResource(int resource);
+     void showProgresbarDialog();
 
-    public void dismissDialog();
-
-    public void showProgresbarDialog();
-
-    public void hideProgresbarDialog();
+    void hideProgresbarDialog();
 
     void editable();
+
+    void showEditableBalance(boolean b);
+
+    void showUserRole(String role);
 }

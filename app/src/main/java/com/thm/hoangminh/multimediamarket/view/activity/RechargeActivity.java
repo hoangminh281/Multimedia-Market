@@ -2,8 +2,8 @@ package com.thm.hoangminh.multimediamarket.view.RechargeViews;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,32 +19,33 @@ import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.models.Card;
-import com.thm.hoangminh.multimediamarket.presenters.RechargePresenters.RechargePresenter;
-import com.thm.hoangminh.multimediamarket.references.Tools;
-import com.thm.hoangminh.multimediamarket.view.RechargeHistoryViews.RechargeHistoryActivity;
+import com.thm.hoangminh.multimediamarket.presenter.RechargePresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.RechargePresenterImpl;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
+import com.thm.hoangminh.multimediamarket.view.callback.RechargeView;
 
 import java.util.ArrayList;
 
 public class RechargeActivity extends AppCompatActivity implements RechargeView {
-    private RechargePresenter presenter;
+    private Button btnNext;
+    private Toolbar toolbar;
+    private TextView txtTotal;
     private RadioGroup rgCardCategory;
-    private ArrayList<RadioButton> rbCardValueList;
+    private EditText edtCardNumber, edtCardSeri;
+
+    private double balance = 0;
+    private RechargePresenter presenter;
     private int checkedPositionCardValue = -1;
     private int checkPositionCardCategory = -1;
-    private EditText edtCardNumber, edtCardSeri;
-    private Button btnNext;
-    private TextView txtTotal;
-    private double balance = 0;
-    private boolean flag_num, flag_seri;
-    private Toolbar toolbar;
+    private ArrayList<RadioButton> rbCardValueList;
     private ArrayList<RadioButton> rbCardCategoryList;
+    private boolean cardNumberAvailable, cardSeriAvailable;
 
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recharge_procedure_layout);
-
         setControls();
 
         setSupportActionBar(toolbar);
@@ -54,17 +55,21 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
 
         initPresenter();
-
-        presenter.LoadUserWallet();
-
+        presenter.loadUserWallet();
         setEvents();
-
         rbCardCategoryList.get(0).setChecked(true);
         rbCardValueList.get(0).setChecked(true);
     }
 
     private void initPresenter() {
         presenter = new RechargePresenter(this);
+    }
+
+    @Override
+    public void showTotal(double balance) {
+        this.balance = balance;
+        double total = balance + (checkedPositionCardValue == -1 ? 0 : Card.cardValueList[checkedPositionCardValue]);
+        txtTotal.setText(MoneyFormular.format(total));
     }
 
     @Override
@@ -77,12 +82,12 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
         return false;
     }
 
-    public void onClicked_btnNext(View view) {
-        presenter.RechargeCard(new Card(Tools.md5(edtCardNumber.getText().toString()), edtCardSeri.getText().toString()), checkPositionCardCategory, checkedPositionCardValue);
+    public void handleRechargeCard(View view) {
+        presenter.rechargeCard(new Card(edtCardNumber.getText().toString(), edtCardSeri.getText().toString()), checkPositionCardCategory, checkedPositionCardValue);
     }
 
-    private void isOpenBtnNext() {
-        if (flag_num && flag_seri) {
+    private void validate() {
+        if (cardNumberAvailable && cardSeriAvailable) {
             btnNext.setBackground(getResources().getDrawable(R.drawable.blue_radius_button));
             btnNext.setEnabled(true);
         }
@@ -102,13 +107,9 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String cardNumber = edtCardNumber.getText().toString().trim();
-                if (cardNumber.length() == 0) {
-                    edtCardNumber.setError(getResources().getString(R.string.err_empty));
-                    flag_num = false;
-                }
-                flag_num = true;
-                isOpenBtnNext();
+                boolean validated = Validate.validateEditTextsToNumber(RechargeActivity.this, edtCardNumber);
+                cardNumberAvailable = validated ? true : false;
+                validate();
             }
         });
         edtCardSeri.addTextChangedListener(new TextWatcher() {
@@ -124,13 +125,9 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String cardSeri = edtCardSeri.getText().toString().trim();
-                if (cardSeri.length() == 0) {
-                    edtCardSeri.setError(getResources().getString(R.string.err_empty));
-                    flag_seri = false;
-                }
-                flag_seri = true;
-                isOpenBtnNext();
+                boolean validated = Validate.validateEditTextsToString(RechargeActivity.this, edtCardSeri);
+                cardSeriAvailable = validated ? true : false;
+                validate();
             }
         });
 
@@ -190,26 +187,18 @@ public class RechargeActivity extends AppCompatActivity implements RechargeView 
     }
 
     @Override
-    public void showTotal(double balance) {
-        this.balance = balance;
-        double total = balance + (checkedPositionCardValue == -1 ? 0 : Card.cardValueList[checkedPositionCardValue]);
-        String value = Tools.FormatMoney(total);
-        txtTotal.setText(value);
+    public void showMessage(int messageId) {
+        Toast.makeText(this, getResources().getString(messageId), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public void startActivity(Class<?> clazz) {
+        startActivity(new Intent(this, clazz));
     }
 
     @Override
-    public void showMessageFromResource(int resource) {
-        Toast.makeText(this, getResources().getString(resource), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void startRechargeHistoryActivity(Bundle bundle) {
-        Intent intent = new Intent(this, RechargeHistoryActivity.class);
+    public void startActivity(Class<?> clazz, Bundle bundle) {
+        Intent intent = new Intent(this, clazz);
         intent.putExtras(bundle);
         startActivity(intent);
     }

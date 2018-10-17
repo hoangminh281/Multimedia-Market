@@ -48,83 +48,10 @@ public class ProfileInteractor {
     }
 
     public void LoadCurrentUserMultimedia() {
-        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(0).getCate_id()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
-                    int size = 0;
-                    for (DataSnapshot item : iterable) {
-                        size++;
-                    }
-                    listener.onLoadCurrentUserProductSuccess(size);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(1).getCate_id()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
-                    int size = 0;
-                    for (DataSnapshot item : iterable) {
-                        size++;
-                    }
-                    listener.onLoadCurrentUserImageSuccess(size);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(2).getCate_id()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
-                    int size = 0;
-                    for (DataSnapshot item : iterable) {
-                        size++;
-                    }
-                    listener.onLoadCurrentUserVideoSuccess(size);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(3).getCate_id()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
-                    int size = 0;
-                    for (DataSnapshot item : iterable) {
-                        size++;
-                    }
-                    listener.onLoadCurrentUserMusicSuccess(size);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public void CheckCurrentUserProvider() {
-        if (user_id.equals(currentUser.getUid()))
-            listener.onCheckCurrentUserProviderSuccess(currentUser.getProviders().get(0));
+
     }
 
     public void updateBalanceByUserId(double balance) {
@@ -180,17 +107,7 @@ public class ProfileInteractor {
     }
 
     public void EditPassword(String password) {
-        currentUser.updatePassword(password).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                listener.onEditSuccess();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                listener.onExistError();
-            }
-        });
+
     }
 
     public void EditBirthday(int year, int month, int day) {

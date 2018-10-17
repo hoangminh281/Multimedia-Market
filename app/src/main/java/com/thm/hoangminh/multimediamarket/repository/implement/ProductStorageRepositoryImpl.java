@@ -35,7 +35,9 @@ public class ProductImageRepositoryImpl implements ImageRepository {
     }
 
     @Override
-    public void findById(String productImageId, OnSuccessListener<Uri> event) {
-        mStorageRef.child(ROUTE.PRODUCT_IMAGE(productImageId)).getDownloadUrl().addOnSuccessListener(event);
+    public void findDownloadUriById(String productImageId, OnSuccessListener<Uri> successListener, OnFailureListener failureListener) {
+        mStorageRef.child(ROUTE.PRODUCTSTORAGE_IMAGE(productImageId)).getDownloadUrl()
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 }

@@ -1,5 +1,7 @@
 package com.thm.hoangminh.multimediamarket.repository;
 
+import android.net.Uri;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -14,5 +16,5 @@ public interface StorageRepository<T, ID> {
 
     void findById(ID id, OnSuccessListener successListener, OnFailureListener failureListener);
 
-    void findDownloadUriById(ID id, OnSuccessListener successListener, OnFailureListener failureListener);
+    void findDownloadUriById(ID id, OnSuccessListener<Uri> successListener, OnFailureListener failureListener);
 }

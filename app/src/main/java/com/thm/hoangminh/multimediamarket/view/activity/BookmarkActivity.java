@@ -46,8 +46,9 @@ public class BookmarkActivity extends AppCompatActivity implements BookmarkView 
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null && bundle.getString(MainActivity.BUNDLE_KEY).equals("admin")) {
-            showCategoriesTabLayout(productAdminKey);
+        if (bundle != null) {
+            initPresenter();
+            showCategoriesTabLayout(Constants.Admin);
             getSupportActionBar().setTitle(getResources().getString(R.string.menu_product_admin) + "");
             initPresenter();
             presenter.findCurrentUserRole();

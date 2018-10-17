@@ -121,43 +121,4 @@ public class Product {
         data.add(new Product("-LDlhVwnkVIDaZrdnmhy", "-LGAQqsSdhMt2bTudm1L", "Monument Valley", "monyment-valley.png", 4.8, 86000, 1));
         return data;
     }
-
-    public void setBitmapImage(final ImageView img, final Context context) {
-        if (this.getStatus() == 0) img.setColorFilter(R.color.white_transparent);
-        else img.clearColorFilter();
-        if (image_url != null) {
-            Picasso.with(context)
-                    .load(image_url)
-                    .error(R.mipmap.icon_app_2)
-                    .into(img);
-        } else {
-            final StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
-            mStorageRef.child("products/" + photoId).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    image_url = uri.toString();
-                    Picasso.with(context)
-                            .load(uri)
-                            .error(R.mipmap.icon_app_2)
-                            .into(img);
-                }
-            });
-        }
-        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-        mRef.child("products/" + this.getProduct_id() + "/status").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    if (dataSnapshot.getValue(int.class) == 0)
-                        img.setColorFilter(R.color.white_transparent);
-                    else img.clearColorFilter();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 }

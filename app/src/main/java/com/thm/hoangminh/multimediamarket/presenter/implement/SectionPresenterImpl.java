@@ -11,9 +11,9 @@ import com.thm.hoangminh.multimediamarket.models.SectionDataModel;
 import com.thm.hoangminh.multimediamarket.models.User;
 import com.thm.hoangminh.multimediamarket.presenter.service.SectionPresenter;
 import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
-import com.thm.hoangminh.multimediamarket.repository.ProductRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.SectionRepository;
-import com.thm.hoangminh.multimediamarket.repository.SectionRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.ProductRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.SectionRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.view.callback.SectionView;
 
 import java.util.HashMap;
@@ -50,11 +50,14 @@ public class SectionPresenterImpl implements SectionPresenter {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                        int count = 0;
                         while (iterator.hasNext()) { //Lấy danh sách section có chứa danh sách id sản phẩm
+                            count++;
                             Section section = iterator.next().getValue(Section.class);
-                            if (!iterator.hasNext()) {
+                            if (!iterator.hasNext() && count == pageable.getCount()) {
                                 String lastSectionId = section.getSectionId();
                                 pageable.setFirstId(lastSectionId);
+                                requestBlock = false;
                                 break;
                             }
                             if (section.getProductIdArr() != null) {
@@ -74,7 +77,6 @@ public class SectionPresenterImpl implements SectionPresenter {
                             }
                         }
                     }
-                    requestBlock = false;
                 }
 
                 @Override

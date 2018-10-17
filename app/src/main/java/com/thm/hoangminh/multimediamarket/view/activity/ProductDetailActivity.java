@@ -28,17 +28,19 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.squareup.picasso.Picasso;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.adapters.ViewPagerAdapter;
-import com.thm.hoangminh.multimediamarket.models.RatingContent;
-import com.thm.hoangminh.multimediamarket.references.Tools;
-import com.thm.hoangminh.multimediamarket.view.RechargeViews.RechargeActivity;
-import com.thm.hoangminh.multimediamarket.view.UpdateProductViews.UpdateProductActivity;
-import com.thm.hoangminh.multimediamarket.view.fragments.RatingFragment;
-import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
-import com.thm.hoangminh.multimediamarket.references.ConvertNumberToString;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.fomular.MoneyFormular;
+import com.thm.hoangminh.multimediamarket.fomular.NumberFormular;
 import com.thm.hoangminh.multimediamarket.models.Product;
 import com.thm.hoangminh.multimediamarket.models.ProductDetail;
+import com.thm.hoangminh.multimediamarket.models.ProductRating;
 import com.thm.hoangminh.multimediamarket.models.User;
-import com.thm.hoangminh.multimediamarket.presenters.ProductDetailPresenters.ProductDetailPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.ProductDetailPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.ProductDetailPresenterImpl;
+import com.thm.hoangminh.multimediamarket.utility.AnimationSupport;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
+import com.thm.hoangminh.multimediamarket.view.callback.ProductDetailView;
+import com.thm.hoangminh.multimediamarket.view.fragments.RatingFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -399,7 +401,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void showProduct(Product value) {
         this.product = value;
-        product.setBitmapImage(imgProduct, this);
+        presenter.loadImageProduct(this, imgProduct, value);
         txtTitle.setText(product.getTitle());
         txtRating.setText(product.getRating() + "");
         ratingBar.setRating((float) product.getRating());
@@ -442,24 +444,25 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog = new Dialog(ProductDetailActivity.this);
-                // khởi tạo dialog
-                dialog.setContentView(R.layout.checkout_dialog);
-                // xét layout cho dialog
-                dialog.setTitle(product.getTitle());
-                // xét tiêu đề cho dialog
+                checkoutDialog = new Dialog(ProductDetailActivity.this);
+                // khởi tạo checkoutDialog
+                checkoutDialog.setContentView(R.layout.checkout_dialog);
+                // xét layout cho checkoutDialog
+                checkoutDialog.setTitle(product.getTitle());
+                // xét tiêu đề cho checkoutDialog
 
-                ImageView imgLogo = dialog.findViewById(R.id.imageViewLogo);
-                TextView txtTitle = dialog.findViewById(R.id.textViewTitle);
-                TextView txtPrice = dialog.findViewById(R.id.textViewPrice);
-                txtContent = dialog.findViewById(R.id.textViewContent);
-                txtWallet = dialog.findViewById(R.id.textViewWallet);
-                btnCheckout = dialog.findViewById(R.id.buttonCheckout);
-                rlDialog = dialog.findViewById(R.id.relativeLayoutDialog);
-                pgbDialog = dialog.findViewById(R.id.progressBarDialog);
-                // khai báo control trong dialog để bắt sự kiện
-                presenter.LoadUserWallet(product.getPrice());
-                product.setBitmapImage(imgLogo, ProductDetailActivity.this);
+                final ImageView imgLogo = checkoutDialog.findViewById(R.id.imageViewLogo);
+                TextView txtTitle = checkoutDialog.findViewById(R.id.textViewTitle);
+                TextView txtPrice = checkoutDialog.findViewById(R.id.textViewPrice);
+                txtContent = checkoutDialog.findViewById(R.id.textViewContent);
+                txtWallet = checkoutDialog.findViewById(R.id.textViewWallet);
+                btnCheckout = checkoutDialog.findViewById(R.id.buttonCheckout);
+                rlDialog = checkoutDialog.findViewById(R.id.relativeLayoutDialog);
+                pgbDialog = checkoutDialog.findViewById(R.id.progressBarDialog);
+                // khai báo control trong checkoutDialog để bắt sự kiện
+                presenter.setupCheckoutDialog(product.getPrice());
+                Validate.validateImageProduct(imgLogo, product.getStatus());
+                presenter.loadImageProduct(ProductDetailActivity.this, imgLogo, product);
                 txtTitle.setText(product.getTitle());
                 txtPrice.setText(Tools.FormatMoney(product.getPrice()));
 

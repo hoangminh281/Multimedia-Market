@@ -14,21 +14,23 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.models.Product;
-import com.thm.hoangminh.multimediamarket.references.Tools;
-import com.thm.hoangminh.multimediamarket.views.ProductDetailViews.ProductDetailActivity;
+import com.thm.hoangminh.multimediamarket.repository.ProductStorageRepository;
+import com.thm.hoangminh.multimediamarket.repository.implement.ProductStorageRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
+import com.thm.hoangminh.multimediamarket.view.activity.ProductDetailActivity;
+import com.thm.hoangminh.multimediamarket.view.callback.SectionView;
 
 import java.util.ArrayList;
 
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
-
     private ArrayList<Product> itemsList;
-    private Context mContext;
-    private StorageReference mStorageRef;
+    private ProductStorageRepository productStorageRepository;
 
     public SectionListDataAdapter(Context context, ArrayList<Product> itemsList) {
+        this.listener = listener;
         this.itemsList = itemsList;
-        this.mContext = context;
-        this.mStorageRef = FirebaseStorage.getInstance().getReference();
+        productStorageRepository = new ProductStorageRepositoryImpl();
     }
 
     @Override
@@ -41,7 +43,8 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     @Override
     public void onBindViewHolder(final SingleItemRowHolder holder, int i) {
         Product product = itemsList.get(i);
-        product.setBitmapImage(holder.img, mContext);
+        Validate.validateImageProduct(holder.img, product.getStatus());
+        ImageLoader.loadImageProduct(productStorageRepository, mContext, holder.img, product.getPhotoId());
         holder.tvTitle.setText(product.getTitle());
         holder.tvPrice.setText(Tools.FormatMoney(product.getPrice()));
         holder.tvRate.setText(product.getRating() + "");
