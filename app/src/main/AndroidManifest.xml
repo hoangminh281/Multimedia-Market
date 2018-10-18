@@ -12,36 +12,36 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.MainViews.MainActivity" />
-        <activity android:name=".SigninActivity">
+        <activity android:name=".view.activity.MainActivity" />
+        <activity android:name=".view.activity.SigninActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".views.ProductViews.ProductActivity" />
+        <activity android:name=".view.activity.RegisterActivity" />
+        <activity android:name=".view.activity.ProductActivity" />
         <activity
-            android:name=".views.ProductDetailViews.ProductDetailActivity"
+            android:name=".view.activity.ProductDetailActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".views.RechargeViews.RechargeActivity"
+            android:name=".view.activity.RechargeActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".views.RechargeHistoryViews.RechargeHistoryActivity" />
-        <activity android:name=".RatingActivity" />
-        <activity android:name=".views.ProfileViews.ProfileActivity" />
+        <activity android:name=".view.activity.RechargeHistoryActivity" />
+        <activity android:name=".view.activity.RatingActivity" />
+        <activity android:name=".view.activity.ProfileActivity" />
         <activity
-            android:name=".views.fragments.ModifyProductFragment"
+            android:name=".view.fragment.ModifyProductFragment"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".views.BookmarkViews.BookmarkActivity" />
-        <activity android:name=".views.ModifyProductViews.ModifyProductActivity" />
+        <activity android:name=".view.activity.BookmarkActivity" />
+        <activity android:name=".view.activity.ModifyProductActivity" />
         <activity
-            android:name=".views.UpdateProductViews.UpdateProductActivity"
+            android:name=".view.activity.UpdateProductActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".views.UserViews.UserActivity" />
-        <activity android:name=".views.CardViews.CardActivity" />
-        <activity android:name=".views.ModifyCardViews.ModifyCardActivity"
+        <activity android:name=".view.activity.UserActivity" />
+        <activity android:name=".view.activity.CardActivity" />
+        <activity android:name=".view.activity.ModifyCardActivity"
             android:windowSoftInputMode="stateHidden" />
     </application>
 

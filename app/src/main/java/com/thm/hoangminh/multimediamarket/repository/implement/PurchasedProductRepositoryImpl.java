@@ -1,0 +1,39 @@
+package com.thm.hoangminh.multimediamarket.repository.implement;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ValueEventListener;
+import com.thm.hoangminh.multimediamarket.model.PurchasedProduct;
+import com.thm.hoangminh.multimediamarket.repository.PurchasedProductRepository;
+
+public class PurchasedProductRepositoryImpl implements PurchasedProductRepository {
+    @Override
+    public void add(PurchasedProduct item, ValueEventListener listener) {
+
+    }
+
+    @Override
+    public void update(PurchasedProduct item, OnSuccessListener successListener, OnFailureListener failureListener) {
+
+    }
+
+    @Override
+    public void remove(PurchasedProduct item, ValueEventListener listener) {
+
+    }
+
+    @Override
+    public void findAll(ValueEventListener event) {
+
+    }
+
+    @Override
+    public void findById(String s, ValueEventListener event) {
+
+    }
+
+    @Override
+    public void findAll(String cateId, String userId, ValueEventListener eventListener) {
+
+    }
+}
