@@ -17,13 +17,13 @@ import android.widget.TextView;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.view.activity.RatingActivity;
 import com.thm.hoangminh.multimediamarket.adapter.RatingAdapter;
-import com.thm.hoangminh.multimediamarket.model.RatingContent;
+import com.thm.hoangminh.multimediamarket.model.ProductRating;
 import com.thm.hoangminh.multimediamarket.references.Tools;
 
 import java.util.ArrayList;
 
 public class RatingFragment extends Fragment {
-    private ArrayList<RatingContent> ratingList;
+    private ArrayList<ProductRating> ratingList;
     private ListView listView;
     private TextView txtRatingOverview, txtRatingSumOverview;
     private RatingBar rtbOverview;
@@ -72,7 +72,7 @@ public class RatingFragment extends Fragment {
 
     private void setRatingOverviewDetail() {
         int[] ratingArr = {0, 0, 0, 0, 0};
-        for (RatingContent item : ratingList) {
+        for (ProductRating item : ratingList) {
             ratingArr[item.getPoint() - 1]++;
         }
         txtRatingSumOverview.setText(ratingList.size() + "");

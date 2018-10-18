@@ -8,7 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.model.Card;
-import com.thm.hoangminh.multimediamarket.model.RechargeHistory;
+import com.thm.hoangminh.multimediamarket.model.RechargedHistory;
 import com.thm.hoangminh.multimediamarket.presenter.callback.RechargeHistoryListener;
 
 public class RechargeHistoryInteractor {
@@ -27,7 +27,7 @@ public class RechargeHistoryInteractor {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists())
-                    listener.onLoadRechargeHistorySuccess(dataSnapshot.getValue(RechargeHistory.class));
+                    listener.onLoadRechargeHistorySuccess(dataSnapshot.getValue(RechargedHistory.class));
             }
 
             @Override

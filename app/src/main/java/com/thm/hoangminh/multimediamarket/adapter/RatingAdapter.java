@@ -14,17 +14,17 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.thm.hoangminh.multimediamarket.R;
-import com.thm.hoangminh.multimediamarket.model.RatingContent;
+import com.thm.hoangminh.multimediamarket.model.ProductRating;
 
 import java.util.ArrayList;
 
-public class RatingAdapter extends ArrayAdapter<RatingContent> {
+public class RatingAdapter extends ArrayAdapter<ProductRating> {
     private Context context;
     private int resource;
-    private ArrayList<RatingContent> objects;
+    private ArrayList<ProductRating> objects;
     private int limit;
 
-    public RatingAdapter(@NonNull Context context, int resource, @NonNull ArrayList<RatingContent> objects, int limit) {
+    public RatingAdapter(@NonNull Context context, int resource, @NonNull ArrayList<ProductRating> objects, int limit) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -67,18 +67,18 @@ public class RatingAdapter extends ArrayAdapter<RatingContent> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final RatingContent ratingContent = objects.get(position);
-        ratingContent.LoadImageViewUser(holder.imgAvatar, context);
-        ratingContent.LoadUserName(holder.txtName);
-        holder.txtDate.setText(ratingContent.getTime());
-        String st = ratingContent.getContent().trim();
+        final ProductRating productRating = objects.get(position);
+        productRating.LoadImageViewUser(holder.imgAvatar, context);
+        productRating.LoadUserName(holder.txtName);
+        holder.txtDate.setText(productRating.getTime());
+        String st = productRating.getContent().trim();
         if (st.length() == 0) {
             holder.txtComment.setVisibility(View.GONE);
         } else {
             holder.txtComment.setText(st);
         }
-        holder.ratingBar.setRating(ratingContent.getPoint());
-        ratingContent.CheckCurrentUserLike(holder.cbLike);
+        holder.ratingBar.setRating(productRating.getPoint());
+        productRating.CheckCurrentUserLike(holder.cbLike);
         holder.imgOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

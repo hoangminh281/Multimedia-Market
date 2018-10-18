@@ -22,7 +22,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public void add(Product item, ValueEventListener eventListener) {
+    public void add(Product item, OnSuccessListener successListener, OnFailureListener failureListener) {
 
     }
 
@@ -32,7 +32,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public void remove(Product item, ValueEventListener eventListener) {
+    public void remove(Product item, OnSuccessListener successListener, OnFailureListener failureListener) {
 
     }
 
@@ -44,5 +44,15 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public void findById(String productId, ValueEventListener event) {
         mRef.child(ROUTE.PRODUCT(productId)).addListenerForSingleValueEvent(event);
+    }
+
+    @Override
+    public void setRatingPoint(String productId, double ratingPoint) {
+
+    }
+
+    @Override
+    public void findPriceByProductId(String productId, ValueEventListener eventListener) {
+
     }
 }

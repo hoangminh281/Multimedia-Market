@@ -14,5 +14,5 @@ public interface StorageRepository<T, ID> {
 
     void remove(ID id, OnSuccessListener successListener, OnFailureListener failureListener);
 
-    void findDownloadUriById(ID id, OnSuccessListener<Uri> successListener, OnFailureListener failureListener);
+    void findUriById(ID id, OnSuccessListener<Uri> successListener, OnFailureListener failureListener);
 }

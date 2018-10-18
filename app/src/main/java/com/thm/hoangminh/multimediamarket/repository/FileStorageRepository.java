@@ -1,4 +1,7 @@
 package com.thm.hoangminh.multimediamarket.repository;
 
-public interface FileStorageRepository {
+import com.thm.hoangminh.multimediamarket.model.File;
+import com.thm.hoangminh.multimediamarket.repository.base.StorageRepository;
+
+public interface FileStorageRepository extends StorageRepository<File, String> {
 }

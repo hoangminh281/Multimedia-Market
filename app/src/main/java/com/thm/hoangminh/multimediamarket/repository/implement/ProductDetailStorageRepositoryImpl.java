@@ -8,7 +8,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.thm.hoangminh.multimediamarket.config.api.ROUTE;
+import com.thm.hoangminh.multimediamarket.api.ROUTE;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailStorageRepository;
 
 import java.io.ByteArrayOutputStream;
@@ -43,18 +43,8 @@ public class ProductDetailStorageRepositoryImpl implements ProductDetailStorageR
     }
 
     @Override
-    public void findAll(OnSuccessListener successListener, OnFailureListener failureListener) {
-
-    }
-
-    @Override
-    public void findById(String s, OnSuccessListener successListener, OnFailureListener failureListener) {
-
-    }
-
-    @Override
-    public void findDownloadUriById(String s, OnSuccessListener<Uri> successListener, OnFailureListener failureListener) {
-        mStorageRef.child(ROUTE.PRODUCTDETAILSTORAGE_IMAGE(s)).getDownloadUrl()
+    public void findUriById(String photoId, OnSuccessListener<Uri> successListener, OnFailureListener failureListener) {
+        mStorageRef.child(ROUTE.PRODUCTDETAILSTORAGE_IMAGE(photoId)).getDownloadUrl()
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
     }

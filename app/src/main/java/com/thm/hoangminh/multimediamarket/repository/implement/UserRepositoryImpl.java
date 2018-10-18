@@ -1,5 +1,7 @@
 package com.thm.hoangminh.multimediamarket.repository.implement;
 
+import android.support.annotation.NonNull;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -13,18 +15,27 @@ public class UserRepositoryImpl implements UserRepository {
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
-    public void add(User user, ValueEventListener valueEventListener) {
-        mRef.child(ROUTE.USER(user.getId())).setValue(user);
+    public void add(User user, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.USER(user.getId())).setValue(user)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 
     @Override
-    public void update(User user, OnSuccessListener successListener, OnFailureListener failureListener) {
-
+    public void update(final User user, final OnSuccessListener successListener, final OnFailureListener failureListener) {
+        remove(user, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                add(user, successListener, failureListener);
+            }
+        }, failureListener);
     }
 
     @Override
-    public void remove(User user, ValueEventListener valueEventListener) {
-
+    public void remove(User user, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.USER(user.getId())).removeValue()
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 
     @Override

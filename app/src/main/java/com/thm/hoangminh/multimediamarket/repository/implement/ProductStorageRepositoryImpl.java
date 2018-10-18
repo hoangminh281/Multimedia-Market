@@ -46,7 +46,7 @@ public class ProductStorageRepositoryImpl implements ProductStorageRepository {
     }
 
     @Override
-    public void findDownloadUriById(String productImageId, OnSuccessListener<Uri> successListener, OnFailureListener failureListener) {
+    public void findUriById(String productImageId, OnSuccessListener<Uri> successListener, OnFailureListener failureListener) {
         mStorageRef.child(ROUTE.PRODUCTSTORAGE_IMAGE(productImageId)).getDownloadUrl()
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);

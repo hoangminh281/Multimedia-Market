@@ -78,18 +78,51 @@ public class ROUTE {
         return PRODUCT + productId;
     }
 
-    public static String USERSTORAGE_IMAGE(String photoId) {
-        return USERSTORAGE + photoId;
-    }
-
     public static String RECHARGEHISTORY(String userId) {
         return RECHARGEHISTORY + userId;
     }
 
-    public static String PRODUCTSTORAGE_IMAGE(String productImageId) {
-        return PRODUCTSTORAGE_IMAGE + productImageId;
+    public static String SECTION(String cateId) {
+        return null;
     }
 
-    public static String SECTION(String cateId) {
+    public static String FILE(String fileId) {
+        return null;
+    }
+
+    public static String PRODUCTDETAIL(String productId) {
+        return null;
+    }
+
+    public static String PRODUCTDETAIL_PURCHASEDQUANTITY(String productId) {
+        return null;
+    }
+
+    public static String PRODUCTDETAIL_IMAGELIST(String productId, String imageId) {
+        return null;
+    }
+
+    public static String PRODUCTDETAIL_IMAGELIST(String productId) {
+        return null;
+    }
+
+    public static String PRODUCTDETAIL_FILE(String productId) {
+        return null;
+    }
+
+    public static String PRODUCTDETAIL_CAPACITY(String productId) {
+        return null;
+    }
+
+    public static String USERSTORAGE_IMAGE(String photoId) {
+        return USERSTORAGE + photoId;
+    }
+
+    public static String PRODUCTDETAILSTORAGE_IMAGE(String photoId) {
+        return null;
+    }
+
+    public static String PRODUCTSTORAGE_IMAGE(String productImageId) {
+        return PRODUCTSTORAGE_IMAGE + productImageId;
     }
 }

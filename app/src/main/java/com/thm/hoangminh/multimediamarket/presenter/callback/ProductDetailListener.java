@@ -2,7 +2,7 @@ package com.thm.hoangminh.multimediamarket.presenter.callback;
 
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
-import com.thm.hoangminh.multimediamarket.model.RatingContent;
+import com.thm.hoangminh.multimediamarket.model.ProductRating;
 import com.thm.hoangminh.multimediamarket.model.User;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public interface ProductDetailListener {
 
     public void onAddNewRatingSuccess();
 
-    public void onLoadRatingSuccess(ArrayList<RatingContent> ratingList);
+    public void onLoadRatingSuccess(ArrayList<ProductRating> ratingList);
 
     public void onLoadUserWalletSuccess(double balance);
 

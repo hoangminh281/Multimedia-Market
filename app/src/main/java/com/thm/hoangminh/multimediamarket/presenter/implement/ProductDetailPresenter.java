@@ -5,7 +5,7 @@ import android.content.Context;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
-import com.thm.hoangminh.multimediamarket.model.RatingContent;
+import com.thm.hoangminh.multimediamarket.model.ProductRating;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.ProductDetailPresenters.ProductDetailInteractor;
 import com.thm.hoangminh.multimediamarket.presenter.callback.ProductDetailListener;
@@ -90,13 +90,13 @@ public class ProductDetailPresenter implements ProductDetailListener {
     }
 
     @Override
-    public void onLoadRatingSuccess(ArrayList<RatingContent> ratingList) {
+    public void onLoadRatingSuccess(ArrayList<ProductRating> ratingList) {
         listener.showRatingFragment(ratingList);
     }
 
     public void addNewRating(String product_id, float rating_point, String rating_content) {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-        interactor.createNewRating(product_id, new RatingContent((int) rating_point, rating_content, dateFormatter.format(Calendar.getInstance().getTime())));
+        interactor.createNewRating(product_id, new ProductRating((int) rating_point, rating_content, dateFormatter.format(Calendar.getInstance().getTime())));
     }
 
     public void LoadUserWallet(double price) {

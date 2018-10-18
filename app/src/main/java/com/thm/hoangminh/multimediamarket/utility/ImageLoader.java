@@ -11,7 +11,7 @@ import com.thm.hoangminh.multimediamarket.repository.base.StorageRepository;
 
 public class ImageLoader {
     public static void loadImage(StorageRepository storageRepository, final Context context, final ImageView img, String imageId) {
-        storageRepository.findDownloadUriById(imageId, new OnSuccessListener<Uri>() {
+        storageRepository.findUriById(imageId, new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Picasso.with(context)

@@ -22,23 +22,23 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 import com.thm.hoangminh.multimediamarket.R;
 
-public class RatingContent implements Parcelable {
+public class ProductRating implements Parcelable {
     private String user_id;
     private String content_id;
     private int point;
     private String content;
     private String time;
 
-    public RatingContent() {
+    public ProductRating() {
     }
 
-    public RatingContent(int point, String content, String time) {
+    public ProductRating(int point, String content, String time) {
         this.point = point;
         this.content = content;
         this.time = time;
     }
 
-    protected RatingContent(Parcel in) {
+    protected ProductRating(Parcel in) {
         user_id = in.readString();
         content_id = in.readString();
         point = in.readInt();
@@ -46,15 +46,15 @@ public class RatingContent implements Parcelable {
         time = in.readString();
     }
 
-    public static final Creator<RatingContent> CREATOR = new Creator<RatingContent>() {
+    public static final Creator<ProductRating> CREATOR = new Creator<ProductRating>() {
         @Override
-        public RatingContent createFromParcel(Parcel in) {
-            return new RatingContent(in);
+        public ProductRating createFromParcel(Parcel in) {
+            return new ProductRating(in);
         }
 
         @Override
-        public RatingContent[] newArray(int size) {
-            return new RatingContent[size];
+        public ProductRating[] newArray(int size) {
+            return new ProductRating[size];
         }
     };
 
@@ -172,7 +172,7 @@ public class RatingContent implements Parcelable {
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        RatingContent.this.LikeRatingContent(b);
+                        ProductRating.this.LikeRatingContent(b);
                     }
                 });
             }

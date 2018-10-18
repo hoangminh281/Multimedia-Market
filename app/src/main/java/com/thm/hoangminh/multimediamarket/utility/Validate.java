@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.User;
-import com.thm.hoangminh.multimediamarket.view.SigninActivity;
+import com.thm.hoangminh.multimediamarket.view.activity.SigninActivity;
 
 public class Validate {
     public static boolean validateCurrentUser(final Context context) {
@@ -48,41 +48,41 @@ public class Validate {
     }
 
     public static boolean validateEditTextsToString(Context context, EditText... editTexts) {
+        boolean validate = true;
         for (EditText editText : editTexts) {
             if (editText.getVisibility() == View.VISIBLE && editText.getText().toString().trim().length() == 0) {
                 editText.setError(context.getResources().getString(R.string.err_empty));
-
-                return false;
+                validate = false;
             }
         }
 
-        return true;
+        return validate;
     }
 
     public static boolean validateEditTextsToNumber(Context context, EditText... editTexts) {
+        boolean validate = true;
         for (EditText editText : editTexts) {
             if (editText.getVisibility() == View.VISIBLE
                     && (editText.getText().toString().trim().length() == 0
                     || Double.parseDouble(editText.getText().toString().trim()) == 0)) {
                 editText.setError(context.getResources().getString(R.string.err_empty));
-
-                return false;
+                validate = false;
             }
         }
 
-        return true;
+        return validate;
     }
 
     public static boolean validateTextViewsToString(Context context, TextView... textViews) {
+        boolean validate = true;
         for (TextView textView : textViews) {
             if (textView.getVisibility() == View.VISIBLE && textView.getText().toString().trim().length() == 0) {
                 textView.setError(context.getResources().getString(R.string.err_empty));
-
-                return false;
+                validate = false;
             }
         }
 
-        return true;
+        return validate;
     }
 
     public static void validateImageProduct(ImageView img, int status) {
@@ -91,6 +91,7 @@ public class Validate {
     }
 
     public static boolean validatePassword(Context context, EditText... edtPasswords) {
+        boolean validate = true;
         for (EditText editText : edtPasswords) {
             if (editText.getVisibility() != View.VISIBLE) {
                 continue;
@@ -98,28 +99,26 @@ public class Validate {
             String password = editText.getText().toString().trim();
             if (password.length() == 0) {
                 editText.setError(context.getResources().getString(R.string.err_empty));
-
-                return false;
+                validate = false;
             } else if (password.length() < 6) {
                 editText.setError(context.getResources().getString(R.string.err_notlength));
-
-                return false;
+                validate = false;
             }
         }
 
-        return true;
+        return validate;
     }
 
     public static boolean validateSamePassword(Context context, EditText edtPassword, EditText edtRepassword) {
+        boolean validate = true;
         String password = edtPassword.getText().toString().trim();
         String repassword = edtRepassword.getText().toString().trim();
         if (!password.equals(repassword)) {
             edtRepassword.setError(context.getResources().getString(R.string.err_passnotsame));
-
-            return false;
+            validate = false;
         }
 
-        return true;
+        return validate;
     }
 
     public static boolean validateAge(Context context, int day, int month, int year) {

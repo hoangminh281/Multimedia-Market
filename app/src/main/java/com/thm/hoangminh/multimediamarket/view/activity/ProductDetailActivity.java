@@ -28,7 +28,7 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.squareup.picasso.Picasso;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.adapter.ViewPagerAdapter;
-import com.thm.hoangminh.multimediamarket.model.RatingContent;
+import com.thm.hoangminh.multimediamarket.model.ProductRating;
 import com.thm.hoangminh.multimediamarket.references.Tools;
 import com.thm.hoangminh.multimediamarket.view.callback.ProductDetailView;
 import com.thm.hoangminh.multimediamarket.view.fragment.RatingFragment;
@@ -297,7 +297,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     }
 
     @Override
-    public void showRatingFragment(ArrayList<RatingContent> ratingList) {
+    public void showRatingFragment(ArrayList<ProductRating> ratingList) {
         txtRatingSum.setText(ratingList.size() + "");
 
         Bundle bundle = new Bundle();

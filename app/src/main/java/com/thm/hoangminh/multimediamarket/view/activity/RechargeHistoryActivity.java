@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.model.Card;
-import com.thm.hoangminh.multimediamarket.model.RechargeHistory;
+import com.thm.hoangminh.multimediamarket.model.RechargedHistory;
 import com.thm.hoangminh.multimediamarket.presenter.implement.RechargeHistoryPresenter;
 import com.thm.hoangminh.multimediamarket.references.Tools;
 import com.thm.hoangminh.multimediamarket.view.callback.RechargeHistoryView;
@@ -47,15 +47,15 @@ public class RechargeHistoryActivity extends AppCompatActivity implements Rechar
     }
 
     @Override
-    public void onLoadRechargeHistorySuccess(RechargeHistory rechargeHistory) {
-        int cardValue = Card.cardValueList[rechargeHistory.getCardValue()];
+    public void onLoadRechargeHistorySuccess(RechargedHistory rechargedHistory) {
+        int cardValue = Card.cardValueList[rechargedHistory.getCardValue()];
         String value = Tools.FormatMoney(cardValue);
 
         txtValueHeader.setText(value + "");
         txtValue.setText(value + "");
         txtTransCode.setText(trans_code);
-        txtTime.setText(rechargeHistory.getTime());
-        txtCardCategory.setText(Card.cardCategoryList[rechargeHistory.getCardCategory()]);
+        txtTime.setText(rechargedHistory.getTime());
+        txtCardCategory.setText(Card.cardCategoryList[rechargedHistory.getCardCategory()]);
 
     }
 

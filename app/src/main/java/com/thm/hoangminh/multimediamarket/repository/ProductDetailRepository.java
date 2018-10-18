@@ -2,9 +2,11 @@ package com.thm.hoangminh.multimediamarket.repository;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ValueEventListener;
+import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.repository.base.WatchingRepository;
 
-public interface ProductDetailRepository<ProductDetail, String, ValueEventListener> extends WatchingRepository<ProductDetail, String, ValueEventListener> {
+public interface ProductDetailRepository extends WatchingRepository <ProductDetail, String> {
     void findPurchasedQuantityByProductId(String productId, ValueEventListener event);
 
     void setPurchasedQuantityByProductId(String productId, int purchasedQuantity, OnSuccessListener successListener, OnFailureListener failureListener);

@@ -1,7 +1,9 @@
 package com.thm.hoangminh.multimediamarket.repository.base;
 
-public interface WatchingRepository<T, ID, E> extends Repository<T, ID, E> {
-    void findAndWatchById(ID id, E event);
+import com.google.firebase.database.ValueEventListener;
 
-    void findAndWatch(E event);
+public interface WatchingRepository<T, ID> extends Repository<T, ID> {
+    void findAndWatchById(ID id, ValueEventListener eventListener);
+
+    void findAndWatch(ValueEventListener eventListener);
 }

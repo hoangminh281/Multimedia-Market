@@ -11,6 +11,4 @@ public interface PurchasedProductRepository extends Repository<PurchasedProduct,
     void findAll(String cateId, String userId, ValueEventListener eventListener);
 
     void findAndWatch(String uid, String cateId, String productId, ValueEventListener eventListener);
-
-    void add(String uid, Product purcharsedProduct, String time, OnSuccessListener<Void> onSuccessListener, OnFailureListener failureListener);
 }

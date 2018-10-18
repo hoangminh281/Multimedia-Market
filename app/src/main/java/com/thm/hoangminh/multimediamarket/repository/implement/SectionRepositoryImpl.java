@@ -2,6 +2,7 @@ package com.thm.hoangminh.multimediamarket.repository.implement;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -15,7 +16,7 @@ public class SectionRepositoryImpl implements SectionRepository {
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
-    public void add(Section item, ValueEventListener eventListener) {
+    public void add(Section item, OnSuccessListener successListener, OnFailureListener failureListener) {
 
     }
 
@@ -25,7 +26,7 @@ public class SectionRepositoryImpl implements SectionRepository {
     }
 
     @Override
-    public void remove(Section item, ValueEventListener eventListener) {
+    public void remove(Section item, OnSuccessListener successListener, OnFailureListener failureListener) {
     
     }
 
@@ -40,6 +41,16 @@ public class SectionRepositoryImpl implements SectionRepository {
         if (mQuery != null) {
             mQuery.addListenerForSingleValueEvent(event);
         }
+    }
+
+    @Override
+    public void findAll(String cateId, String sectionId, ValueEventListener eventListener) {
+
+    }
+
+    @Override
+    public boolean checkProductByDataSnapshotAndProductId(DataSnapshot dataSnapshot, String productId) {
+        return false;
     }
 
     @Override

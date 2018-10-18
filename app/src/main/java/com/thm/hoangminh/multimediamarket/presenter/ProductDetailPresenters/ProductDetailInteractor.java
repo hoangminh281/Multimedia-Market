@@ -22,7 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
-import com.thm.hoangminh.multimediamarket.model.RatingContent;
+import com.thm.hoangminh.multimediamarket.model.ProductRating;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.callback.ProductDetailListener;
 
@@ -102,12 +102,12 @@ public class ProductDetailInteractor {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
-                    ArrayList<RatingContent> ratingList = new ArrayList<>();
+                    ArrayList<ProductRating> ratingList = new ArrayList<>();
                     for (DataSnapshot item : iterable) {
-                        RatingContent ratingContent = item.getValue(RatingContent.class);
-                        ratingContent.setUser_id(item.getKey());
-                        ratingContent.setContent_id(product_id);
-                        ratingList.add(ratingContent);
+                        ProductRating productRating = item.getValue(ProductRating.class);
+                        productRating.setUser_id(item.getKey());
+                        productRating.setContent_id(product_id);
+                        ratingList.add(productRating);
                     }
                     listener.onLoadRatingSuccess(ratingList);
                 }
@@ -171,8 +171,8 @@ public class ProductDetailInteractor {
         }
     }
 
-    public void createNewRating(final String product_id, RatingContent ratingContent) {
-        mRef.child("rating/" + product_id + "/" + firebaseUser.getUid()).setValue(ratingContent)
+    public void createNewRating(final String product_id, ProductRating productRating) {
+        mRef.child("rating/" + product_id + "/" + firebaseUser.getUid()).setValue(productRating)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -183,7 +183,7 @@ public class ProductDetailInteractor {
                             Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                             int[] ratingArr = {0, 0, 0, 0, 0};
                             for (DataSnapshot item : iterable) {
-                                RatingContent rating = item.getValue(RatingContent.class);
+                                ProductRating rating = item.getValue(ProductRating.class);
                                 ratingArr[rating.getPoint() - 1]++;
                             }
                             double ratingPoint = (double) (5 * ratingArr[4] + 4 * ratingArr[3]

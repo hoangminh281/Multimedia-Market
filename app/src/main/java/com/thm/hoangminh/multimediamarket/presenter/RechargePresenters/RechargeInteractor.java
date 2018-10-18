@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.model.Card;
-import com.thm.hoangminh.multimediamarket.model.RechargeHistory;
+import com.thm.hoangminh.multimediamarket.model.RechargedHistory;
 import com.thm.hoangminh.multimediamarket.presenter.callback.RechargeListener;
 
 import java.text.SimpleDateFormat;
@@ -74,7 +74,7 @@ public class RechargeInteractor {
                                                         final DatabaseReference mRefTmp
                                                                 = mRef.child("recharge_histories/" + firebaseUser.getUid())
                                                                 .push();
-                                                        mRefTmp.setValue(new RechargeHistory(mRefTmp.getKey()
+                                                        mRefTmp.setValue(new RechargedHistory(mRefTmp.getKey()
                                                                 , item.getKey(), category, value,
                                                                 dateFormatter.format(Calendar.getInstance().getTime())))
                                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {

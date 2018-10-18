@@ -14,7 +14,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
-    public void add(String item, ValueEventListener listener) {
+    public void add(String item, OnSuccessListener successListener, OnFailureListener failureListener) {
 
     }
 
@@ -24,13 +24,13 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public void remove(String item, ValueEventListener listener) {
+    public void remove(String item, OnSuccessListener successListener, OnFailureListener failureListener) {
 
     }
 
     @Override
-    public ArrayList<String> findAll(ValueEventListener event) {
-        return null;
+    public void findAll(ValueEventListener event) {
+
     }
 
     @Override

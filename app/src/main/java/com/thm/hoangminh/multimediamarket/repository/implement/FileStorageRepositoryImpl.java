@@ -7,7 +7,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.thm.hoangminh.multimediamarket.config.api.ROUTE;
+import com.thm.hoangminh.multimediamarket.api.ROUTE;
 import com.thm.hoangminh.multimediamarket.model.File;
 import com.thm.hoangminh.multimediamarket.repository.FileStorageRepository;
 
@@ -39,16 +39,7 @@ public class FileStorageRepositoryImpl implements FileStorageRepository {
     }
 
     @Override
-    public void findAll(OnSuccessListener successListener, OnFailureListener failureListener) {
-    }
-
-    @Override
-    public void findById(String s, OnSuccessListener successListener, OnFailureListener failureListener) {
-
-    }
-
-    @Override
-    public void findDownloadUriById(String fileId, OnSuccessListener<Uri> successListener, OnFailureListener failureListener) {
+    public void findUriById(String fileId, OnSuccessListener<Uri> successListener, OnFailureListener failureListener) {
         mStorageRef.child(ROUTE.FILE(fileId)).getDownloadUrl()
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);

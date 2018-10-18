@@ -1,14 +1,14 @@
 package com.thm.hoangminh.multimediamarket.model;
 
-public class RechargeHistory {
+public class RechargedHistory {
     private String id, card_id, time;
     private int cardCategory, cardValue;
 
-    public RechargeHistory() {
+    public RechargedHistory() {
 
     }
 
-    public RechargeHistory(String id, String card_id, int cardCategory, int cardValue, String time) {
+    public RechargedHistory(String id, String card_id, int cardCategory, int cardValue, String time) {
         this.id = id;
         this.card_id = card_id;
         this.cardCategory = cardCategory;

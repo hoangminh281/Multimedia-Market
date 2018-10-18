@@ -43,7 +43,7 @@ public class UserStorageRepositoryImpl implements UserStorageRepository {
     }
 
     @Override
-    public void findDownloadUriById(String userImageId, OnSuccessListener<Uri> successListener, OnFailureListener failureListener) {
+    public void findUriById(String userImageId, OnSuccessListener<Uri> successListener, OnFailureListener failureListener) {
         mStorageRef.child(ROUTE.USERSTORAGE_IMAGE(userImageId)).getDownloadUrl()
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);

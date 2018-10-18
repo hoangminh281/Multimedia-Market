@@ -9,7 +9,7 @@ import com.thm.hoangminh.multimediamarket.api.ROUTE;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailRepository;
 
-public class ProductDetailRepositoryImpl implements ProductDetailRepository<ProductDetail, String, ValueEventListener> {
+public class ProductDetailRepositoryImpl implements ProductDetailRepository {
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
@@ -18,12 +18,12 @@ public class ProductDetailRepositoryImpl implements ProductDetailRepository<Prod
     }
 
     @Override
-    public void findAllAndWatch(ValueEventListener event) {
+    public void findAndWatch(ValueEventListener event) {
 
     }
 
     @Override
-    public void add(ProductDetail item, ValueEventListener listener) {
+    public void add(ProductDetail item, OnSuccessListener successListener, OnFailureListener failureListener) {
 
     }
 
@@ -35,7 +35,7 @@ public class ProductDetailRepositoryImpl implements ProductDetailRepository<Prod
     }
 
     @Override
-    public void remove(ProductDetail item, ValueEventListener listener) {
+    public void remove(ProductDetail item, OnSuccessListener successListener, OnFailureListener failureListener) {
 
     }
 
