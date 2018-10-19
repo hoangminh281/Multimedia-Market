@@ -12,25 +12,35 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.thm.hoangminh.multimediamarket.R;
-import com.thm.hoangminh.multimediamarket.model.Section;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.SectionDataModel;
-import com.thm.hoangminh.multimediamarket.presenter.implement.SectionPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.SectionPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.SectionPresenterImpl;
 import com.thm.hoangminh.multimediamarket.view.activity.ProductActivity;
 import com.thm.hoangminh.multimediamarket.view.callback.SectionView;
 
 import java.util.ArrayList;
 
-public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.ItemRowHolder> implements SectionView {
-
-    private ArrayList<SectionDataModel> dataList;
+public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.ItemRowHolder>{
     private Context mContext;
     private SectionPresenter presenter;
+    private ArrayList<SectionDataModel> dataList;
     private SectionListDataAdapter itemListDataAdapter;
 
     public AllSectionsAdapter(Context context, ArrayList<SectionDataModel> dataList) {
         this.dataList = dataList;
         this.mContext = context;
-        this.presenter = new SectionPresenter(this);
+        this.presenter = new SectionPresenterImpl(new SectionView() {
+            @Override
+            public void refreshAdapter() {
+                itemListDataAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void addSectionDataModelToCardview(SectionDataModel sectionDataModel) {
+
+            }
+        });
     }
 
     @Override
@@ -41,23 +51,17 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
 
     @Override
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
-        final String cateId = dataList.get(i).getCate_id();
-
-        final String sectionId = dataList.get(i).getSection_id();
-
+        final String cateId = dataList.get(i).getCateId();
+        final String sectionId = dataList.get(i).getSectionId();
         final String sectionName = dataList.get(i).getHeaderTitle();
-
         ArrayList singleSectionItems = dataList.get(i).getAllItemsInSection();
-
         itemRowHolder.itemTitle.setText(sectionName);
-
         itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems);
-
-        itemRowHolder.recycler_view_list.setHasFixedSize(true);
-        itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-        itemRowHolder.recycler_view_list.setAdapter(itemListDataAdapter);
-        itemRowHolder.recycler_view_list.setNestedScrollingEnabled(false);
-        itemRowHolder.recycler_view_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        itemRowHolder.recyclerView.setHasFixedSize(true);
+        itemRowHolder.recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+        itemRowHolder.recyclerView.setAdapter(itemListDataAdapter);
+        itemRowHolder.recyclerView.setNestedScrollingEnabled(false);
+        itemRowHolder.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             //Listener handle dragging bottom of list's event
             //1: for down
             //-1: for up
@@ -70,7 +74,7 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
                 super.onScrolled(recyclerView, dx, dy);
                 Boolean isBottomReached = !recyclerView.canScrollHorizontally(1);
                 if (isBottomReached && i < dataList.size()) {
-                    presenter.LoadProductsBySectionPaging(dataList.get(i));
+                    presenter.loadProductBySectionWithPaging(dataList.get(i));
                 }
             }
         });
@@ -78,16 +82,15 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
         itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent moveToProductActivity = new Intent(mContext, ProductActivity.class);
+                Intent intent = new Intent(mContext, ProductActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("section_id", sectionId);
-                bundle.putString("cate_id", cateId);
-                bundle.putString("sectionTitle", sectionName);
-                moveToProductActivity.putExtras(bundle);
-                mContext.startActivity(moveToProductActivity);
+                bundle.putString(Constants.SectionIdKey, sectionId);
+                bundle.putString(Constants.SectionTitleKey, sectionName);
+                bundle.putString(Constants.CateIdKey, cateId);
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -95,36 +98,15 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
         return (null != dataList ? dataList.size() : 0);
     }
 
-    @Override
-    public void addSectionCardview(ArrayList<Section> sectionArr) {
-
-    }
-
-    @Override
-    public void refreshAdapter() {
-        itemListDataAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void showBottomProgressbar() {
-
-    }
-
-    @Override
-    public void hideBottomProgressbar() {
-
-    }
-
     public class ItemRowHolder extends RecyclerView.ViewHolder {
-
         private TextView itemTitle;
-        private RecyclerView recycler_view_list;
+        private RecyclerView recyclerView;
         private Button btnMore;
 
         private ItemRowHolder(View view) {
             super(view);
             this.itemTitle = view.findViewById(R.id.textViewTitleSection);
-            this.recycler_view_list = view.findViewById(R.id.recyclerViewSection);
+            this.recyclerView = view.findViewById(R.id.recyclerViewSection);
             this.btnMore = view.findViewById(R.id.buttonMoreSection);
         }
 

@@ -4,7 +4,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.repository.base.WatchingRepository;
 
-public interface ProductRepository extends WatchingRepository<Product, String, ValueEventListener> {
+public interface ProductRepository extends WatchingRepository<Product, String> {
     void setRatingPoint(String productId, double ratingPoint);
 
     void findPriceByProductId(String productId, ValueEventListener eventListener);

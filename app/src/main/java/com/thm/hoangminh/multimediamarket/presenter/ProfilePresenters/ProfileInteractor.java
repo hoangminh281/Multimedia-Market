@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.callback.ProfileListener;
 import com.thm.hoangminh.multimediamarket.view.activity.MainActivity;
@@ -49,7 +50,7 @@ public class ProfileInteractor {
     }
 
     public void LoadCurrentUserMultimedia() {
-        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(0).getCate_id()).addValueEventListener(new ValueEventListener() {
+        mRef.child("purchased_product/" + user_id + "/" + Category.getInstance().get(0).getCateId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -67,7 +68,7 @@ public class ProfileInteractor {
 
             }
         });
-        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(1).getCate_id()).addValueEventListener(new ValueEventListener() {
+        mRef.child("purchased_product/" + user_id + "/" + Category.getInstance().get(1).getCateId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -85,7 +86,7 @@ public class ProfileInteractor {
 
             }
         });
-        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(2).getCate_id()).addValueEventListener(new ValueEventListener() {
+        mRef.child("purchased_product/" + user_id + "/" + Category.getInstance().get(2).getCateId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -103,7 +104,7 @@ public class ProfileInteractor {
 
             }
         });
-        mRef.child("purchased_product/" + user_id + "/" + MainActivity.categories.get(3).getCate_id()).addValueEventListener(new ValueEventListener() {
+        mRef.child("purchased_product/" + user_id + "/" + Category.getInstance().get(3).getCateId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.File;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.implement.ModifyProductPresenter;
@@ -219,13 +220,13 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
 
     public void showFilePicker() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        if (key_category.equals(MainActivity.categories.get(0).getCate_id())) {
+        if (key_category.equals(Category.getInstance().get(0).getCateId())) {
             intent.setType("application/vnd.android.package-archive");
-        } else if (key_category.equals(MainActivity.categories.get(1).getCate_id())) {
+        } else if (key_category.equals(Category.getInstance().get(1).getCateId())) {
             intent.setType("image/*");
-        } else if (key_category.equals(MainActivity.categories.get(2).getCate_id())) {
+        } else if (key_category.equals(Category.getInstance().get(2).getCateId())) {
             intent.setType("video/*");
-        } else if (key_category.equals(MainActivity.categories.get(3).getCate_id())) {
+        } else if (key_category.equals(Category.getInstance().get(3).getCateId())) {
             intent.setType("audio/*");
         }
         startActivityForResult(intent, REQUEST_CODE_PICKFILE);

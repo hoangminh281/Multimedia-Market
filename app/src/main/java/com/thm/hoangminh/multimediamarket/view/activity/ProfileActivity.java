@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.implement.ProfilePresenter;
 import com.thm.hoangminh.multimediamarket.references.Tools;
@@ -502,8 +503,8 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("user_id", currentUser.getId());
-        bundle.putString("cateProduct", MainActivity.categories.get(0).getCate_id());
-        bundle.putString("cateTitle", MainActivity.categories.get(0).getName());
+        bundle.putString("cateProduct", Category.getInstance().get(0).getCateId());
+        bundle.putString("cateTitle", Category.getInstance().get(0).getName());
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -512,8 +513,8 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("user_id", currentUser.getId());
-        bundle.putString("cateProduct", MainActivity.categories.get(1).getCate_id());
-        bundle.putString("cateTitle", MainActivity.categories.get(1).getName());
+        bundle.putString("cateProduct", Category.getInstance().get(1).getCateId());
+        bundle.putString("cateTitle", Category.getInstance().get(1).getName());
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -522,8 +523,8 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("user_id", currentUser.getId());
-        bundle.putString("cateProduct", MainActivity.categories.get(2).getCate_id());
-        bundle.putString("cateTitle", MainActivity.categories.get(2).getName());
+        bundle.putString("cateProduct", Category.getInstance().get(2).getCateId());
+        bundle.putString("cateTitle", Category.getInstance().get(2).getName());
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -532,8 +533,8 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("user_id", currentUser.getId());
-        bundle.putString("cateProduct", MainActivity.categories.get(3).getCate_id());
-        bundle.putString("cateTitle", MainActivity.categories.get(3).getName());
+        bundle.putString("cateProduct", Category.getInstance().get(3).getCateId());
+        bundle.putString("cateTitle", Category.getInstance().get(3).getName());
         intent.putExtras(bundle);
         startActivity(intent);
     }

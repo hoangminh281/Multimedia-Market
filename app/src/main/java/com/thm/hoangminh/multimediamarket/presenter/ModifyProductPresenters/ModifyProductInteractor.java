@@ -48,7 +48,7 @@ public class ModifyProductInteractor {
                     Iterable<DataSnapshot> sections = dataSnapshot.getChildren();
                     for (DataSnapshot item : sections) {
                         Section section = item.getValue(Section.class);
-                        category.put(section.getSection_id(), section.getTitle());
+                        category.put(section.getSectionId(), section.getTitle());
                     }
                     listener.LoadCategoryProductSuccess(category);
                 }

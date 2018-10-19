@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SectionDataModel {
-    private String cate_id;
-    private String section_id;
+    private String cateId;
+    private String sectionId;
     private String headerTitle;
     private ArrayList<Product> allItemsInSection;
-    private List<String> product_id_arr;
-    private boolean request_deny;
+    private List<String> productIdArr;
+    private boolean requestLock;
 
     public SectionDataModel() {
         this.allItemsInSection = new ArrayList<>();
@@ -20,18 +20,18 @@ public class SectionDataModel {
         this.allItemsInSection = allItemsInSection;
     }
 
-    public SectionDataModel(String section_id, String headerTitle, ArrayList<Product> allItemsInSection) {
-        this.section_id = section_id;
+    public SectionDataModel(String sectionId, String headerTitle, ArrayList<Product> allItemsInSection) {
+        this.sectionId = sectionId;
         this.headerTitle = headerTitle;
         this.allItemsInSection = allItemsInSection;
     }
 
-    public String getSection_id() {
-        return section_id;
+    public String getSectionId() {
+        return sectionId;
     }
 
-    public void setSection_id(String section_id) {
-        this.section_id = section_id;
+    public void setSectionId(String sectionId) {
+        this.sectionId = sectionId;
     }
 
     public String getHeaderTitle() {
@@ -54,27 +54,27 @@ public class SectionDataModel {
         this.allItemsInSection.add(product);
     }
 
-    public List<String> getProduct_id_arr() {
-        return product_id_arr;
+    public List<String> getProductIdArr() {
+        return productIdArr;
     }
 
-    public void setProduct_id_arr(List<String> product_id_arr) {
-        this.product_id_arr = product_id_arr;
+    public void setProductIdArr(List<String> productIdArr) {
+        this.productIdArr = productIdArr;
     }
 
-    public boolean isRequest_deny() {
-        return request_deny;
+    public boolean isRequestLock() {
+        return requestLock;
     }
 
-    public void setRequest_deny(boolean request_deny) {
-        this.request_deny = request_deny;
+    public void setRequestLock(boolean requestLock) {
+        this.requestLock = requestLock;
     }
 
-    public String getCate_id() {
-        return cate_id;
+    public String getCateId() {
+        return cateId;
     }
 
-    public void setCate_id(String cate_id) {
-        this.cate_id = cate_id;
+    public void setCateId(String cateId) {
+        this.cateId = cateId;
     }
 }

@@ -4,22 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Category {
-    private String cate_id;
+    private String cateId;
     private String name;
+
+    private static ArrayList<Category> instance;
+
+    public static ArrayList<Category> getInstance() {
+        if (instance == null) instance = new ArrayList<Category>();
+        return instance;
+    }
+
+    public static ArrayList<Category> setInstance(ArrayList<Category> category) {
+        instance = category;
+        return instance;
+    }
 
     public Category(){}
 
-    public Category(String cate_id, String name) {
-        this.cate_id = cate_id;
+    public Category(String cateId, String name) {
+        this.cateId = cateId;
         this.name = name;
     }
 
-    public String getCate_id() {
-        return cate_id;
+    public String getCateId() {
+        return cateId;
     }
 
-    public void setCate_id(String cate_id) {
-        this.cate_id = cate_id;
+    public void setCateId(String cateId) {
+        this.cateId = cateId;
     }
 
     public String getName() {
@@ -28,14 +40,5 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public static List<Category> initializeData() {
-        List<Category> data = new ArrayList<>();
-        data.add(new Category("-LDlhVwj9j3tU89adLiE", "Trò chơi"));
-        data.add(new Category("-LDlhVwkEMtWv1ttsEVs", "Hình ảnh"));
-        data.add(new Category("-LDlhVwlraRt24dXSmyx", "Video"));
-        data.add(new Category("-LDlhVwmIEuMkLPNA9EK", "Âm thanh"));
-        return data;
     }
 }

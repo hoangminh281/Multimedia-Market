@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.File;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
@@ -82,7 +83,7 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
             product_id = bundle.getString("product_id");
             cate_id = bundle.getString("cate_id");
 
-            if (cate_id.equals(MainActivity.categories.get(1).getCate_id()) || cate_id.equals(MainActivity.categories.get(3).getCate_id())) {
+            if (cate_id.equals(Category.getInstance().get(1).getCateId()) || cate_id.equals(Category.getInstance().get(3).getCateId())) {
                 hideEdtYoutube();
             }
 
@@ -434,13 +435,13 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
 
     public void showFilePicker() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        if (cate_id.equals(MainActivity.categories.get(0).getCate_id())) {
+        if (cate_id.equals(Category.getInstance().get(0).getCateId())) {
             intent.setType("application/vnd.android.package-archive");
-        } else if (cate_id.equals(MainActivity.categories.get(1).getCate_id())) {
+        } else if (cate_id.equals(Category.getInstance().get(1).getCateId())) {
             intent.setType("image/*");
-        } else if (cate_id.equals(MainActivity.categories.get(2).getCate_id())) {
+        } else if (cate_id.equals(Category.getInstance().get(2).getCateId())) {
             intent.setType("video/*");
-        } else if (cate_id.equals(MainActivity.categories.get(3).getCate_id())) {
+        } else if (cate_id.equals(Category.getInstance().get(3).getCateId())) {
             intent.setType("audio/*");
         }
         startActivityForResult(intent, REQUEST_CODE_PICKFILE);

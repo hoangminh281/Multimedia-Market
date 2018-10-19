@@ -28,9 +28,9 @@ public class SectionInteractor {
 
     public synchronized void LoadProductsBySectionPaging(final SectionDataModel sectionDataModel, int product_count) {
         int i = 0;
-        while (!sectionDataModel.getProduct_id_arr().isEmpty() && i < product_count) {
-            String product_id = sectionDataModel.getProduct_id_arr().get(0);
-            sectionDataModel.getProduct_id_arr().remove(0);
+        while (!sectionDataModel.getProductIdArr().isEmpty() && i < product_count) {
+            String product_id = sectionDataModel.getProductIdArr().get(0);
+            sectionDataModel.getProductIdArr().remove(0);
             mRef.child("products/" + product_id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -66,9 +66,9 @@ public class SectionInteractor {
                         ArrayList<Section> sectionArr = new ArrayList<>();
                         for (DataSnapshot item : iterable) { //Láy danh sách section có chứa danh sách id sản phẩm
                             Section section = item.getValue(Section.class);
-                            section.setSection_id(section.getSection_id());
-                            if (section.getProduct_id() != null) {
-                                Iterator<Map.Entry<String, Integer>> ite = section.getProduct_id().entrySet().iterator();
+                            section.setSectionId(section.getSectionId());
+                            if (section.getProductIdArr() != null) {
+                                Iterator<Map.Entry<String, Integer>> ite = section.getProductIdArr().entrySet().iterator();
                                 while (ite.hasNext()) {
                                     Map.Entry<String, Integer> productId = ite.next();
                                     if (productId.getValue() == 0)

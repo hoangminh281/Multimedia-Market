@@ -68,6 +68,7 @@ public class User {
         this.sex = user.sex;
         this.balance = user.balance;
         this.role = user.role;
+        this.status = user.status;
     }
 
     public User(String name, String image, String email, String phone, String birthday, int sex, int role, int balance, int status) {

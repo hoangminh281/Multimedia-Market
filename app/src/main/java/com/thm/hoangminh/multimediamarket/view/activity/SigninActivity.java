@@ -93,7 +93,7 @@ public class SigninActivity extends AppCompatActivity implements SigninView {
 
     @Override
     public void showLoadingProgressDialog() {
-        progressDialog.setMessage("Sign in...");
+        progressDialog.setMessage("Signing in, please waiting a moment");
         progressDialog.setIndeterminate(true);
         progressDialog.show();
     }
@@ -115,15 +115,16 @@ public class SigninActivity extends AppCompatActivity implements SigninView {
         startActivity(RegisterActivity.class);
     }
 
+    @Override
+    public void startActivity(Class<?> clazz) {
+        startActivity(new Intent(this, clazz));
+    }
+
     private void setControls() {
         edtUsername = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
         progressDialog = new ProgressDialog(this);
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.dismiss();
-    }
-
-    @Override
-    public void startActivity(Class<?> clazz) {
-        startActivity(new Intent(this, clazz));
     }
 }

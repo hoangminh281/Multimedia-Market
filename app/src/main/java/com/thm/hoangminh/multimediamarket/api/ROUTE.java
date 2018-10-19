@@ -26,6 +26,16 @@ public class ROUTE {
 
     private static String PRODUCTSTORAGE_IMAGE = "products/";
 
+    private static String SECTION = "sections/";
+
+    private static String PRODUCTDETAIL = "product_detail/";
+    private static String PRODUCTDETAIL_CAPACITY = "/capacity/";
+    private static String PRODUCTDETAIL_IMAGELIST = "/imageList/";
+    private static final String PRODUCTDETAIL_FILE = "/downloadLink/";
+    private static String PRODUCTDETAIL_PURCHASEDQUANTITY = "/downloaded/";
+
+    private static String PRODUCTDETAILSTORAGE_IMAGE = "products/";
+
     public static String USER(String userId) {
         return USER + userId;
     }
@@ -83,35 +93,35 @@ public class ROUTE {
     }
 
     public static String SECTION(String cateId) {
-        return null;
+        return SECTION + cateId;
     }
 
     public static String FILE(String fileId) {
-        return null;
+        return FILE + fileId;
     }
 
     public static String PRODUCTDETAIL(String productId) {
-        return null;
+        return PRODUCTDETAIL + productId;
     }
 
     public static String PRODUCTDETAIL_PURCHASEDQUANTITY(String productId) {
-        return null;
+        return PRODUCTDETAIL + productId + PRODUCTDETAIL_PURCHASEDQUANTITY;
     }
 
     public static String PRODUCTDETAIL_IMAGELIST(String productId, String imageId) {
-        return null;
+        return PRODUCTDETAIL + productId + PRODUCTDETAIL_IMAGELIST + imageId;
     }
 
     public static String PRODUCTDETAIL_IMAGELIST(String productId) {
-        return null;
+        return PRODUCTDETAIL + productId + PRODUCTDETAIL_IMAGELIST;
     }
 
     public static String PRODUCTDETAIL_FILE(String productId) {
-        return null;
+        return PRODUCTDETAIL + productId + PRODUCTDETAIL_FILE;
     }
 
     public static String PRODUCTDETAIL_CAPACITY(String productId) {
-        return null;
+        return PRODUCTDETAIL + productId + PRODUCTDETAIL_CAPACITY;
     }
 
     public static String USERSTORAGE_IMAGE(String photoId) {
@@ -119,7 +129,7 @@ public class ROUTE {
     }
 
     public static String PRODUCTDETAILSTORAGE_IMAGE(String photoId) {
-        return null;
+        return PRODUCTDETAILSTORAGE_IMAGE + photoId;
     }
 
     public static String PRODUCTSTORAGE_IMAGE(String productImageId) {

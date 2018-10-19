@@ -6,7 +6,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.repository.base.WatchingRepository;
 
-public interface UserRepository extends WatchingRepository<User, String, ValueEventListener> {
+public interface UserRepository extends WatchingRepository<User, String> {
     void findBalance(String userId, ValueEventListener event);
 
     ValueEventListener findAndWatchRoleByUserId(String userId, ValueEventListener event);

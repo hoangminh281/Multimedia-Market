@@ -1,9 +1,9 @@
 package com.thm.hoangminh.multimediamarket.view.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -24,15 +24,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.presenter.MainPresenter;
+import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
 import com.thm.hoangminh.multimediamarket.view.callback.MainView;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.User;
-import com.thm.hoangminh.multimediamarket.presenter.implement.MainPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.MainPresenterImpl;
 import com.thm.hoangminh.multimediamarket.references.Tools;
 import com.thm.hoangminh.multimediamarket.view.fragment.SectionFragment;
 
@@ -42,24 +44,20 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements MainView, NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
     private Toolbar toolbar;
+    private ImageView imgSex;
+    private Button btnRecharge;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ViewPagerAdapter adapter;
     private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
-    private Button btnRecharge;
-    private NavigationView navigationView;
-    private de.hdodenhof.circleimageview.CircleImageView imgUser;
-    private TextView txtUserName, txtBalance, txtRole;
-    private ImageView imgSex;
-    private MainPresenter presenter;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private MaterialSearchView searchView;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle drawerToggle;
+    private TextView txtUserName, txtBalance, txtRole;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private de.hdodenhof.circleimageview.CircleImageView imgUser;
 
-    public final static String HOME_KEY = "home";
-    public static ArrayList<Category> categories;
-
-    public final static String BUNDLE_KEY = "keyMode";
+    private MainPresenter presenter;
+    private ViewPagerAdapter adapter;
     private Map<String, String> suggestions;
 
     @Override
@@ -74,75 +72,66 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         getSupportActionBar().setHomeButtonEnabled(true);
         setupNavigationView();
 
-        presenter.LoadUserProfile();
-        presenter.LoadCategory();
-        presenter.LoadProductSuggestions();
+        presenter.loadUserProfile();
+        presenter.loadCategory();
+        presenter.loadProductSuggestions();
     }
 
 
     public void initPresenter() {
-        presenter = new MainPresenter(this);
+        presenter = new MainPresenterImpl(this, this);
     }
 
     @Override
-    public void updateUI(User user) {
-        if (user.getStatus() == 0) {
-            Handler handler = new Handler();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(MainActivity.this, R.string.info_logout, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), SigninActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-        } else {
-            Menu menu = navigationView.getMenu();
-            switch (user.getRole()) {
-                case User.ADMIN:
-                    menu.findItem(R.id.menu_user_admin).setVisible(true);
-                    menu.findItem(R.id.menu_card_admin).setVisible(true);
-                    menu.findItem(R.id.menu_product_admin).setVisible(true);
-                    menu.findItem(R.id.menu_upload).setVisible(true);
-                    break;
-                case User.MOD:
-                    menu.findItem(R.id.menu_user_admin).setVisible(false);
-                    menu.findItem(R.id.menu_card_admin).setVisible(false);
-                    menu.findItem(R.id.menu_product_admin).setVisible(false);
-                    menu.findItem(R.id.menu_upload).setVisible(true);
-                    break;
-                case User.USER:
-                    menu.findItem(R.id.menu_user_admin).setVisible(false);
-                    menu.findItem(R.id.menu_card_admin).setVisible(false);
-                    menu.findItem(R.id.menu_product_admin).setVisible(false);
-                    menu.findItem(R.id.menu_upload).setVisible(false);
-                    break;
-            }
-
-            user.LoadUserImageView(imgUser, this);
-            user.LoadUserRole(txtRole);
-            user.LoadUserImageGender(imgSex);
-            txtUserName.setText(user.getName());
-            txtBalance.setText(Tools.FormatMoney(user.getBalance()));
-        }
+    public void updateUserUI(User user) {
+        txtUserName.setText(user.getName());
+        txtBalance.setText(Tools.FormatMoney(user.getBalance()));
     }
 
     @Override
-    public void showCategory(ArrayList<Category> categories) {
-        MainActivity.categories = categories;
-        // this must be below to avoid user click toggle when categories null
+    public void setVisibleItemMenu(int itemId, boolean b) {
+        navigationView.getMenu().findItem(itemId).setVisible(b);
+    }
+
+    @Override
+    public void loadUserAvatar(Uri uri) {
+        ImageLoader.loadImageByUri(this, imgUser, uri);
+    }
+
+    @Override
+    public void showUserRole(String roleName) {
+        txtRole.setText(roleName);
+    }
+
+    @Override
+    public void showUserGenderImage(int imageId) {
+        imgSex.setImageResource(imageId);
+    }
+
+    @Override
+    public void setNavigationItemSelectedListener() {
         navigationView.setNavigationItemSelectedListener(this);
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
-        setEvents();
     }
 
     @Override
-    public void showSuggestions(Map<String, String> suggestions) {
+    public void initViewPager() {
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        Category.getInstance().add(0, new Category(Constants.HomeKey, Constants.Home));
+        for (Category category : Category.getInstance()) {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.BundleKey, category.getCateId());
+            SectionFragment fragment = new SectionFragment();
+            fragment.setArguments(bundle);
+            adapter.addFragment(fragment, category.getName());
+        }
+
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(Category.getInstance().size());
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void setProductSuggestions(Map<String, String> suggestions) {
         this.suggestions = suggestions;
         searchView.setSuggestions(suggestions.values().toArray(new String[suggestions.size()]));
         searchView.showSuggestions();
@@ -188,36 +177,28 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_profile:
-                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(intent);
+                startActivity(ProfileActivity.class);
                 break;
             case R.id.menu_bookmark:
-                intent = new Intent(MainActivity.this, BookmarkActivity.class);
-                startActivity(intent);
+                startActivity(BookmarkActivity.class);
                 break;
             case R.id.menu_upload:
-                intent = new Intent(MainActivity.this, ModifyProductActivity.class);
-                startActivity(intent);
+                startActivity(ModifyProductActivity.class);
                 break;
             case R.id.menu_user_admin:
-                intent = new Intent(MainActivity.this, UserActivity.class);
-                startActivity(intent);
+                startActivity(UserActivity.class);
                 break;
             case R.id.menu_card_admin:
-                intent = new Intent(MainActivity.this, CardActivity.class);
-                startActivity(intent);
-                return true;
+                startActivity(CardActivity.class);
+                break;
             case R.id.menu_product_admin:
-                intent = new Intent(MainActivity.this, BookmarkActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString(BUNDLE_KEY, "admin");
-                intent.putExtras(bundle);
-                startActivity(intent);
-                return true;
+                bundle.putString(Constants.BundleKey, Constants.Admin);
+                startActivity(BookmarkActivity.class, bundle);
+                break;
             case R.id.menu_logout:
                 FirebaseAuth.getInstance().signOut();
-                intent = new Intent(MainActivity.this, SigninActivity.class);
-                startActivity(intent);
+                startActivity(SigninActivity.class);
                 finish();
                 break;
         }
@@ -239,27 +220,6 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         txtRole = headerView.findViewById(R.id.textViewRole);
     }
 
-    void setupViewPager(ViewPager viewPager) {
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-        Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_KEY, HOME_KEY);
-        SectionFragment homeFragment = new SectionFragment();
-        homeFragment.setArguments(bundle);
-        adapter.addFragment(homeFragment, "Home");
-
-        for (Category category : categories) {
-            bundle = new Bundle();
-            bundle.putString(BUNDLE_KEY, category.getCate_id());
-            SectionFragment fragment = new SectionFragment();
-            fragment.setArguments(bundle);
-            adapter.addFragment(fragment, category.getName());
-        }
-
-        viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(1 + categories.size());
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -271,7 +231,8 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         }
     }
 
-    private void setupTabIcons() {
+    @Override
+    public void setupTabIcons() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             tabLayout.getTabAt(0).setIcon(R.mipmap.ic_home).getIcon().setTint(getResources().getColor(R.color.theme_app));
             tabLayout.getTabAt(1).setIcon(R.mipmap.ic_game).getIcon().setTint(getResources().getColor(R.color.separate_line));
@@ -311,6 +272,18 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         return false;
     }
 
+    @Override
+    public void startActivity(Class<?> clazz) {
+        startActivity(new Intent(this, clazz));
+    }
+
+    @Override
+    public void startActivity(Class<?> clazz, Bundle bundle) {
+        Intent intent = new Intent(this, clazz);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -341,7 +314,8 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
 
     }
 
-    private void setEvents() {
+    @Override
+    public void setEvents() {
         btnRecharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -369,9 +343,9 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
                         searchResults.add(row.getKey());
                     }
                 }
-                Intent intent = new Intent(MainActivity.this, ProductActivity.class);
-                intent.putExtra("searchResults", searchResults.toArray(new String[searchResults.size()]));
-                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList(Constants.SearchResults, searchResults);
+                startActivity(ProductActivity.class, bundle);
                 return false;
             }
 
@@ -391,5 +365,4 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         swipeRefreshLayout = findViewById(R.id.swiperefresh);
         searchView = findViewById(R.id.search_view);
     }
-
 }

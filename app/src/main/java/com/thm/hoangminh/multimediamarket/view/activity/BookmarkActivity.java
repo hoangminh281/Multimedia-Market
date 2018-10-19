@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.implement.BookmarkPresenter;
@@ -46,7 +47,7 @@ public class BookmarkActivity extends AppCompatActivity implements BookmarkView 
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null && bundle.getString(MainActivity.BUNDLE_KEY).equals("admin")) {
+        if (bundle != null && bundle.getString(Constants.BundleKey).equals("admin")) {
             showCategoriesTabLayout(productAdminKey);
             getSupportActionBar().setTitle(getResources().getString(R.string.menu_product_admin) + "");
             initPresenter();
@@ -75,15 +76,15 @@ public class BookmarkActivity extends AppCompatActivity implements BookmarkView 
 
     public void showCategoriesTabLayout(String key) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        for (Category category : MainActivity.categories) {
+        for (Category category : Category.getInstance()) {
             Bundle bundle = new Bundle();
-            bundle.putString(key, category.getCate_id());
+            bundle.putString(key, category.getCateId());
             ProductFragment productFragment = new ProductFragment();
             productFragment.setArguments(bundle);
             adapter.addFragment(productFragment, category.getName());
         }
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(MainActivity.categories.size());
+        viewPager.setOffscreenPageLimit(Category.getInstance().size());
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
     }

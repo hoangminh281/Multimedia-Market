@@ -25,12 +25,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.model.User;
+import com.thm.hoangminh.multimediamarket.repository.UserRepository;
+import com.thm.hoangminh.multimediamarket.repository.implement.UserRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText edtEmail, edtPassword, edtPasswordConfirm, edtUsername;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,16 +46,20 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
+
+        userRepository = new UserRepositoryImpl();
     }
 
     void setControls() {
         firebaseAuth = FirebaseAuth.getInstance();
-        progressDialog = new ProgressDialog(this);
         edtUsername = findViewById(R.id.edtUsername);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
         edtPasswordConfirm = findViewById(R.id.edtPasswordConfirm);
         toolbar = findViewById(R.id.toolbar);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Signing up, please waiting a moment");
+        progressDialog.setIndeterminate(true);
     }
 
     @Override
@@ -65,60 +73,48 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void Signup(View view) {
-        progressDialog.setMessage("Loading...");
-        progressDialog.setIndeterminate(true);
+        boolean validate = Validate.validateEditTextsToString(this, edtUsername, edtEmail)
+                & Validate.validatePassword(this, edtPassword, edtPasswordConfirm)
+                && Validate.validateSamePassword(this, edtPassword, edtPasswordConfirm);
+        if (!validate) return;
         progressDialog.show();
-
         final String username = edtUsername.getText().toString();
         final String email = edtEmail.getText().toString();
         final String password = edtPassword.getText().toString();
-        String nhaplaimatkhau = edtPasswordConfirm.getText().toString();
-
-        if (username.trim().length() == 0) {
-            Toast.makeText(this, R.string.err_username, Toast.LENGTH_SHORT).show();
-            progressDialog.dismiss();
-        } else if (email.trim().length() == 0) {
-            Toast.makeText(this, R.string.err_email, Toast.LENGTH_SHORT).show();
-            progressDialog.dismiss();
-        } else if (password.trim().length() == 0) {
-            Toast.makeText(this, R.string.err_password, Toast.LENGTH_SHORT).show();
-            progressDialog.dismiss();
-        } else if (!nhaplaimatkhau.equals(password)) {
-            Toast.makeText(this, R.string.err_passnotsame, Toast.LENGTH_SHORT).show();
-            progressDialog.dismiss();
-        } else {
-            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        progressDialog.dismiss();
-                        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                        final User user = new User(firebaseUser.getUid(), username, "user.png", email, "", "", 2, 0, 2, 1);
-                        mRef.child("users/" + user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (!dataSnapshot.exists()) {
-                                    mRef.child("users/" + user.getId()).setValue(user);// Nếu không tồn tại sẽ tạo user mới
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    userRepository.findById(firebaseUser.getUid(),
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    final User user = new User(firebaseUser.getUid(), username, "user.png", email, "", "", 2, 0, 2, 1);
+                                    if (!dataSnapshot.exists()) {
+                                        userRepository.add(user, null, null);
+                                    }
+                                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                                    finish();
                                 }
-                                Intent login = new Intent(RegisterActivity.this, MainActivity.class);
-                                startActivity(login);
-                                finish();
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
-                        });
-                    }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progressDialog.dismiss();
-                    Toast.makeText(RegisterActivity.this, R.string.err_signup, Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RegisterActivity.this, R.string.err_signup, Toast.LENGTH_SHORT).show();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                progressDialog.dismiss();
+            }
+        });
+
     }
 }

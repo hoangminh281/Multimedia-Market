@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
 import com.thm.hoangminh.multimediamarket.view.activity.MainActivity;
 
@@ -62,7 +63,7 @@ public class OptionModifyProductFragment extends Fragment {
         imgGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createModifyProductFragment(MainActivity.categories.get(0).getCate_id(), imgGame);
+                createModifyProductFragment(Category.getInstance().get(0).getCateId(), imgGame);
                 requestCode = 0;
             }
         });
@@ -71,7 +72,7 @@ public class OptionModifyProductFragment extends Fragment {
         imgImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createModifyProductFragment(MainActivity.categories.get(1).getCate_id(), imgImage);
+                createModifyProductFragment(Category.getInstance().get(1).getCateId(), imgImage);
                 requestCode = 1;
             }
         });
@@ -80,7 +81,7 @@ public class OptionModifyProductFragment extends Fragment {
         imgVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createModifyProductFragment(MainActivity.categories.get(2).getCate_id(), imgVideo);
+                createModifyProductFragment(Category.getInstance().get(2).getCateId(), imgVideo);
                 requestCode = 2;
             }
         });
@@ -89,7 +90,7 @@ public class OptionModifyProductFragment extends Fragment {
         imgMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createModifyProductFragment(MainActivity.categories.get(3).getCate_id(), imgMusic);
+                createModifyProductFragment(Category.getInstance().get(3).getCateId(), imgMusic);
                 requestCode = 3;
             }
         });

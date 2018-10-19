@@ -9,7 +9,7 @@ import com.thm.hoangminh.multimediamarket.api.ROUTE;
 import com.thm.hoangminh.multimediamarket.model.RechargedHistory;
 import com.thm.hoangminh.multimediamarket.repository.RechargeHistoryRepository;
 
-public class RechargeHistoryRepositoryImpl implements RechargeHistoryRepository<RechargedHistory, String, ValueEventListener> {
+public class RechargeHistoryRepositoryImpl implements RechargeHistoryRepository<RechargedHistory, String> {
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     @Override

@@ -1,15 +1,9 @@
 package com.thm.hoangminh.multimediamarket.view.callback;
 
-import com.thm.hoangminh.multimediamarket.model.Section;
-
-import java.util.ArrayList;
+import com.thm.hoangminh.multimediamarket.model.SectionDataModel;
 
 public interface SectionView {
-    public void addSectionCardview(ArrayList<Section> sectionArr);
+    void refreshAdapter();
 
-    public void refreshAdapter();
-
-    public void showBottomProgressbar();
-
-    public void hideBottomProgressbar();
+    void addSectionDataModelToCardview(SectionDataModel sectionDataModel);
 }

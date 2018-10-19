@@ -2,6 +2,7 @@ package com.thm.hoangminh.multimediamarket.presenter.implement;
 
 import android.graphics.Bitmap;
 
+import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.File;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.presenter.ModifyProductPresenters.ModifyProductInteractor;
@@ -31,7 +32,7 @@ public class ModifyProductPresenter implements ModifyProductListener {
     public void LoadCategoryProduct(String key_category) {
         cate_id = key_category;
         interactor.LoadCategoryProduct(cate_id);
-        if (key_category.equals(MainActivity.categories.get(1).getCate_id()) || key_category.equals(MainActivity.categories.get(3).getCate_id())) {
+        if (key_category.equals(Category.getInstance().get(1).getCateId()) || key_category.equals(Category.getInstance().get(3).getCateId())) {
             listener.hideEdtYoutube();
         }
     }

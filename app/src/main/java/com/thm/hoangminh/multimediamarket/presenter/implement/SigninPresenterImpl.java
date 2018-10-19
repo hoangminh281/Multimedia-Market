@@ -34,7 +34,7 @@ import com.thm.hoangminh.multimediamarket.view.activity.MainActivity;
 import com.thm.hoangminh.multimediamarket.view.callback.SigninView;
 
 public class SigninPresenterImpl implements SigninPresenter, FirebaseAuth.AuthStateListener, GoogleApiClient.OnConnectionFailedListener {
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private SigninView listener;
     private final Context context;
     private GoogleApiClient apiClient;
@@ -44,9 +44,8 @@ public class SigninPresenterImpl implements SigninPresenter, FirebaseAuth.AuthSt
     public SigninPresenterImpl(Context context, SigninView listener) {
         this.context = context;
         this.listener = listener;
-        this.mAuth = FirebaseAuth.getInstance();
         userRepository = new UserRepositoryImpl();
-        this.createClientLoginGG();
+        createClientLoginGG();
     }
 
     @Override

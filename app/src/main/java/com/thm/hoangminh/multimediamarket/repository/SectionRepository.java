@@ -6,7 +6,7 @@ import com.thm.hoangminh.multimediamarket.model.Pageable;
 import com.thm.hoangminh.multimediamarket.model.Section;
 import com.thm.hoangminh.multimediamarket.repository.base.Repository;
 
-public interface SectionRepository extends Repository<Section, String, ValueEventListener> {
+public interface SectionRepository extends Repository<Section, String> {
     void findByPageable(String cateId, Pageable pageable, ValueEventListener event);
 
     void findAll(String cateId, String sectionId, ValueEventListener eventListener);

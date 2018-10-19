@@ -21,4 +21,11 @@ public class ImageLoader {
             }
         }, null);
     }
+
+    public static void loadImageByUri(final Context context, final ImageView img, Uri uri) {
+        Picasso.with(context)
+                .load(uri)
+                .error(R.mipmap.icon_app_2)
+                .into(img);
+    }
 }
