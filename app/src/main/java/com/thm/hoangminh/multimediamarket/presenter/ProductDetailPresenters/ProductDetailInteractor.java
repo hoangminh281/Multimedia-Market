@@ -105,8 +105,8 @@ public class ProductDetailInteractor {
                     ArrayList<ProductRating> ratingList = new ArrayList<>();
                     for (DataSnapshot item : iterable) {
                         ProductRating productRating = item.getValue(ProductRating.class);
-                        productRating.setUser_id(item.getKey());
-                        productRating.setContent_id(product_id);
+                        productRating.setUserId(item.getKey());
+                        productRating.setProductId(product_id);
                         ratingList.add(productRating);
                     }
                     listener.onLoadRatingSuccess(ratingList);

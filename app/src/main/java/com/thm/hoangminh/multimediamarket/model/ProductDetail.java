@@ -20,48 +20,48 @@ public class ProductDetail {
     private int capacity;
     private int downloaded;
     private int ageLimit;
-    private String owner_id;
+    private String ownerId;
     private String video;
-    private HashMap<String, String> imageList;
-    private String downloadLink;
+    private HashMap<String, String> imageIdList;
+    private String fileId;
 
     public ProductDetail() {
     }
 
-    public ProductDetail(String intro, String description, int capacity, int downloaded, int ageLimit, String owner_id, String video, String downloadLink) {
+    public ProductDetail(String intro, String description, int capacity, int downloaded, int ageLimit, String ownerId, String video, String fileId) {
         this.intro = intro;
         this.description = description;
         this.capacity = capacity;
         this.downloaded = downloaded;
         this.ageLimit = ageLimit;
-        this.owner_id = owner_id;
+        this.ownerId = ownerId;
         this.video = video;
-        this.downloadLink = downloadLink;
+        this.fileId = fileId;
     }
 
-    public ProductDetail(String id, String intro, String description, int capacity, int downloaded, int ageLimit, String owner_id, String video, String downloadLink) {
+    public ProductDetail(String id, String intro, String description, int capacity, int downloaded, int ageLimit, String ownerId, String video, String fileId) {
         this.id = id;
         this.intro = intro;
         this.description = description;
         this.capacity = capacity;
         this.downloaded = downloaded;
         this.ageLimit = ageLimit;
-        this.owner_id = owner_id;
+        this.ownerId = ownerId;
         this.video = video;
-        this.downloadLink = downloadLink;
+        this.fileId = fileId;
     }
 
-    public ProductDetail(String id, String intro, String description, int capacity, int downloaded, int ageLimit, String owner_id, String video, HashMap<String, String> imageList, String downloadLink) {
+    public ProductDetail(String id, String intro, String description, int capacity, int downloaded, int ageLimit, String ownerId, String video, HashMap<String, String> imageIdList, String fileId) {
         this.id = id;
         this.intro = intro;
         this.description = description;
         this.capacity = capacity;
         this.downloaded = downloaded;
         this.ageLimit = ageLimit;
-        this.owner_id = owner_id;
+        this.ownerId = ownerId;
         this.video = video;
-        this.imageList = imageList;
-        this.downloadLink = downloadLink;
+        this.imageIdList = imageIdList;
+        this.fileId = fileId;
     }
 
     public String getId() {
@@ -113,12 +113,12 @@ public class ProductDetail {
         this.ageLimit = ageLimit;
     }
 
-    public String getOwner_id() {
-        return owner_id;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner_id(String owner_id) {
-        this.owner_id = owner_id;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getVideo() {
@@ -129,20 +129,20 @@ public class ProductDetail {
         this.video = video;
     }
 
-    public HashMap<String, String> getImageList() {
-        return imageList;
+    public HashMap<String, String> getImageIdList() {
+        return imageIdList;
     }
 
-    public void setImageList(HashMap<String, String> imageList) {
-        this.imageList = imageList;
+    public void setImageIdList(HashMap<String, String> imageIdList) {
+        this.imageIdList = imageIdList;
     }
 
-    public String getDownloadLink() {
-        return downloadLink;
+    public String getFileId() {
+        return fileId;
     }
 
-    public void setDownloadLink(String downloadLink) {
-        this.downloadLink = downloadLink;
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
     }
 
     public static ArrayList<ProductDetail> initializeGame() {

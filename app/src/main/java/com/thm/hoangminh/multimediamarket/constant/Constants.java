@@ -45,6 +45,7 @@ public class Constants {
     //Rating
     public final static String RatingListKey = "ratingList";
     public final static String RatingPointKey = "ratingPoint";
+    public final static String RatingLimitKey = "ratingLimit";
     public final static int RatingLimit = 3;
 
     //
@@ -68,4 +69,8 @@ public class Constants {
     //Tag
     public final static int HasImageTag = 0;
     public final static int NotHasImageTag = 1;
+
+    //Bookmark
+    public static int BookMarkEnable = 1;
+    public static int BookMarkDisable = 0;
 }

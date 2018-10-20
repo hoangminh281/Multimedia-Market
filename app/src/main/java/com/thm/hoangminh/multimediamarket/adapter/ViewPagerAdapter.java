@@ -13,16 +13,16 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
 
 public class ViewPagerAdapter extends PagerAdapter {
-
     private ArrayList<String> itemsList;
-    private Context mContext;
+    private Context context;
     private LayoutInflater inflater;
 
     public ViewPagerAdapter(Context context, ArrayList<String> itemsList) {
         this.itemsList = itemsList;
-        this.mContext = context;
+        this.context = context;
         inflater = LayoutInflater.from(context);
     }
 
@@ -40,18 +40,10 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View view = inflater.inflate(R.layout.image_view_layout, container, false);
-
         assert view != null;
         final ImageView img = view.findViewById(R.id.imageView);
-
-        Picasso.with(mContext)
-                .load(itemsList.get(position))
-                .fit()
-                .placeholder(R.drawable.icon_app_2)
-                .into(img);
-
+        ImageLoader.loadImageByString(context, img, itemsList.get(position));
         container.addView(view, 0);
-
         return view;
     }
 
@@ -59,5 +51,4 @@ public class ViewPagerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
     }
-
 }

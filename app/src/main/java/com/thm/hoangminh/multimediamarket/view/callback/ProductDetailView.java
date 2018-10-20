@@ -1,58 +1,45 @@
 package com.thm.hoangminh.multimediamarket.view.callback;
 
+import android.net.Uri;
+
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.model.ProductRating;
 import com.thm.hoangminh.multimediamarket.model.User;
+import com.thm.hoangminh.multimediamarket.view.callback.base.BundleBaseView;
 
 import java.util.ArrayList;
 
-public interface ProductDetailView {
+public interface ProductDetailView extends BundleBaseView {
+    void showProductDetail(ProductDetail productDetail);
 
-    public void showProductDetail(ProductDetail productDetail);
+    void showOwner(User user);
 
-    public void showOwner(User user);
+    void addUriToSliderLayout(Uri uri);
 
-    public void checkBookmark(boolean b);
+    void refreshSliderAdapter();
 
-    public void addLinkIntoSlider(String link);
+    void showSuccessRatingLayout();
 
-    public void refreshAdapter();
+    void showMessage(int resource);
 
-    public void showBottomProgressbar();
+    void showRatingFragment(ArrayList<ProductRating> ratingList);
 
-    public void hideBottomProgressbar();
+    void showDialogProgressbar();
 
-    public void showRatingLayout();
+    void hideDialogProgressbar();
 
-    public void showRatingSuccessLayout();
+    void closeDialogProgressbar();
 
-    public void showImageUser(String user_image_link);
-
-    public void showMessage(String message);
-
-    public void showMessageFromResource(int resource);
-
-    public void showRatingFragment(ArrayList<ProductRating> ratingList);
-
-    public void showDialogProgressbar();
-
-    public void hideDialogProgressbar();
-
-    public void closeDialogProgressbar();
-
-    public void AllowCheckout(double balance);
-
-    public void NotAllowCheckout(double balance);
-
-    public void EnableInstall();
-
-    void onLoadCurrentUserSuccess(int role, String user_id);
-
-    void showMessage(int messageId);
-
-    void EnableButtonBuy();
+    void enableOrDisableProductCheckout(double balance, boolean b);
 
     void showProduct(Product value);
 
+    void activeOrDeactiveBookmark(boolean b);
+
+    void showOrHideRatingLayout(boolean b);
+
+    void setVisibleItemMenu(int itemId, boolean b);
+
+    void enableOrDisableDownloadButton(boolean b);
 }

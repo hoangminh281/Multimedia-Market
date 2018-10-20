@@ -23,8 +23,8 @@ import com.squareup.picasso.Picasso;
 import com.thm.hoangminh.multimediamarket.R;
 
 public class ProductRating implements Parcelable {
-    private String user_id;
-    private String content_id;
+    private String userId;
+    private String productId;
     private int point;
     private String content;
     private String time;
@@ -32,15 +32,17 @@ public class ProductRating implements Parcelable {
     public ProductRating() {
     }
 
-    public ProductRating(int point, String content, String time) {
+    public ProductRating(String userId, String productId, int point, String content, String time) {
+        this.userId = userId;
+        this.productId = productId;
         this.point = point;
         this.content = content;
         this.time = time;
     }
 
     protected ProductRating(Parcel in) {
-        user_id = in.readString();
-        content_id = in.readString();
+        userId = in.readString();
+        productId = in.readString();
         point = in.readInt();
         content = in.readString();
         time = in.readString();
@@ -83,26 +85,26 @@ public class ProductRating implements Parcelable {
         this.time = time;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getContent_id() {
-        return content_id;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setContent_id(String content_id) {
-        this.content_id = content_id;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public void LoadImageViewUser(final ImageView img, final Context context) {
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
         final StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
-        mRef.child("users/" + user_id + "/image").addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.child("users/" + userId + "/image").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -129,7 +131,7 @@ public class ProductRating implements Parcelable {
 
     public void LoadUserName(final TextView txt) {
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-        mRef.child("users/" + user_id + "/name").addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.child("users/" + userId + "/name").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -151,8 +153,8 @@ public class ProductRating implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(user_id);
-        parcel.writeString(content_id);
+        parcel.writeString(userId);
+        parcel.writeString(productId);
         parcel.writeInt(point);
         parcel.writeString(content);
         parcel.writeString(time);
@@ -161,7 +163,7 @@ public class ProductRating implements Parcelable {
     public void CheckCurrentUserLike(final CheckBox checkBox) {
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        mRef.child("liked_rating/" + content_id + "/" + user_id + "/" + user.getUid()).addValueEventListener(new ValueEventListener() {
+        mRef.child("liked_rating/" + productId + "/" + userId + "/" + user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int i = 0;
@@ -187,6 +189,6 @@ public class ProductRating implements Parcelable {
     public void LikeRatingContent(boolean b) {
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        mRef.child("liked_rating/" + content_id + "/" + user_id + "/" + user.getUid()).setValue(b ? 1 : 0);
+        mRef.child("liked_rating/" + productId + "/" + userId + "/" + user.getUid()).setValue(b ? 1 : 0);
     }
 }

@@ -19,28 +19,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Product {
-    private String product_id;
-    private String cate_id;
+    private String productId;
+    private String cateId;
     private String title;
     private String photoId;
     private double rating;
     private double price;
-    private String image_url;
+    private String imageUri;
     private int status; //0: inactive, 1: active
 
     public Product() {
     }
 
-    public Product(String cate_id, String title, String photoId, double rating, double price) {
-        this.title = title;
-        this.photoId = photoId;
-        this.rating = rating;
-        this.price = price;
-    }
-
-    public Product(String product_id, String cate_id, String title, String photoId, double rating, double price, int status) {
-        this.product_id = product_id;
-        this.cate_id = cate_id;
+    public Product(String productId, String cateId, String title, String photoId, double rating, double price, int status) {
+        this.productId = productId;
+        this.cateId = cateId;
         this.title = title;
         this.photoId = photoId;
         this.rating = rating;
@@ -48,20 +41,20 @@ public class Product {
         this.status = status;
     }
 
-    public String getProduct_id() {
-        return product_id;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setProduct_id(String product_id) {
-        this.product_id = product_id;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
-    public String getCate_id() {
-        return cate_id;
+    public String getCateId() {
+        return cateId;
     }
 
-    public void setCate_id(String cate_id) {
-        this.cate_id = cate_id;
+    public void setCateId(String cateId) {
+        this.cateId = cateId;
     }
 
     public String getTitle() {
@@ -122,9 +115,9 @@ public class Product {
     public void setBitmapImage(final ImageView img, final Context context) {
         if (this.getStatus() == 0) img.setColorFilter(R.color.white_transparent);
         else img.clearColorFilter();
-        if (image_url != null) {
+        if (imageUri != null) {
             Picasso.with(context)
-                    .load(image_url)
+                    .load(imageUri)
                     .error(R.mipmap.icon_app_2)
                     .into(img);
         } else {
@@ -132,7 +125,7 @@ public class Product {
             mStorageRef.child("products/" + photoId).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    image_url = uri.toString();
+                    imageUri = uri.toString();
                     Picasso.with(context)
                             .load(uri)
                             .error(R.mipmap.icon_app_2)
@@ -141,7 +134,7 @@ public class Product {
             });
         }
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-        mRef.child("products/" + this.getProduct_id() + "/status").addValueEventListener(new ValueEventListener() {
+        mRef.child("products/" + this.getProductId() + "/status").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

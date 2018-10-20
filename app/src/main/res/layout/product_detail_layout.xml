@@ -238,7 +238,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:clickable="true"
-                            android:onClick="UnCollapse_Description"
+                            android:onClick="unCollapseDescription"
                             android:text="@string/txt_readmore"
                             android:textColor="@color/theme_app"
                             android:textSize="15sp"

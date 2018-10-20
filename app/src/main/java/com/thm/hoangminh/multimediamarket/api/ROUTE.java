@@ -36,6 +36,12 @@ public class ROUTE {
 
     private static String PRODUCTDETAILSTORAGE_IMAGE = "products/";
 
+    private static String BOOKMARK = "bookmark/";
+
+    private static Object PURCHASEDPRODUCT = "purchased_product/";
+
+    private static String RATING = "rating/";
+
     public static String USER(String userId) {
         return USER + userId;
     }
@@ -134,5 +140,21 @@ public class ROUTE {
 
     public static String PRODUCTSTORAGE_IMAGE(String productImageId) {
         return PRODUCTSTORAGE_IMAGE + productImageId;
+    }
+
+    public static String BOOKMARK(String userId, String cateId, String productId) {
+        return BOOKMARK + userId + "/" + cateId + "/" + productId;
+    }
+
+    public static String PURCHASEDPRODUCT(String userId, String cateId, String productId) {
+        return PURCHASEDPRODUCT + userId + "/" + cateId + "/" + productId;
+    }
+
+    public static String RATING(String productId) {
+        return RATING + productId;
+    }
+
+    public static String RATING(String userId, String productId) {
+        return RATING + productId + "/" + userId;
     }
 }

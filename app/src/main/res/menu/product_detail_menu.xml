@@ -9,7 +9,7 @@
         android:title="@string/menu_active"
         android:visible="false"/>
     <item
-        android:id="@+id/menu_inactive"
+        android:id="@+id/menu_deactive"
         android:title="@string/menu_inactive"
         android:visible="false"/>
 </menu>

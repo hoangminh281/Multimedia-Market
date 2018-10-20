@@ -212,7 +212,7 @@ public class UpdateProductInteractorImpl implements UpdateProductInteractor {
 
     @Override
     public void UpdateProduct(Product product) {
-        mRef.child("products/" + product.getProduct_id()).setValue(product).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mRef.child("products/" + product.getProductId()).setValue(product).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 listener.onUpdateProductSuccess();

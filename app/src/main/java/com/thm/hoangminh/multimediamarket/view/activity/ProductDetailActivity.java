@@ -2,6 +2,8 @@ package com.thm.hoangminh.multimediamarket.view.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -25,19 +27,23 @@ import android.widget.Toast;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.squareup.picasso.Picasso;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.adapter.ViewPagerAdapter;
-import com.thm.hoangminh.multimediamarket.model.ProductRating;
-import com.thm.hoangminh.multimediamarket.references.Tools;
-import com.thm.hoangminh.multimediamarket.view.callback.ProductDetailView;
-import com.thm.hoangminh.multimediamarket.view.fragment.RatingFragment;
-import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
-import com.thm.hoangminh.multimediamarket.references.ConvertNumberToString;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.fomular.MoneyFormular;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
+import com.thm.hoangminh.multimediamarket.model.ProductRating;
 import com.thm.hoangminh.multimediamarket.model.User;
-import com.thm.hoangminh.multimediamarket.presenter.implement.ProductDetailPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.ProductDetailPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.ProductDetailPresenterImpl;
+import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
+import com.thm.hoangminh.multimediamarket.references.ConvertNumberToString;
+import com.thm.hoangminh.multimediamarket.repository.ProductStorageRepository;
+import com.thm.hoangminh.multimediamarket.repository.UserStorageRepository;
+import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
+import com.thm.hoangminh.multimediamarket.view.callback.ProductDetailView;
+import com.thm.hoangminh.multimediamarket.view.fragment.RatingFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,42 +52,36 @@ import java.util.Collections;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProductDetailActivity extends AppCompatActivity implements ProductDetailView {
-    private ImageView imgProduct;
-    private TextView txtTitle, txtOwnername, txtAgelimit, txtDownloaded, txtSubdownloaded,
-            txtRating, txtDescription, txtRead, txtIntro, txtRatingSum, txtWallet, txtContent;
-    private RatingBar ratingBar, rtb_User;
-    private Button btnBuy, btnRating, btnCheckout;
-    private ProductDetailPresenter presenter;
-    private Product product;
-    private YouTubePlayerSupportFragment youtubeView;
-    private String video_id;
-    private YouTubePlayer.OnInitializedListener onInitializedListener;
-    private ViewPagerAdapter adapter;
-    private ArrayList<String> imagesList;
-    private ViewPager viewPager;
+    private Menu menu;
+    private Dialog dialog;
+    private Toolbar toolbar;
     private EditText edtRating;
-    private RelativeLayout ratingLayout;
-    private LinearLayout ratingContentLayout, ratingSuccessLayout;
+    private ViewPager viewPager;
+    private ImageView imgThanks;
+    private CheckBox cbBookmark;
+    private ImageView imgProduct;
+    private ProgressBar pgbDialog;
     private CircleImageView imgUser;
     private RelativeLayout rlDialog;
-    private ProgressBar pgbDialog;
-    private Dialog dialog;
-    private CheckBox cbBookmark;
-    private ImageView imgThanks;
-    private Toolbar toolbar;
+    private RelativeLayout ratingLayout;
+    private RatingBar ratingBarOverview, rtbUser;
+    private Button btnBuy, btnRating, btnCheckout;
+    private YouTubePlayerSupportFragment youtubeView;
+    private LinearLayout ratingContentLayout, ratingSuccessLayout;
+    private TextView txtTitle, txtOwnername, txtAgelimit, txtDownloaded, txtSubdownloaded,
+            txtRating, txtDescription, txtRead, txtIntro, txtRatingSum, txtWallet, txtContent;
 
+    private ViewPagerAdapter adapter;
+    private ArrayList<String> imagesList;
+    private ProductDetailPresenter presenter;
+    private YouTubePlayer.OnInitializedListener onInitializedListener;
     public static final String googleApiKey = "AIzaSyBzvhnvsvpM2Kpy6_2ceRthi59uJx2Lyxg";
-    private String owner_id;
-    private Menu menu;
-    private String fileName;
-    private String user_id;
-    private int role;
+    private Product product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_detail_layout);
-
         setControls();
 
         setSupportActionBar(toolbar);
@@ -91,24 +91,16 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
 
         initPresenter();
-
         initAdapter();
-
-        initYoutubeLayout();
-
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            String cate_id = bundle.getString("cate_id");
-            String product_id = bundle.getString("product_id");
-
-            presenter.LoadProductById(product_id);
-            presenter.LoadProductDetailById(product_id);
-            presenter.LoadBookmarkContent(cate_id, product_id);
-            presenter.LoadProductTransactionHistory(cate_id, product_id);
-            presenter.LoadRating(product_id);
-
+            presenter.extractBundle(bundle);
+            setEvents();
         }
-        setEvents();
+    }
+
+    private void initPresenter() {
+        presenter = new ProductDetailPresenterImpl(this);
     }
 
     @Override
@@ -126,29 +118,23 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 finish();
                 break;
             case R.id.menu_update:
-                Intent intent = new Intent(this, UpdateProductActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("product_id", product.getProduct_id());
-                bundle.putString("cate_id", product.getCate_id());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                bundle.putString(Constants.CateIdKey, product.getCateId());
+                bundle.putString(Constants.ProductIdKey, product.getProductId());
+                startActivity(UpdateProductActivity.class, bundle);
                 break;
             case R.id.menu_active:
-                ActiveContent(1);
+                activeOrDeactiveProduct(true);
                 return true;
-            case R.id.menu_inactive:
-                ActiveContent(0);
+            case R.id.menu_deactive:
+                activeOrDeactiveProduct(false);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void ActiveContent(final int status) {
-        presenter.ActiveProduct(product.getProduct_id(), status);
-    }
-
-    private void initPresenter() {
-        presenter = new ProductDetailPresenter(this);
+    public void activeOrDeactiveProduct(boolean b) {
+        presenter.activeOrDeactiveProduct(b);
     }
 
     private void initAdapter() {
@@ -157,12 +143,12 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         viewPager.setAdapter(adapter);
     }
 
-    private void initYoutubeLayout() {
-        onInitializedListener = new YouTubePlayer.OnInitializedListener() {
+    private void initYoutubeLayout(final String videoId) {
+        youtubeView.initialize(googleApiKey, new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 if (!b) {
-                    youTubePlayer.cueVideo(video_id);
+                    youTubePlayer.cueVideo(videoId);
                 }
             }
 
@@ -170,16 +156,22 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
             }
-        };
+        });
+    }
+
+    @Override
+    public void showProduct(Product product) {
+        this.product = product;
+        ImageLoader.loadImage(ProductStorageRepository.class, this, imgProduct, this.product.getPhotoId());
+        txtTitle.setText(product.getTitle());
+        txtRating.setText(product.getRating() + "");
+        ratingBarOverview.setRating((float) product.getRating());
+        btnBuy.setText(MoneyFormular.format(product.getPrice()));
     }
 
     @Override
     public void showProductDetail(ProductDetail productDetail) {
-        fileName = productDetail.getDownloadLink();
-        owner_id = productDetail.getOwner_id();
-        presenter.LoadCurrentUser();
-        video_id = productDetail.getVideo();
-        youtubeView.initialize(googleApiKey, onInitializedListener);
+        initYoutubeLayout(productDetail.getVideo());
         txtAgelimit.setText(productDetail.getAgeLimit() + "+");
         ConvertNumberToString convert = new ConvertNumberToString(productDetail.getDownloaded(), getResources().getStringArray(R.array.unit));
         txtDownloaded.setText(convert.getNumber() + "");
@@ -191,35 +183,32 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void showOwner(User user) {
         txtOwnername.setText(user.getName());
+        ImageLoader.loadImage(UserStorageRepository.class, this, imgUser, user.getImage());
     }
 
     @Override
-    public void checkBookmark(boolean b) {
+    public void activeOrDeactiveBookmark(boolean b) {
         cbBookmark.setChecked(b);
         cbBookmark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    presenter.SavedProductBookmark(product.getCate_id(), product.getProduct_id());
-                } else {
-                    presenter.UnSavedProductBookmark(product.getCate_id(), product.getProduct_id());
-                }
+                presenter.enableOrDisableBookmark(b);
             }
         });
     }
 
     @Override
-    public void addLinkIntoSlider(String link) {
+    public void addUriToSliderLayout(Uri uri) {
         viewPager.setVisibility(View.VISIBLE);
-        imagesList.add(link);
+        imagesList.add(uri.toString());
     }
 
     @Override
-    public void refreshAdapter() {
+    public void refreshSliderAdapter() {
         adapter.notifyDataSetChanged();
     }
 
-    public void UnCollapse_Description(View view) {
+    public void unCollapseDescription(View view) {
         if (txtDescription.isShown()) {
             txtRead.setText(R.string.txt_readmore);
             AnimationSupport.slide_up(this, txtDescription);
@@ -233,22 +222,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     }
 
     @Override
-    public void showBottomProgressbar() {
-
-    }
-
-    @Override
-    public void hideBottomProgressbar() {
-
-    }
-
-    @Override
-    public void showRatingLayout() {
-        ratingLayout.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void showRatingSuccessLayout() {
+    public void showSuccessRatingLayout() {
         if (ratingLayout.isShown()) {
             AnimationSupport.fade_out(this, ratingContentLayout);
             new Thread() {
@@ -278,20 +252,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     }
 
     @Override
-    public void showImageUser(String user_image_link) {
-        Picasso.with(this)
-                .load(user_image_link)
-                .into(imgUser);
-    }
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        if (dialog != null && dialog.isShowing()) dialog.dismiss();
-    }
-
-    @Override
-    public void showMessageFromResource(int resource) {
+    public void showMessage(int resource) {
         Toast.makeText(this, getResources().getString(resource), Toast.LENGTH_SHORT).show();
         if (dialog != null && dialog.isShowing()) dialog.dismiss();
     }
@@ -299,11 +260,10 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void showRatingFragment(ArrayList<ProductRating> ratingList) {
         txtRatingSum.setText(ratingList.size() + "");
-
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("ratingList", ratingList);
-        bundle.putDouble("rating_point", product.getRating());
-        bundle.putInt("limit", 3);
+        bundle.putParcelableArrayList(Constants.RatingListKey, ratingList);
+        bundle.putDouble(Constants.RatingPointKey, product.getRating());
+        bundle.putInt(Constants.RatingLimitKey, Constants.RatingLimit);
         RatingFragment ratingFragment = new RatingFragment();
         ratingFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -329,101 +289,91 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     }
 
     @Override
-    public void AllowCheckout(double balance) {
-        txtWallet.setText(Tools.FormatMoney(balance));
-        txtContent.setText(R.string.txt_allowCheckout);
-        btnCheckout.setText(R.string.btn_checkout);
-        btnCheckout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.CheckoutProduct(product.getCate_id(), product.getProduct_id(), owner_id);
-            }
-        });
-    }
-
-    @Override
-    public void NotAllowCheckout(double balance) {
-        txtWallet.setText(Tools.FormatMoney(balance));
-        txtWallet.setTextColor(getResources().getColor(R.color.red));
-        txtContent.setText(R.string.txt_NotAllowCheckout);
-        btnCheckout.setText(R.string.btn_recharge);
-        btnCheckout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ProductDetailActivity.this, RechargeActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    @Override
-    public void EnableInstall() {
-        btnBuy.setEnabled(true);
-        btnBuy.setBackgroundColor(getResources().getColor(R.color.theme_app));
-        btnBuy.setText(R.string.btn_install);
-        btnBuy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnBuy.setEnabled(false);
-                btnBuy.setBackgroundColor(getResources().getColor(R.color.grey_50));
-                btnBuy.setText(R.string.btn_loading);
-                presenter.downLoadProduct(ProductDetailActivity.this, fileName);
-            }
-        });
-    }
-
-    @Override
-    public void onLoadCurrentUserSuccess(int role, String user_id) {
-        this.role = role;
-        this.user_id = user_id;
-        if (owner_id.equals(user_id) || role == User.ADMIN) {
-            menu.findItem(R.id.menu_update).setVisible(true);
+    public void enableOrDisableProductCheckout(double balance, boolean b) {
+        if (b) {
+            txtWallet.setText(MoneyFormular.format(balance));
+            txtContent.setText(R.string.txt_allowCheckout);
+            btnCheckout.setText(R.string.btn_checkout);
+            btnCheckout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    presenter.checkoutProduct();
+                }
+            });
         } else {
-            menu.findItem(R.id.menu_update).setVisible(false);
+            txtWallet.setText(MoneyFormular.format(balance));
+            txtWallet.setTextColor(getResources().getColor(R.color.red));
+            txtContent.setText(R.string.txt_NotAllowCheckout);
+            btnCheckout.setText(R.string.btn_recharge);
+            btnCheckout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(RechargeActivity.class);
+                }
+            });
         }
-        EnableModifyProduct();
     }
 
     @Override
-    public void showMessage(int messageId) {
-        Toast.makeText(this, getResources().getString(messageId), Toast.LENGTH_SHORT).show();
-        if (dialog != null && dialog.isShowing()) dialog.dismiss();
+    public void showOrHideRatingLayout(boolean b) {
+        ratingLayout.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
     @Override
-    public void EnableButtonBuy() {
-        btnBuy.setEnabled(true);
+    public void setVisibleItemMenu(int itemId, boolean b) {
+        if (menu != null) {
+            menu.findItem(itemId).setVisible(b);
+        }
     }
 
     @Override
-    public void showProduct(Product value) {
-        this.product = value;
-        product.setBitmapImage(imgProduct, this);
+    public void enableOrDisableDownloadButton(boolean b) {
+        if (b) {
+            btnBuy.setEnabled(true);
+            btnBuy.setBackgroundColor(getResources().getColor(R.color.theme_app));
+            btnBuy.setText(R.string.btn_install);
+            btnBuy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    btnBuy.setEnabled(false);
+                    btnBuy.setBackgroundColor(getResources().getColor(R.color.grey_50));
+                    btnBuy.setText(R.string.btn_loading);
+                    presenter.downLoadProduct();
+                }
+            });
+        } else {
+            btnBuy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (dialog == null) initBuyingDialog();
+                    presenter.loadUserWallet();
+                    dialog.show();
+                }
+            });
+        }
+    }
+
+    private void initBuyingDialog() {
+        dialog = new Dialog(ProductDetailActivity.this);
+        dialog.setContentView(R.layout.checkout_dialog);
+        dialog.setTitle(product.getTitle());
+
+        ImageView imgLogo = dialog.findViewById(R.id.imageViewLogo);
+        TextView txtTitle = dialog.findViewById(R.id.textViewTitle);
+        TextView txtPrice = dialog.findViewById(R.id.textViewPrice);
+        txtContent = dialog.findViewById(R.id.textViewContent);
+        txtWallet = dialog.findViewById(R.id.textViewWallet);
+        btnCheckout = dialog.findViewById(R.id.buttonCheckout);
+        rlDialog = dialog.findViewById(R.id.relativeLayoutDialog);
+        pgbDialog = dialog.findViewById(R.id.progressBarDialog);
+        // khai báo control trong dialog để bắt sự kiện
+        imgLogo.setImageBitmap(((BitmapDrawable) imgProduct.getDrawable()).getBitmap());
         txtTitle.setText(product.getTitle());
-        txtRating.setText(product.getRating() + "");
-        ratingBar.setRating((float) product.getRating());
-        btnBuy.setText(Tools.FormatMoney(product.getPrice()));
-        EnableModifyProduct();
-    }
-
-    private void EnableModifyProduct() {
-        if (product == null || owner_id == null) return;
-        if (owner_id.equals(user_id) || role == User.ADMIN) {
-            if (product.getStatus() == 0) {
-                menu.findItem(R.id.menu_inactive).setVisible(false);
-                menu.findItem(R.id.menu_active).setVisible(true);
-            } else {
-                menu.findItem(R.id.menu_inactive).setVisible(true);
-                menu.findItem(R.id.menu_active).setVisible(false);
-            }
-        } else {
-            menu.findItem(R.id.menu_inactive).setVisible(false);
-            menu.findItem(R.id.menu_active).setVisible(false);
-        }
+        txtPrice.setText(MoneyFormular.format(product.getPrice()));
     }
 
     private void setEvents() {
-        rtb_User.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+        rtbUser.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 if (b) {
@@ -435,36 +385,11 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         btnRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.addNewRating(product.getProduct_id(), rtb_User.getRating(), edtRating.getText().toString());
-            }
-        });
-        btnBuy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog = new Dialog(ProductDetailActivity.this);
-                // khởi tạo dialog
-                dialog.setContentView(R.layout.checkout_dialog);
-                // xét layout cho dialog
-                dialog.setTitle(product.getTitle());
-                // xét tiêu đề cho dialog
-
-                ImageView imgLogo = dialog.findViewById(R.id.imageViewLogo);
-                TextView txtTitle = dialog.findViewById(R.id.textViewTitle);
-                TextView txtPrice = dialog.findViewById(R.id.textViewPrice);
-                txtContent = dialog.findViewById(R.id.textViewContent);
-                txtWallet = dialog.findViewById(R.id.textViewWallet);
-                btnCheckout = dialog.findViewById(R.id.buttonCheckout);
-                rlDialog = dialog.findViewById(R.id.relativeLayoutDialog);
-                pgbDialog = dialog.findViewById(R.id.progressBarDialog);
-                // khai báo control trong dialog để bắt sự kiện
-                presenter.LoadUserWallet(product.getPrice());
-                product.setBitmapImage(imgLogo, ProductDetailActivity.this);
-                txtTitle.setText(product.getTitle());
-                txtPrice.setText(Tools.FormatMoney(product.getPrice()));
-
-                // bắt sự kiện cho nút đăng kí
-                dialog.show();
-
+                ProductRating productRating = new ProductRating();
+                productRating.setProductId(product.getProductId());
+                productRating.setPoint((int) rtbUser.getRating());
+                productRating.setContent(edtRating.getText().toString());
+                presenter.addRating(productRating);
             }
         });
     }
@@ -478,15 +403,15 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         txtDownloaded = findViewById(R.id.textViewDownloaded);
         txtSubdownloaded = findViewById(R.id.textViewSubDownloaded);
         txtRating = findViewById(R.id.textViewRating);
-        ratingBar = findViewById(R.id.ratingBar);
+        ratingBarOverview = findViewById(R.id.ratingBar);
         btnBuy = findViewById(R.id.buttonBuy);
-        youtubeView = (YouTubePlayerSupportFragment) this.getSupportFragmentManager().findFragmentById(R.id.youtube_layout);
+        youtubeView = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_layout);
         txtIntro = findViewById(R.id.textViewIntro);
         txtDescription = findViewById(R.id.textViewDescription);
         txtDescription.setVisibility(View.GONE);
         txtRead = findViewById(R.id.textViewRead);
         viewPager = findViewById(R.id.viewPager);
-        rtb_User = findViewById(R.id.ratingBarUser);
+        rtbUser = findViewById(R.id.ratingBarUser);
         imgUser = findViewById(R.id.imageViewUser);
         edtRating = findViewById(R.id.editTextRating);
         txtRatingSum = findViewById(R.id.textViewRatingSum);
@@ -496,5 +421,17 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         ratingSuccessLayout = findViewById(R.id.ratingSuccessLayout);
         imgThanks = findViewById(R.id.imageViewThanks);
         toolbar = findViewById(R.id.toolbar);
+    }
+
+    @Override
+    public void startActivity(Class<?> clazz, Bundle bundle) {
+        Intent intent = new Intent(this, clazz);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void startActivity(Class<?> clazz) {
+        startActivity(new Intent(this, clazz));
     }
 }

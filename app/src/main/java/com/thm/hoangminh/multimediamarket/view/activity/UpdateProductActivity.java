@@ -119,7 +119,7 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
     }
 
     public void SaveContent() {
-        if (User.getInstance().getId() != pDetail.getOwner_id() && User.getInstance().getRole()!= User.ADMIN) {
+        if (User.getInstance().getId() != pDetail.getOwnerId() && User.getInstance().getRole()!= User.ADMIN) {
             Toast.makeText(this, R.string.info_fail_role, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -191,7 +191,7 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
         product.setTitle(title);
         product.setPrice(Double.valueOf(price));
 
-        if (pDetail.getImageList() == null) pDetail.setImageList(new HashMap<String, String>());
+        if (pDetail.getImageIdList() == null) pDetail.setImageIdList(new HashMap<String, String>());
         pDetail.setIntro(intro);
         pDetail.setDescription(desc);
         pDetail.setAgeLimit(Integer.parseInt(ageLimit.replace("+", "")));
@@ -214,8 +214,8 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
         edtIntro.setText(pDetail.getIntro());
         edtDes.setText(pDetail.getDescription());
         edtVideo.setText(pDetail.getVideo());
-        if (pDetail.getImageList() != null) {
-            imageList = pDetail.getImageList();
+        if (pDetail.getImageIdList() != null) {
+            imageList = pDetail.getImageIdList();
             int minSize = imageList.size() < imgArr.length ? imageList.size() : imgArr.length;
             for (int i = 1; i < minSize + 1; i++) {
                 pDetail.setBitmapImage(imgArr[i], String.valueOf(imageList.values().toArray()[i - 1]), this);
@@ -228,7 +228,7 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
                 showAgePickerDialog();
             }
         });
-        txtFile.setText(pDetail.getDownloadLink());
+        txtFile.setText(pDetail.getFileId());
         txtFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

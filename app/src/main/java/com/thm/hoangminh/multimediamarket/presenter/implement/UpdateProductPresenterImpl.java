@@ -71,7 +71,7 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter, Updat
         this.newProductDetailBitmaps = newProductDetailBitmaps;
         this.file = file;
         if (newSections != null)
-            interactor.DeleteProductSections(product.getProduct_id(), product.getCate_id(), oldSections);
+            interactor.DeleteProductSections(product.getProductId(), product.getCateId(), oldSections);
         else
             interactor.UpdateProduct(product);
     }
@@ -79,7 +79,7 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter, Updat
     @Override
     public void onDeleteProductSectionsSuccess() {
         listener.UpdateProgressDialog(R.string.dialog_successfully_delete_section);
-        interactor.UpdateProductSections(product.getProduct_id(), product.getCate_id(), newSections);
+        interactor.UpdateProductSections(product.getProductId(), product.getCateId(), newSections);
     }
 
     @Override
@@ -98,11 +98,11 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter, Updat
     public void onUpdateProductDetailSuccess() {
         listener.UpdateProgressDialog(R.string.dialog_successfully_update_product_detail);
         if (newProductBitmap != null)
-            interactor.UpdateProductImage(product.getProduct_id(), product.getPhotoId(), newProductBitmap);
+            interactor.UpdateProductImage(product.getProductId(), product.getPhotoId(), newProductBitmap);
         if (newProductDetailBitmaps.size() != 0)
-            interactor.UpdateProductDetailImage(product.getProduct_id(), pDetail.getImageList(), newProductDetailBitmaps);
+            interactor.UpdateProductDetailImage(product.getProductId(), pDetail.getImageIdList(), newProductDetailBitmaps);
         if (file != null)
-            interactor.UpdateFile(product.getProduct_id(), pDetail.getDownloadLink(), file);
+            interactor.UpdateFile(product.getProductId(), pDetail.getFileId(), file);
     }
 
     @Override

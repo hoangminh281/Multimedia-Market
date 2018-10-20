@@ -69,8 +69,8 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ProductDetailActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("cate_id", product.getCate_id());
-                    bundle.putString("product_id", product.getProduct_id());
+                    bundle.putString("cate_id", product.getCateId());
+                    bundle.putString("product_id", product.getProductId());
                     intent.putExtras(bundle);
                     mContext.startActivity(intent);
                 }

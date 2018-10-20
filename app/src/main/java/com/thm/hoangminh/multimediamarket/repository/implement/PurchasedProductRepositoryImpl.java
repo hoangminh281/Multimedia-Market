@@ -2,12 +2,16 @@ package com.thm.hoangminh.multimediamarket.repository.implement;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.thm.hoangminh.multimediamarket.api.ROUTE;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.PurchasedProduct;
 import com.thm.hoangminh.multimediamarket.repository.PurchasedProductRepository;
 
 public class PurchasedProductRepositoryImpl implements PurchasedProductRepository {
+    DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
     public void add(PurchasedProduct item, OnSuccessListener successListener, OnFailureListener failureListener) {
@@ -41,6 +45,7 @@ public class PurchasedProductRepositoryImpl implements PurchasedProductRepositor
 
     @Override
     public void findAndWatch(String uid, String cateId, String productId, ValueEventListener eventListener) {
-
+        mRef.child(ROUTE.PURCHASEDPRODUCT(uid, cateId, productId))
+                .addValueEventListener(eventListener);
     }
 }

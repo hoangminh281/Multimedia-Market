@@ -103,8 +103,8 @@ public class ProductActivity extends AppCompatActivity implements ProductView {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(ProductActivity.this, ProductDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("cate_id", productsList.get(i).getCate_id());
-                bundle.putString("product_id", productsList.get(i).getProduct_id());
+                bundle.putString("cate_id", productsList.get(i).getCateId());
+                bundle.putString("product_id", productsList.get(i).getProductId());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
