@@ -37,15 +37,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UpdateProductActivity extends AppCompatActivity implements UpdateProductView {
+    private Toolbar toolbar;
     private ImageView[] imgArr;
+    private LinearLayout videoLayout;
+    private TextView txtCategory, txtAgeLimit, txtFile;
     private EditText edtTitle, edtPrice, edtIntro, edtDes, edtVideo;
+
     private ArrayList<Integer> mSelectedItems;
     private Map<String, String> categoryList;
-    private TextView txtCategory, txtAgeLimit, txtFile;
-    private Toolbar toolbar;
-    private LinearLayout videoLayout;
-    private String cate_id;
-    private com.thm.hoangminh.multimediamarket.model.File pickedFile;
+    private File pickedFile;
     private ProgressDialog progressDialog;
 
     private int imgPosition;
@@ -195,7 +195,7 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
         pDetail.setIntro(intro);
         pDetail.setDescription(desc);
         pDetail.setAgeLimit(Integer.parseInt(ageLimit.replace("+", "")));
-        pDetail.setVideo(video);
+        pDetail.setVideoId(video);
 
         presenter.UpdateProduct(productSections, newSections, product, pDetail, productImage, productDetailBitmaps, pickedFile);
     }
@@ -213,7 +213,7 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
         this.pDetail = pDetail;
         edtIntro.setText(pDetail.getIntro());
         edtDes.setText(pDetail.getDescription());
-        edtVideo.setText(pDetail.getVideo());
+        edtVideo.setText(pDetail.getVideoId());
         if (pDetail.getImageIdList() != null) {
             imageList = pDetail.getImageIdList();
             int minSize = imageList.size() < imgArr.length ? imageList.size() : imgArr.length;

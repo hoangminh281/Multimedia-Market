@@ -15,6 +15,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.view.activity.RatingActivity;
 import com.thm.hoangminh.multimediamarket.adapter.RatingAdapter;
 import com.thm.hoangminh.multimediamarket.model.ProductRating;
@@ -56,9 +57,9 @@ public class RatingFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
-            rating_point = getArguments().getDouble("rating_point");
-            ratingList = getArguments().getParcelableArrayList("ratingList");
-            limit = getArguments().getInt("limit");
+            rating_point = getArguments().getDouble(Constants.RatingPointKey);
+            ratingList = getArguments().getParcelableArrayList(Constants.RatingListKey);
+            limit = Constants.RatingLimit;
             setRatingOverview();
             setRatingOverviewDetail();
             setRatingContentListview();

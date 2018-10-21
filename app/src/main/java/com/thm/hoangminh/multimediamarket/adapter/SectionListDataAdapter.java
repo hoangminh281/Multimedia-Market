@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.references.Tools;
 import com.thm.hoangminh.multimediamarket.view.activity.ProductDetailActivity;
@@ -69,8 +70,8 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ProductDetailActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("cate_id", product.getCateId());
-                    bundle.putString("product_id", product.getProductId());
+                    bundle.putString(Constants.CateIdKey, product.getCateId());
+                    bundle.putString(Constants.ProductIdKey, product.getProductId());
                     intent.putExtras(bundle);
                     mContext.startActivity(intent);
                 }

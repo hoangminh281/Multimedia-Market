@@ -6,7 +6,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.api.ROUTE;
-import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.PurchasedProduct;
 import com.thm.hoangminh.multimediamarket.repository.PurchasedProductRepository;
 
@@ -14,18 +13,29 @@ public class PurchasedProductRepositoryImpl implements PurchasedProductRepositor
     DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
-    public void add(PurchasedProduct item, OnSuccessListener successListener, OnFailureListener failureListener) {
-
+    public void add(PurchasedProduct purchasedProduct, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.PURCHASEDPRODUCT(purchasedProduct.getUserId(), purchasedProduct.getCateId(), purchasedProduct.getProductId()))
+                .setValue(purchasedProduct)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 
     @Override
-    public void update(PurchasedProduct item, OnSuccessListener successListener, OnFailureListener failureListener) {
-
+    public void update(final PurchasedProduct purchasedProduct, final OnSuccessListener successListener, final OnFailureListener failureListener) {
+        remove(purchasedProduct, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                add(purchasedProduct, successListener, failureListener);
+            }
+        }, failureListener);
     }
 
     @Override
-    public void remove(PurchasedProduct item, OnSuccessListener successListener, OnFailureListener failureListener) {
-
+    public void remove(PurchasedProduct purchasedProduct, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.PURCHASEDPRODUCT(purchasedProduct.getUserId(), purchasedProduct.getCateId(), purchasedProduct.getProductId()))
+                .removeValue()
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 
     @Override

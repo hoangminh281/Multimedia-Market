@@ -35,7 +35,7 @@ public class RechargePresenter implements RechargeListener {
 
     @Override
     public void onRechargeCardFailure() {
-        listener.showMessageFromResource(R.string.infor_failure);
+        listener.showMessageFromResource(R.string.info_failure);
     }
 
     @Override

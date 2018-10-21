@@ -47,7 +47,7 @@
     <string name="txt_500k">500.000đ</string>
     <string name="err_empty">Còn trống</string>
     <string name="info_success">Chúc mừng!!! Bạn đã nạp thẻ thành công</string>
-    <string name="infor_failure">Ôi!!! Chúng tôi đã phát hiện một lỗi không lường trước. Vui lòng thử lại</string>
+    <string name="info_failure">Ôi!!! Chúng tôi đã phát hiện một lỗi không lường trước. Vui lòng thử lại</string>
     <string name="info_wrong">Ôi không!!! Chúng tôi không thể xác minh thông tin của bạn. Vui lòng thử lại</string>
     <string name="btn_newRecharge">Tạo giao dịch mới</string>
     <string name="txt_time">Thời gian</string>

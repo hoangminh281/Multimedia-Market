@@ -24,8 +24,7 @@ public class ImageLoader {
             storageRepository = new ProductStorageRepositoryImpl();
         } else if (clazz.isAssignableFrom(ProductDetailStorageRepository.class)) {
             storageRepository = new ProductDetailStorageRepositoryImpl();
-        }
-        else return;
+        } else return;
         if (storageRepository != null) {
             storageRepository.findUriById(imageId, new OnSuccessListener<Uri>() {
                 @Override
@@ -46,9 +45,10 @@ public class ImageLoader {
                 .into(img);
     }
 
-    public static void loadImageByString(final Context context, final ImageView img, String path) {
+    public static void loadImageByUriToFit(final Context context, final ImageView img, Uri uri) {
         Picasso.with(context)
-                .load(path)
+                .load(uri)
+                .fit()
                 .error(R.mipmap.icon_app_2)
                 .into(img);
     }

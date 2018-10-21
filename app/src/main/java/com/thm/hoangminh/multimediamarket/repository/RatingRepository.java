@@ -5,5 +5,5 @@ import com.thm.hoangminh.multimediamarket.model.ProductRating;
 import com.thm.hoangminh.multimediamarket.repository.base.Repository;
 
 public interface RatingRepository extends Repository<ProductRating, String> {
-    void findAndWatchByUserId(String uid, String productId, ValueEventListener eventListener);
+    void findByUserId(String uid, String productId, ValueEventListener eventListener);
 }

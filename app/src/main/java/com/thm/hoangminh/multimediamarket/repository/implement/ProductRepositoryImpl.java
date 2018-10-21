@@ -13,7 +13,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
-    public void findAndWatchById(String s, ValueEventListener event) {
+    public void findAndWatchById(String productId, ValueEventListener event) {
+        mRef.child(ROUTE.PRODUCT(productId)).addValueEventListener(event);
     }
 
     @Override
@@ -47,12 +48,21 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public void setRatingPoint(String productId, double ratingPoint) {
-
+    public void setRatingPoint(String productId, double ratingPoint, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.PRODUCT_RATING(productId)).setValue(ratingPoint)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 
     @Override
     public void findPriceByProductId(String productId, ValueEventListener eventListener) {
+        mRef.child(ROUTE.PRODUCT_PRICE(productId)).addListenerForSingleValueEvent(eventListener);
+    }
 
+    @Override
+    public void setStatus(String productId, int status, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.PRODUCT(productId)).setValue(status)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 }

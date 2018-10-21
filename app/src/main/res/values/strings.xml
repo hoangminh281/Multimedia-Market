@@ -49,7 +49,7 @@
     <string name="txt_500k">$24.99</string>
     <string name="err_empty">Empty</string>
     <string name="info_success">Congratulation!!! You successfully recharged</string>
-    <string name="infor_failure">Oops!!! We encountered an unexpected error. Please try again</string>
+    <string name="info_failure">Oops!!! We encountered an unexpected error. Please try again</string>
     <string name="info_wrong">Oh no!!! We are unable to validate your information. Please try again</string>
     <string name="btn_newRecharge">New recharge</string>
     <string name="txt_time">Time</string>
@@ -69,7 +69,7 @@
     <string name="btn_install">Download</string>
     <string name="info_buyingSuccess">Congratulation!!! You successfully checkout</string>
     <string name="info_saved">Marked this content</string>
-    <string name="info_unSaved">Unmarked this content</string>
+    <string name="info_unSaved">Unmarked this product</string>
     <string name="hint_birthday">Birthday</string>
     <string name="hint_gender">Gender</string>
     <string name="info_male">Male</string>

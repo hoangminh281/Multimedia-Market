@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
-import com.thm.hoangminh.multimediamarket.view.activity.MainActivity;
 
 public class OptionModifyProductFragment extends Fragment {
     private RelativeLayout optionLayout;
@@ -97,8 +96,8 @@ public class OptionModifyProductFragment extends Fragment {
     }
 
     private void createModifyProductFragment(final String cate_key, final ImageView img) {
-        AnimationSupport.zoom_in(getContext(), img);
-        AnimationSupport.fade_out(getContext(), optionLayout);
+        AnimationSupport.zoomIn(getContext(), img);
+        AnimationSupport.fadeOut(getContext(), optionLayout);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -122,8 +121,8 @@ public class OptionModifyProductFragment extends Fragment {
                                     @Override
                                     public void onBackStackChanged() {
                                         if (((int) img.getTag()) == requestCode && getFragmentManager().getBackStackEntryCount() == 0) {
-                                            AnimationSupport.fade_in(getContext(), optionLayout);
-                                            AnimationSupport.zoom_out(getContext(), img);
+                                            AnimationSupport.fadeIn(getContext(), optionLayout);
+                                            AnimationSupport.zoomOut(getContext(), img);
                                         }
                                     }
                                 });

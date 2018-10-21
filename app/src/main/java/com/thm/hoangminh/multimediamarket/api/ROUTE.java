@@ -12,7 +12,11 @@ public class ROUTE {
 
     private static final String ROLE = "roles/";
     private static final String CATEGORY = "categories/";
+
     private static final String PRODUCT = "products/";
+    private static final String PRODUCT_STATUS = "/status/";
+    private static final String PRODUCT_PRICE = "/price/";
+    private static final String PRODUCT_RATING = "/rating/";
 
     private static final String FILE = "files/";
 
@@ -22,25 +26,25 @@ public class ROUTE {
     private static final String USERSTORAGE = "users/";
     private static final String USERSTORAGE_IMAGE = "/image/";
 
-    private static String RECHARGEHISTORY = "recharge_histories/";
+    private static final String RECHARGEHISTORY = "recharge_histories/";
 
-    private static String PRODUCTSTORAGE_IMAGE = "products/";
+    private static final String PRODUCTSTORAGE_IMAGE = "products/";
 
-    private static String SECTION = "sections/";
+    private static final String SECTION = "sections/";
 
-    private static String PRODUCTDETAIL = "product_detail/";
-    private static String PRODUCTDETAIL_CAPACITY = "/capacity/";
-    private static String PRODUCTDETAIL_IMAGELIST = "/imageList/";
+    private static final String PRODUCTDETAIL = "product_detail/";
+    private static final String PRODUCTDETAIL_CAPACITY = "/capacity/";
+    private static final String PRODUCTDETAIL_IMAGELIST = "/imageList/";
     private static final String PRODUCTDETAIL_FILE = "/downloadLink/";
-    private static String PRODUCTDETAIL_PURCHASEDQUANTITY = "/downloaded/";
+    private static final String PRODUCTDETAIL_PURCHASEDQUANTITY = "/downloaded/";
 
-    private static String PRODUCTDETAILSTORAGE_IMAGE = "products/";
+    private static final String PRODUCTDETAILSTORAGE_IMAGE = "products/";
 
-    private static String BOOKMARK = "bookmark/";
+    private static final String BOOKMARK = "bookmark/";
 
-    private static Object PURCHASEDPRODUCT = "purchased_product/";
+    private static final String PURCHASEDPRODUCT = "purchased_product/";
 
-    private static String RATING = "rating/";
+    private static final String RATING = "rating/";
 
     public static String USER(String userId) {
         return USER + userId;
@@ -92,6 +96,18 @@ public class ROUTE {
 
     public static String PRODUCT(String productId) {
         return PRODUCT + productId;
+    }
+
+    public static String PRODUCT_STATUS(String productId) {
+        return PRODUCT + productId + PRODUCT_STATUS;
+    }
+
+    public static String PRODUCT_RATING(String productId) {
+        return PRODUCT + productId + PRODUCT_RATING;
+    }
+
+    public static String PRODUCT_PRICE(String productId) {
+        return PRODUCT + productId + PRODUCT_PRICE;
     }
 
     public static String RECHARGEHISTORY(String userId) {

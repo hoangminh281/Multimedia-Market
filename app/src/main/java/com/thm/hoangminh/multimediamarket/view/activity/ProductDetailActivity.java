@@ -53,16 +53,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProductDetailActivity extends AppCompatActivity implements ProductDetailView {
     private Menu menu;
-    private Dialog dialog;
+    private Dialog checkoutDialog;
     private Toolbar toolbar;
     private EditText edtRating;
     private ViewPager viewPager;
     private ImageView imgThanks;
     private CheckBox cbBookmark;
     private ImageView imgProduct;
-    private ProgressBar pgbDialog;
+    private ProgressBar pgbCheckoutDialog;
     private CircleImageView imgUser;
-    private RelativeLayout rlDialog;
+    private RelativeLayout checkoutComponent;
     private RelativeLayout ratingLayout;
     private RatingBar ratingBarOverview, rtbUser;
     private Button btnBuy, btnRating, btnCheckout;
@@ -72,7 +72,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             txtRating, txtDescription, txtRead, txtIntro, txtRatingSum, txtWallet, txtContent;
 
     private ViewPagerAdapter adapter;
-    private ArrayList<String> imagesList;
+    private ArrayList<Uri> imagesList;
     private ProductDetailPresenter presenter;
     private YouTubePlayer.OnInitializedListener onInitializedListener;
     public static final String googleApiKey = "AIzaSyBzvhnvsvpM2Kpy6_2ceRthi59uJx2Lyxg";
@@ -171,7 +171,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     @Override
     public void showProductDetail(ProductDetail productDetail) {
-        initYoutubeLayout(productDetail.getVideo());
+        initYoutubeLayout(productDetail.getVideoId());
         txtAgelimit.setText(productDetail.getAgeLimit() + "+");
         ConvertNumberToString convert = new ConvertNumberToString(productDetail.getDownloaded(), getResources().getStringArray(R.array.unit));
         txtDownloaded.setText(convert.getNumber() + "");
@@ -200,7 +200,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void addUriToSliderLayout(Uri uri) {
         viewPager.setVisibility(View.VISIBLE);
-        imagesList.add(uri.toString());
+        imagesList.add(uri);
     }
 
     @Override
@@ -211,12 +211,12 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     public void unCollapseDescription(View view) {
         if (txtDescription.isShown()) {
             txtRead.setText(R.string.txt_readmore);
-            AnimationSupport.slide_up(this, txtDescription);
+            AnimationSupport.slideUp(this, txtDescription);
             txtDescription.setVisibility(View.GONE);
 
         } else {
             txtDescription.setVisibility(View.VISIBLE);
-            AnimationSupport.slide_down(this, txtDescription);
+            AnimationSupport.slideDown(this, txtDescription);
             txtRead.setText(R.string.txt_readless);
         }
     }
@@ -224,7 +224,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void showSuccessRatingLayout() {
         if (ratingLayout.isShown()) {
-            AnimationSupport.fade_out(this, ratingContentLayout);
+            AnimationSupport.fadeOut(this, ratingContentLayout);
             new Thread() {
                 @Override
                 public void run() {
@@ -239,7 +239,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                                     ArrayList<String> ticketList = new ArrayList<>(Arrays.asList(tickets));
                                     Collections.shuffle(ticketList);
                                     imgThanks.setImageResource(getResources().getIdentifier(ticketList.get(0), "mipmap", getPackageName()));
-                                    AnimationSupport.fade_in(ProductDetailActivity.this, ratingSuccessLayout);
+                                    AnimationSupport.fadeIn(ProductDetailActivity.this, ratingSuccessLayout);
                                 }
                             });
                         }
@@ -254,7 +254,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     @Override
     public void showMessage(int resource) {
         Toast.makeText(this, getResources().getString(resource), Toast.LENGTH_SHORT).show();
-        if (dialog != null && dialog.isShowing()) dialog.dismiss();
+        if (checkoutDialog != null && checkoutDialog.isShowing()) checkoutDialog.dismiss();
     }
 
     @Override
@@ -263,7 +263,6 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constants.RatingListKey, ratingList);
         bundle.putDouble(Constants.RatingPointKey, product.getRating());
-        bundle.putInt(Constants.RatingLimitKey, Constants.RatingLimit);
         RatingFragment ratingFragment = new RatingFragment();
         ratingFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -272,20 +271,20 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     }
 
     @Override
-    public void showDialogProgressbar() {
-        if (rlDialog != null) rlDialog.setVisibility(View.INVISIBLE);
-        if (pgbDialog != null) pgbDialog.setVisibility(View.VISIBLE);
+    public void showProgressbarDialog() {
+        if (checkoutComponent != null) checkoutComponent.setVisibility(View.INVISIBLE);
+        if (pgbCheckoutDialog != null) pgbCheckoutDialog.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void hideDialogProgressbar() {
-        if (rlDialog != null) rlDialog.setVisibility(View.VISIBLE);
-        if (pgbDialog != null) pgbDialog.setVisibility(View.INVISIBLE);
+    public void hideProgressbarDialog() {
+        if (checkoutComponent != null) checkoutComponent.setVisibility(View.VISIBLE);
+        if (pgbCheckoutDialog != null) pgbCheckoutDialog.setVisibility(View.INVISIBLE);
     }
 
     @Override
-    public void closeDialogProgressbar() {
-        dialog.dismiss();
+    public void closeCheckoutDialog() {
+        if (checkoutDialog.isShowing()) checkoutDialog.dismiss();
     }
 
     @Override
@@ -316,7 +315,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     @Override
     public void showOrHideRatingLayout(boolean b) {
-        ratingLayout.setVisibility(b ? View.VISIBLE : View.GONE);
+        ratingLayout.setVisibility(b ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -328,14 +327,13 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
 
     @Override
     public void enableOrDisableDownloadButton(boolean b) {
+        btnBuy.setEnabled(true);
         if (b) {
-            btnBuy.setEnabled(true);
             btnBuy.setBackgroundColor(getResources().getColor(R.color.theme_app));
             btnBuy.setText(R.string.btn_install);
             btnBuy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    btnBuy.setEnabled(false);
                     btnBuy.setBackgroundColor(getResources().getColor(R.color.grey_50));
                     btnBuy.setText(R.string.btn_loading);
                     presenter.downLoadProduct();
@@ -345,28 +343,28 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             btnBuy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (dialog == null) initBuyingDialog();
+                    if (checkoutDialog == null) initBuyingDialog();
                     presenter.loadUserWallet();
-                    dialog.show();
+                    checkoutDialog.show();
                 }
             });
         }
     }
 
     private void initBuyingDialog() {
-        dialog = new Dialog(ProductDetailActivity.this);
-        dialog.setContentView(R.layout.checkout_dialog);
-        dialog.setTitle(product.getTitle());
+        checkoutDialog = new Dialog(ProductDetailActivity.this);
+        checkoutDialog.setContentView(R.layout.checkout_dialog);
+        checkoutDialog.setTitle(product.getTitle());
 
-        ImageView imgLogo = dialog.findViewById(R.id.imageViewLogo);
-        TextView txtTitle = dialog.findViewById(R.id.textViewTitle);
-        TextView txtPrice = dialog.findViewById(R.id.textViewPrice);
-        txtContent = dialog.findViewById(R.id.textViewContent);
-        txtWallet = dialog.findViewById(R.id.textViewWallet);
-        btnCheckout = dialog.findViewById(R.id.buttonCheckout);
-        rlDialog = dialog.findViewById(R.id.relativeLayoutDialog);
-        pgbDialog = dialog.findViewById(R.id.progressBarDialog);
-        // khai báo control trong dialog để bắt sự kiện
+        ImageView imgLogo = checkoutDialog.findViewById(R.id.imageViewLogo);
+        TextView txtTitle = checkoutDialog.findViewById(R.id.textViewTitle);
+        TextView txtPrice = checkoutDialog.findViewById(R.id.textViewPrice);
+        txtContent = checkoutDialog.findViewById(R.id.textViewContent);
+        txtWallet = checkoutDialog.findViewById(R.id.textViewWallet);
+        btnCheckout = checkoutDialog.findViewById(R.id.buttonCheckout);
+        checkoutComponent = checkoutDialog.findViewById(R.id.relativeLayoutDialog);
+        pgbCheckoutDialog = checkoutDialog.findViewById(R.id.progressBarDialog);
+        // khai báo control trong checkoutDialog để bắt sự kiện
         imgLogo.setImageBitmap(((BitmapDrawable) imgProduct.getDrawable()).getBitmap());
         txtTitle.setText(product.getTitle());
         txtPrice.setText(MoneyFormular.format(product.getPrice()));
@@ -377,7 +375,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 if (b) {
-                    ratingBar.setRating((float) Math.floor(v));
+                    ratingBar.setRating((int) v);
                     btnRating.setEnabled(true);
                 }
             }

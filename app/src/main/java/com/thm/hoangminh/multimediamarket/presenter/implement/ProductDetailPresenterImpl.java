@@ -1,9 +1,10 @@
 package com.thm.hoangminh.multimediamarket.presenter.implement;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,9 +17,9 @@ import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductBookmark;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.model.ProductRating;
+import com.thm.hoangminh.multimediamarket.model.PurchasedProduct;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.ProductDetailPresenter;
-import com.thm.hoangminh.multimediamarket.presenter.ProductDetailPresenters.ProductDetailInteractor;
 import com.thm.hoangminh.multimediamarket.repository.BookmarkRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
@@ -35,12 +36,13 @@ import com.thm.hoangminh.multimediamarket.repository.implement.RatingRepositoryI
 import com.thm.hoangminh.multimediamarket.repository.implement.UserRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.view.callback.ProductDetailView;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ProductDetailPresenterImpl implements ProductDetailPresenter {
-    private ProductDetailInteractor interactor;
     private User ownerUser;
     private Product product;
     private FirebaseUser currentUser;
@@ -59,12 +61,11 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
         userRepository = new UserRepositoryImpl();
         ratingRepository = new RatingRepositoryImpl();
         productRepository = new ProductRepositoryImpl();
+        bookmarkRepository = new BookmarkRepositoryImpl();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         productDetailRepository = new ProductDetailRepositoryImpl();
-        bookmarkRepository = new BookmarkRepositoryImpl();
         productStorageRepository = new ProductStorageRepositoryImpl();
         purchasedProductRepository = new PurchasedProductRepositoryImpl();
-        this.interactor = new ProductDetailInteractor(this);
     }
 
     @Override
@@ -81,25 +82,15 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
     }
 
     @Override
-    public void activeOrDeactiveProduct(boolean b) {
-
-    }
-
-    @Override
-    public void enableOrDisableBookmark(boolean b) {
-
-    }
-
-    @Override
     public void loadUserWallet() {
-        listener.showDialogProgressbar();
+        listener.showProgressbarDialog();
         userRepository.findBalance(currentUser.getUid(), new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     double balance = dataSnapshot.getValue(double.class);
                     listener.enableOrDisableProductCheckout(balance, balance >= product.getPrice());
-                    listener.hideDialogProgressbar();
+                    listener.hideProgressbarDialog();
                 }
             }
 
@@ -131,11 +122,15 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
         productDetailRepository.findById(productId, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                productDetail = dataSnapshot.getValue(ProductDetail.class);
-                listener.showProductDetail(productDetail);
-                validateProduct();
-                loadProductOwner(productDetail.getOwnerId());
-                loadImageList(new ArrayList<>(productDetail.getImageIdList().values()));
+                if (dataSnapshot.exists()) {
+                    productDetail = dataSnapshot.getValue(ProductDetail.class);
+                    listener.showProductDetail(productDetail);
+                    validateProduct();
+                    loadProductOwner(productDetail.getOwnerId());
+                    if (productDetail.getImageIdList() != null) {
+                        loadImageList(new ArrayList<>(productDetail.getImageIdList().values()));
+                    }
+                }
             }
 
             @Override
@@ -208,11 +203,11 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
         bookmarkRepository.findByProductBookmark(productBookmark, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int i = 0;
+                ProductBookmark productBookmark = null;
                 if (dataSnapshot.exists()) {
-                    i = dataSnapshot.getValue(int.class);
+                    productBookmark = dataSnapshot.getValue(ProductBookmark.class);
                 }
-                listener.activeOrDeactiveBookmark(i == 0 ? false : true);
+                listener.activeOrDeactiveBookmark(productBookmark == null || productBookmark.getValue() == Constants.BookMarkDisable ? false : true);
             }
 
             @Override
@@ -261,7 +256,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
     }
 
     private void checkUserRating(String productId) {
-        ratingRepository.findAndWatchByUserId(currentUser.getUid(), productId,
+        ratingRepository.findByUserId(currentUser.getUid(), productId,
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -276,14 +271,135 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
     }
 
     @Override
-    public void checkoutProduct() {
-        listener.showDialogProgressbar();
-        interactor.CheckoutProductbyId(cate_id, product_id, owner_id);
+    public void activeOrDeactiveProduct(boolean b) {
+        productRepository.setStatus(product.getProductId(), b ? Constants.ProductEnable : Constants.ProductDisable, null, null);
     }
 
     @Override
-    public void downLoadProduct() {
+    public void enableOrDisableBookmark(final boolean b) {
+        ProductBookmark productBookmark = new ProductBookmark();
+        productBookmark.setCateId(product.getCateId());
+        productBookmark.setProductId(product.getProductId());
+        productBookmark.setUserId(currentUser.getUid());
+        productBookmark.setValue(b ? Constants.BookMarkEnable : Constants.BookMarkDisable);
+        bookmarkRepository.add(productBookmark, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                listener.showMessage(b ? R.string.info_saved : R.string.info_unSaved);
+            }
+        }, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
+            }
+        });
+    }
+
+    @Override
+    public void checkoutProduct() {
+        listener.showProgressbarDialog();
+        // TODO: 29/9/2018
+        userRepository.findBalance(currentUser.getUid(), new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    final double balance = dataSnapshot.getValue(double.class);
+                    productRepository.findPriceByProductId(product.getProductId(), new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                final double price = dataSnapshot.getValue(double.class);
+                                double refund = balance - price;
+                                if (refund > -1) {
+                                    userRepository.setBalance(currentUser.getUid(), refund, new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+                                            String currentDateTime = dateFormatter.format(Calendar.getInstance().getTime());
+                                            PurchasedProduct purcharsedProduct = new PurchasedProduct();
+                                            purcharsedProduct.setCateId(product.getCateId());
+                                            purcharsedProduct.setProductId(product.getProductId());
+                                            purcharsedProduct.setUserId(currentUser.getUid());
+                                            purcharsedProduct.setDateTime(currentDateTime);
+                                            purchasedProductRepository.add(purcharsedProduct,
+                                                    new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            userRepository.findBalance(productDetail.getOwnerId(), new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                    if (dataSnapshot.exists()) {
+                                                                        userRepository.setBalance(productDetail.getOwnerId(), dataSnapshot.getValue(double.class) + price, new OnSuccessListener<Void>() {
+                                                                            @Override
+                                                                            public void onSuccess(Void aVoid) {
+                                                                                productDetailRepository.findPurchasedQuantityByProductId(product.getProductId(), new ValueEventListener() {
+                                                                                    @Override
+                                                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                                        if (dataSnapshot.exists()) {
+                                                                                            productDetailRepository.setPurchasedQuantityByProductId(product.getProductId(), dataSnapshot.getValue(int.class) + 1, null, null);
+                                                                                        }
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                                                    }
+                                                                                });
+                                                                                listener.showMessage(R.string.info_buyingSuccess);
+                                                                                listener.closeCheckoutDialog();
+                                                                            }
+                                                                        }, new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                listener.showMessage(R.string.info_failure);
+                                                                                listener.hideProgressbarDialog();
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(DatabaseError databaseError) {
+                                                                    listener.showMessage(R.string.info_failure);
+                                                                    listener.hideProgressbarDialog();
+                                                                }
+                                                            });
+                                                        }
+                                                    },
+                                                    new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            listener.showMessage(R.string.info_failure);
+                                                            listener.hideProgressbarDialog();
+                                                        }
+                                                    });
+                                        }
+                                    }, new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            listener.showMessage(R.string.info_failure);
+                                            listener.hideProgressbarDialog();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            listener.showMessage(R.string.info_failure);
+                            listener.hideProgressbarDialog();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.showMessage(R.string.info_failure);
+                listener.hideProgressbarDialog();
+            }
+        });
     }
 
     @Override
@@ -294,6 +410,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
         ratingRepository.add(productRating, new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                listener.showSuccessRatingLayout();
                 ratingRepository.findById(product.getProductId(), new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -310,7 +427,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
                             ratingPoint *= 10;
                             ratingPoint = Math.round(ratingPoint);
                             ratingPoint /= 10;
-                            productRepository.setRatingPoint(product.getProductId(), ratingPoint);
+                            productRepository.setRatingPoint(product.getProductId(), ratingPoint, null, null);
                         }
                     }
 
@@ -319,75 +436,35 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
 
                     }
                 });
-                listener.showSuccessRatingLayout();
             }
         }, null);
     }
-    @Override
-    public void onCheckoutProductbyIdSuccess() {
-        listener.showMessage(R.string.info_buyingSuccess);
-        listener.closeDialogProgressbar();
-    }
 
     @Override
-    public void onCheckoutProductbyIdFailure() {
-        listener.showMessage(R.string.infor_failure);
-        listener.hideDialogProgressbar();
-    }
-
-    public void SavedProductBookmark(String cate_id, String product_id) {
-        interactor.SavedProductBookmark(cate_id, product_id);
-    }
-
-    @Override
-    public void onSavedProductBookmarkSuccess() {
-        listener.showMessage(R.string.info_saved);
-    }
-
-    public void UnSavedProductBookmark(String cate_id, String product_id) {
-        interactor.UnSavedProductBookmark(cate_id, product_id);
-    }
-
-    @Override
-    public void onUnSavedProductBookmarkSuccess() {
-        listener.showMessage(R.string.info_unSaved);
-    }
-
-    public void ActiveProduct(String id, int status) {
-        interactor.ActiveProduct(id, status);
-    }
-
-    @Override
-    public void onFindCurrentUserSuccess(int role, String user_id) {
-        listener.onLoadCurrentUserSuccess(role, user_id);
-    }
-
-    @Override
-    public void onDownloadProductSuccess() {
-        listener.showMessage(R.string.info_downloadFileSuccess);
-        listener.enableDownload();
-    }
-
-    @Override
-    public void onDownloadProductFailure() {
-        listener.showMessage(R.string.info_downloadFireFailure);
-        listener.enableDownload();
-    }
-
-    @Override
-    public void onLoadProductTransactionHistoryFailure() {
-        listener.EnableButtonBuy();
-    }
-
-    public void LoadCurrentUser() {
-        interactor.FindCurrentUser();
-    }
-
-    public void downLoadProduct(Context context, String fileName) {
-        interactor.downLoadProduct(context, fileName);
-    }
-
-    public void LoadProductById(String product_id) {
-        interactor.LoadProductById(product_id);
+    public void downLoadProduct() {
+        listener.enableOrDisableDownloadButton(false);
+        String fileId = productDetail.getFileId();
+        if (fileId == null || fileId.equals("")) {
+            listener.showMessage(R.string.info_downloadFireFailure);
+            listener.enableOrDisableDownloadButton(true);
+            return;
+        }
+        String[] splitFileName = fileId.split("\\.");
+        final File localFile;
+        try {
+            if (splitFileName.length == 1)
+                localFile = File.createTempFile(splitFileName[0], "");
+            else
+                localFile = File.createTempFile(splitFileName[0], "." + splitFileName[1]);
+        } catch (IOException e) {
+            listener.showMessage(R.string.info_downloadFireFailure);
+            listener.enableOrDisableDownloadButton(true);
+            return;
+        }
+        if (localFile == null) {
+            listener.showMessage(R.string.info_downloadFireFailure);
+            listener.enableOrDisableDownloadButton(true);
+            return;
+        }
     }
 }

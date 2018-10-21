@@ -25,11 +25,11 @@ public interface ProductDetailView extends BundleBaseView {
 
     void showRatingFragment(ArrayList<ProductRating> ratingList);
 
-    void showDialogProgressbar();
+    void showProgressbarDialog();
 
-    void hideDialogProgressbar();
+    void hideProgressbarDialog();
 
-    void closeDialogProgressbar();
+    void closeCheckoutDialog();
 
     void enableOrDisableProductCheckout(double balance, boolean b);
 

@@ -303,14 +303,14 @@ public class User {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mStorageRef.child("users/" + newImage).delete();
-                            Toast.makeText(context, R.string.infor_failure, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, R.string.info_failure, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, R.string.infor_failure, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.info_failure, Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -329,14 +329,14 @@ public class User {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     mStorageRef.child("users/" + newImage).delete();
-                                    Toast.makeText(context, R.string.infor_failure, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, R.string.info_failure, Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(context, R.string.infor_failure, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, R.string.info_failure, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

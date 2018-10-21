@@ -94,7 +94,7 @@ public class ProfilePresenter implements ProfileListener {
 
     @Override
     public void onExistError() {
-        listener.showMessageFromResource(R.string.infor_failure);
+        listener.showMessageFromResource(R.string.info_failure);
         listener.hideProgresbarDialog();
     }
 
