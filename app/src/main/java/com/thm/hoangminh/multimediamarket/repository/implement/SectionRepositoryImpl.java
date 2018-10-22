@@ -8,9 +8,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.api.ROUTE;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Pageable;
 import com.thm.hoangminh.multimediamarket.model.Section;
 import com.thm.hoangminh.multimediamarket.repository.SectionRepository;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 
 public class SectionRepositoryImpl implements SectionRepository {
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
@@ -27,7 +29,7 @@ public class SectionRepositoryImpl implements SectionRepository {
 
     @Override
     public void remove(Section item, OnSuccessListener successListener, OnFailureListener failureListener) {
-    
+
     }
 
     @Override
@@ -49,8 +51,10 @@ public class SectionRepositoryImpl implements SectionRepository {
     }
 
     @Override
-    public boolean checkProductByDataSnapshotAndProductId(DataSnapshot dataSnapshot, String productId) {
-        return false;
+    public boolean checkProductIdInSection(DataSnapshot dataSnapshot, String productId) {
+        boolean validate = dataSnapshot.child(ROUTE.SECTION_PRODUCTIDARR(productId)) != null
+                && dataSnapshot.child(ROUTE.SECTION_PRODUCTIDARR(productId)).getValue(int.class) == Constants.SectionProductEnable;
+        return validate;
     }
 
     @Override
@@ -58,7 +62,14 @@ public class SectionRepositoryImpl implements SectionRepository {
     }
 
     @Override
-    public void findById(String s, ValueEventListener event) {
+    public void findById(String cateId, ValueEventListener eventListener) {
+        mRef.child(ROUTE.SECTION(cateId)).addListenerForSingleValueEvent(eventListener);
+    }
 
+    @Override
+    public void setProductValue(String cateId, String sectionId, String productId, int value, OnSuccessListener<Void> successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.SECTION(cateId, sectionId, productId)).setValue(value)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 }

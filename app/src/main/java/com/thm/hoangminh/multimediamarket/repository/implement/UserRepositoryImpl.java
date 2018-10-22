@@ -114,4 +114,9 @@ public class UserRepositoryImpl implements UserRepository {
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
     }
+
+    @Override
+    public void findImageId(String userId, ValueEventListener eventListener) {
+        mRef.child(ROUTE.USER_IMAGE(userId)).addListenerForSingleValueEvent(eventListener);
+    }
 }

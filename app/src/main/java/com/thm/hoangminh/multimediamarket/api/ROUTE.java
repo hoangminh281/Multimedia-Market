@@ -31,6 +31,7 @@ public class ROUTE {
     private static final String PRODUCTSTORAGE_IMAGE = "products/";
 
     private static final String SECTION = "sections/";
+    private static String SECTION_PRODUCTIDARR = "/productIdArr/";
 
     private static final String PRODUCTDETAIL = "product_detail/";
     private static final String PRODUCTDETAIL_CAPACITY = "/capacity/";
@@ -45,37 +46,38 @@ public class ROUTE {
     private static final String PURCHASEDPRODUCT = "purchased_product/";
 
     private static final String RATING = "rating/";
+    private static String RATING_LIKEDLIST = "/likedList/";
 
     public static String USER(String userId) {
         return USER + userId;
     }
 
     public static String USER_BALANCE(String userId) {
-        return USER + userId + USER_BALANCE;
+        return USER(userId) + USER_BALANCE;
     }
 
     public static String USER_ROLE(String userId) {
-        return USER + userId + USER_ROLE;
+        return USER(userId) + USER_ROLE;
     }
 
     public static String USER_IMAGE(String userId) {
-        return USER + userId + USER_IMAGE;
+        return USER(userId) + USER_IMAGE;
     }
 
     public static String USER_NAME(String userId) {
-        return USER + userId + USER_NAME;
+        return USER(userId) + USER_NAME;
     }
 
     public static String USER_EMAIL(String userId) {
-        return USER + userId + USER_EMAIL;
+        return USER(userId) + USER_EMAIL;
     }
 
     public static String USER_GENDER(String userId) {
-        return USER + userId + USER_GENDER;
+        return USER(userId) + USER_GENDER;
     }
 
     public static String USER_BIRTHDAY(String userId) {
-        return USER + userId + USER_BIRTHDAY;
+        return USER(userId) + USER_BIRTHDAY;
     }
 
     public static String ROLE(int roleId) {
@@ -86,8 +88,8 @@ public class ROUTE {
         return CATEGORY;
     }
 
-    public static String CATEGORY(String CID) {
-        return CATEGORY + CID;
+    public static String CATEGORY(String cateId) {
+        return CATEGORY + cateId;
     }
 
     public static String PRODUCT() {
@@ -99,15 +101,15 @@ public class ROUTE {
     }
 
     public static String PRODUCT_STATUS(String productId) {
-        return PRODUCT + productId + PRODUCT_STATUS;
+        return PRODUCT(productId) + PRODUCT_STATUS;
     }
 
     public static String PRODUCT_RATING(String productId) {
-        return PRODUCT + productId + PRODUCT_RATING;
+        return PRODUCT(productId) + PRODUCT_RATING;
     }
 
     public static String PRODUCT_PRICE(String productId) {
-        return PRODUCT + productId + PRODUCT_PRICE;
+        return PRODUCT(productId) + PRODUCT_PRICE;
     }
 
     public static String RECHARGEHISTORY(String userId) {
@@ -116,6 +118,14 @@ public class ROUTE {
 
     public static String SECTION(String cateId) {
         return SECTION + cateId;
+    }
+
+    public static String SECTION(String cateId, String sectionId, String productId) {
+        return SECTION + cateId + "/" +  sectionId + SECTION_PRODUCTIDARR + productId;
+    }
+
+    public static String SECTION_PRODUCTIDARR(String productId) {
+        return SECTION_PRODUCTIDARR + productId;
     }
 
     public static String FILE(String fileId) {
@@ -127,23 +137,23 @@ public class ROUTE {
     }
 
     public static String PRODUCTDETAIL_PURCHASEDQUANTITY(String productId) {
-        return PRODUCTDETAIL + productId + PRODUCTDETAIL_PURCHASEDQUANTITY;
+        return PRODUCTDETAIL(productId) + PRODUCTDETAIL_PURCHASEDQUANTITY;
     }
 
     public static String PRODUCTDETAIL_IMAGELIST(String productId, String imageId) {
-        return PRODUCTDETAIL + productId + PRODUCTDETAIL_IMAGELIST + imageId;
+        return PRODUCTDETAIL(productId) + PRODUCTDETAIL_IMAGELIST + imageId;
     }
 
     public static String PRODUCTDETAIL_IMAGELIST(String productId) {
-        return PRODUCTDETAIL + productId + PRODUCTDETAIL_IMAGELIST;
+        return PRODUCTDETAIL(productId) + PRODUCTDETAIL_IMAGELIST;
     }
 
     public static String PRODUCTDETAIL_FILE(String productId) {
-        return PRODUCTDETAIL + productId + PRODUCTDETAIL_FILE;
+        return PRODUCTDETAIL(productId) + PRODUCTDETAIL_FILE;
     }
 
     public static String PRODUCTDETAIL_CAPACITY(String productId) {
-        return PRODUCTDETAIL + productId + PRODUCTDETAIL_CAPACITY;
+        return PRODUCTDETAIL(productId) + PRODUCTDETAIL_CAPACITY;
     }
 
     public static String USERSTORAGE_IMAGE(String photoId) {
@@ -172,5 +182,9 @@ public class ROUTE {
 
     public static String RATING(String userId, String productId) {
         return RATING + productId + "/" + userId;
+    }
+
+    public static String RATING_LIKEDLIST(String currentUserId, String userId, String productId) {
+        return RATING(userId, productId) + RATING_LIKEDLIST + currentUserId;
     }
 }

@@ -1,5 +1,7 @@
 package com.thm.hoangminh.multimediamarket.repository;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.model.Pageable;
@@ -11,5 +13,7 @@ public interface SectionRepository extends Repository<Section, String> {
 
     void findAll(String cateId, String sectionId, ValueEventListener eventListener);
 
-    boolean checkProductByDataSnapshotAndProductId(DataSnapshot dataSnapshot, String productId);
+    boolean checkProductIdInSection(DataSnapshot dataSnapshot, String productId);
+
+    void setProductValue(String cateId, String sectionId, String productId, int value, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 }

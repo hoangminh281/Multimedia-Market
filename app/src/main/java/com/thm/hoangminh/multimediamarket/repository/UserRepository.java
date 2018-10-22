@@ -24,4 +24,6 @@ public interface UserRepository extends WatchingRepository<User, String> {
     void setBirthday(String userId, String birthday, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 
     void setGender(String userId, int genderId, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
+
+    void findImageId(String userId, ValueEventListener eventListener);
 }

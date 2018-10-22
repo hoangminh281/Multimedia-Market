@@ -1,6 +1,9 @@
 package com.thm.hoangminh.multimediamarket.presenter.callback;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.thm.hoangminh.multimediamarket.model.File;
 import com.thm.hoangminh.multimediamarket.model.Product;
@@ -10,10 +13,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public interface UpdateProductPresenter {
-    void LoadProductById(String cate_id, String id);
+    void extractBundle(Bundle bundle);
 
-    void LoadSectionById(String cate_id);
+    void updateProduct(ArrayList<Integer> selectedProductSections, Product product, ProductDetail productDetail,
+                       Bitmap productImage, Map<Integer, Bitmap> productDetailBitmaps, File updatedFile);
 
-    void UpdateProduct(ArrayList<String> oldSections, ArrayList<String> newSections, Product product, ProductDetail pDetail, Bitmap newProductBitmap, Map<Integer, Bitmap> newProductDetailBitmaps, File file);
-
+    void loadProductDetailImages(Context context, ImageView[] imgArr);
 }

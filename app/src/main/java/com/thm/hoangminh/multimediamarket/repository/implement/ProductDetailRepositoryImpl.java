@@ -23,20 +23,27 @@ public class ProductDetailRepositoryImpl implements ProductDetailRepository {
     }
 
     @Override
-    public void add(ProductDetail item, OnSuccessListener successListener, OnFailureListener failureListener) {
-
-    }
-
-    @Override
-    public void update(ProductDetail item, OnSuccessListener successListener, OnFailureListener failureListener) {
-        mRef.child(ROUTE.PRODUCTDETAIL(item.getId())).setValue(item)
+    public void add(ProductDetail productDetail, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.PRODUCTDETAIL(productDetail.getId())).setValue(productDetail)
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
     }
 
     @Override
-    public void remove(ProductDetail item, OnSuccessListener successListener, OnFailureListener failureListener) {
+    public void update(final ProductDetail productDetail, final OnSuccessListener successListener, final OnFailureListener failureListener) {
+        remove(productDetail, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                add(productDetail, successListener, failureListener);
+            }
+        }, failureListener);
+    }
 
+    @Override
+    public void remove(ProductDetail productDetail, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.PRODUCTDETAIL(productDetail.getId())).removeValue()
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 
     @Override

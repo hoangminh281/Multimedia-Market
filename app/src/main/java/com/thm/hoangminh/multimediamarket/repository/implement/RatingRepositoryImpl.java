@@ -1,7 +1,5 @@
 package com.thm.hoangminh.multimediamarket.repository.implement;
 
-import android.support.annotation.NonNull;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -51,5 +49,19 @@ public class RatingRepositoryImpl implements RatingRepository {
     @Override
     public void findByUserId(String uid, String productId, ValueEventListener eventListener) {
         mRef.child(ROUTE.RATING(uid, productId)).addListenerForSingleValueEvent(eventListener);
+    }
+
+    @Override
+    public void findLikedRatingByUserId(String currentUserId, ProductRating productRating, ValueEventListener eventListener) {
+        mRef.child(ROUTE.RATING_LIKEDLIST(currentUserId, productRating.getUserId(), productRating.getProductId()))
+                .addListenerForSingleValueEvent(eventListener);
+    }
+
+    @Override
+    public void setValueLikedList(String currentUserId, ProductRating productRating, int value, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.RATING_LIKEDLIST(currentUserId, productRating.getUserId(), productRating.getProductId()))
+                .setValue(value)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 }

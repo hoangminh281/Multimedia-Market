@@ -23,18 +23,23 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public void add(Product item, OnSuccessListener successListener, OnFailureListener failureListener) {
-
+    public void add(Product product, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.PRODUCT(product.getProductId())).setValue(product).addOnSuccessListener(successListener).addOnFailureListener(failureListener);
     }
 
     @Override
-    public void update(Product item, OnSuccessListener successListener, OnFailureListener failureListener) {
-
+    public void update(final Product product, final OnSuccessListener successListener, final OnFailureListener failureListener) {
+        remove(product, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                add(product, successListener, failureListener);
+            }
+        }, failureListener);
     }
 
     @Override
-    public void remove(Product item, OnSuccessListener successListener, OnFailureListener failureListener) {
-
+    public void remove(Product product, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.PRODUCT(product.getProductId())).removeValue().addOnSuccessListener(successListener).addOnFailureListener(failureListener);
     }
 
     @Override

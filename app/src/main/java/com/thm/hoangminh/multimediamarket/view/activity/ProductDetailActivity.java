@@ -386,7 +386,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 ProductRating productRating = new ProductRating();
                 productRating.setProductId(product.getProductId());
                 productRating.setPoint((int) rtbUser.getRating());
-                productRating.setContent(edtRating.getText().toString());
+                productRating.setComment(edtRating.getText().toString());
                 presenter.addRating(productRating);
             }
         });

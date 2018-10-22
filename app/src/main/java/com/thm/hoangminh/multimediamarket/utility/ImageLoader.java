@@ -5,14 +5,19 @@ import android.net.Uri;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailStorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductStorageRepository;
+import com.thm.hoangminh.multimediamarket.repository.UserRepository;
 import com.thm.hoangminh.multimediamarket.repository.UserStorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.base.StorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductDetailStorageRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductStorageRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.UserRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.UserStorageRepositoryImpl;
 
 public class ImageLoader {

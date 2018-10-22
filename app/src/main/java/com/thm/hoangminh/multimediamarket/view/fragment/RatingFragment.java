@@ -24,14 +24,15 @@ import com.thm.hoangminh.multimediamarket.references.Tools;
 import java.util.ArrayList;
 
 public class RatingFragment extends Fragment {
-    private ArrayList<ProductRating> ratingList;
     private ListView listView;
-    private TextView txtRatingOverview, txtRatingSumOverview;
     private RatingBar rtbOverview;
     private ProgressBar[] pgbRatingList;
-    private double rating_point;
+    private TextView txtRatingOverview, txtRatingSumOverview;
+
     private int limit;
+    private double ratingPoint;
     private LinearLayout layoutRatingOverview;
+    private ArrayList<ProductRating> ratingList;
 
     @Nullable
     @Override
@@ -57,7 +58,7 @@ public class RatingFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
-            rating_point = getArguments().getDouble(Constants.RatingPointKey);
+            ratingPoint = getArguments().getDouble(Constants.RatingPointKey);
             ratingList = getArguments().getParcelableArrayList(Constants.RatingListKey);
             limit = Constants.RatingLimit;
             setRatingOverview();
@@ -67,8 +68,8 @@ public class RatingFragment extends Fragment {
     }
 
     private void setRatingOverview() {
-        txtRatingOverview.setText(rating_point + "");
-        rtbOverview.setRating((float) rating_point);
+        txtRatingOverview.setText(ratingPoint + "");
+        rtbOverview.setRating((float) ratingPoint);
     }
 
     private void setRatingOverviewDetail() {
@@ -118,7 +119,7 @@ public class RatingFragment extends Fragment {
     private Bundle getBundleRating() {
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("ratingList", ratingList);
-        bundle.putDouble("rating_point", rating_point);
+        bundle.putDouble("ratingPoint", ratingPoint);
         bundle.putInt("limit", -1);
         return bundle;
     }
