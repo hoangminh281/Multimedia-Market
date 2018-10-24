@@ -11,7 +11,7 @@ public interface UserRepository extends WatchingRepository<User, String> {
 
     ValueEventListener findAndWatchRoleByUserId(String userId, ValueEventListener event);
 
-    void destroyFindAndWatchRoleByUserId(String userId, ValueEventListener event);
+    void removeFindAndWatchRoleByUserIdListener(String userId, ValueEventListener event);
 
     void setBalance(String userId, double balance, OnSuccessListener successListener, OnFailureListener failureListener);
 

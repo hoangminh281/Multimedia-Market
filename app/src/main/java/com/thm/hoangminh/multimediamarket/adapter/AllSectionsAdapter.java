@@ -84,6 +84,7 @@ public class AllSectionsAdapter extends RecyclerView.Adapter<AllSectionsAdapter.
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, ProductActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putString(Constants.BundleOptionKey, Constants.SectionOption);
                 bundle.putString(Constants.SectionIdKey, sectionId);
                 bundle.putString(Constants.SectionTitleKey, sectionName);
                 bundle.putString(Constants.CateIdKey, cateId);

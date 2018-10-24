@@ -29,7 +29,7 @@ import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.File;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
-import com.thm.hoangminh.multimediamarket.presenter.callback.UpdateProductPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.UpdateProductPresenter;
 import com.thm.hoangminh.multimediamarket.presenter.implement.UpdateProductPresenterImpl;
 import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
 import com.thm.hoangminh.multimediamarket.utility.Validate;
@@ -49,11 +49,10 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
 
     private String cateId;
     private File pickedFile;
+    private int imgPosition;
     private UpdateProductPresenter presenter;
     private Map<String, String> sectionCategories;
     private ArrayList<Integer> selectedProductSections;
-
-    private int imgPosition;
 
     private final int REQUESTCODE_TAKEPHOTO = 1;
     private final int REQUESTCODE_PICKPHOTO = 2;
@@ -109,8 +108,7 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
     }
 
     public void saveAction() {
-        boolean validate = Validate.validateCurrentUser(this)
-                && Validate.validateEditTextsToString(this, edtTitle, edtPrice, edtIntro, edtDesc, edtVideo)
+        boolean validate = Validate.validateEditTextsToString(this, edtTitle, edtPrice, edtIntro, edtDesc, edtVideo)
                 & Validate.validateTextViewsToString(this, txtAgeLimit);
         if (!validate) return;
 
@@ -185,6 +183,7 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setTitle(title);
+        progressDialog.setMessage(pgdMessage);
         progressDialog.setProgress(0);
     }
 
@@ -382,13 +381,13 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
 
     public void showFilePicker() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        if (cateId.equals(Category.getInstance().get(0).getCateId())) {
+        if (cateId.equals(Category.getInstance().get(1).getCateId())) {
             intent.setType("application/vnd.android.package-archive");
-        } else if (cateId.equals(Category.getInstance().get(1).getCateId())) {
-            intent.setType("image/*");
         } else if (cateId.equals(Category.getInstance().get(2).getCateId())) {
-            intent.setType("video/*");
+            intent.setType("image/*");
         } else if (cateId.equals(Category.getInstance().get(3).getCateId())) {
+            intent.setType("video/*");
+        } else if (cateId.equals(Category.getInstance().get(4).getCateId())) {
             intent.setType("audio/*");
         }
         startActivityForResult(intent, REQUESTCODE_PICKFILE);

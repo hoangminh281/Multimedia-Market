@@ -14,12 +14,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.User;
+import com.thm.hoangminh.multimediamarket.view.activity.BookmarkActivity;
+import com.thm.hoangminh.multimediamarket.view.activity.MainActivity;
 import com.thm.hoangminh.multimediamarket.view.activity.SigninActivity;
 
 public class Validate {
-    public static boolean validateCurrentUser(final Context context) {
-        User currentUser = User.getInstance();
-        if (currentUser != null && currentUser.getStatus() != Constants.UserEnable) {
+    public static boolean validateCurrentUserStatus(final Context context, int status) {
+        if (status != Constants.UserEnable) {
             Handler handler = new Handler();
             handler.post(new Runnable() {
                 @Override
@@ -27,6 +28,24 @@ public class Validate {
                     FirebaseAuth.getInstance().signOut();
                     Toast.makeText(context, R.string.info_logout, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, SigninActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                    ((Activity)context).finish();
+                }
+            });
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean validateCurrentUserRole(final Context context, int roleId) {
+        if (roleId != User.ADMIN) {
+            Handler handler = new Handler();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, R.string.info_fail_role, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                     ((Activity)context).finish();

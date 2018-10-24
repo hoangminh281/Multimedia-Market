@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,21 +12,22 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.thm.hoangminh.multimediamarket.view.activity.BookmarkActivity;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.adapter.ProductAdapter;
 import com.thm.hoangminh.multimediamarket.model.Product;
-import com.thm.hoangminh.multimediamarket.presenter.implement.ProductPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.ProductPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.ProductPresenterImpl;
 import com.thm.hoangminh.multimediamarket.view.activity.ProductDetailActivity;
 import com.thm.hoangminh.multimediamarket.view.callback.ProductView;
 
 import java.util.ArrayList;
 
 public class ProductFragment extends Fragment implements ProductView {
-    private ArrayList<Product> productsList;
     private GridView gridView;
-    private ProductPresenter presenter;
     private ProductAdapter myAdapter;
+    private ProductPresenter presenter;
+    private ArrayList<Product> productsList;
 
     @Nullable
     @Override
@@ -41,24 +43,22 @@ public class ProductFragment extends Fragment implements ProductView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
-        if (bundle != null) {
-            if (bundle.getString(BookmarkActivity.bookmarkKey) != null) {
-                presenter.LoadProductByBookmarkCateIdPaging(bundle.getString(BookmarkActivity.bookmarkKey));
-            }
-            else if (bundle.getString(BookmarkActivity.productAdminKey) != null) {
-                presenter.LoadProductByAdmin(bundle.getString(BookmarkActivity.productAdminKey));
-            }
-        }
+        presenter.extractBundle(bundle);
         setEvents();
     }
 
-    private void setControls(View view) {
-        productsList = new ArrayList<>();
-        gridView = view.findViewById(R.id.gridView);
+    @Override
+    public void setTitle(String title) {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    public void setTitle(int titleId) {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(titleId);
     }
 
     private void initPresenter() {
-        presenter = new ProductPresenter(this);
+        presenter = new ProductPresenterImpl(this);
     }
 
     private void initAdapter() {
@@ -77,7 +77,7 @@ public class ProductFragment extends Fragment implements ProductView {
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
                 Boolean isBottomReached = !gridView.canScrollVertically(1);
                 if (isBottomReached) {
-                    presenter.LoadProductNexttoScroll();
+                    presenter.loadProductPaging();
                 }
             }
         });
@@ -95,7 +95,7 @@ public class ProductFragment extends Fragment implements ProductView {
     }
 
     @Override
-    public void addProducttoAdapter(Product product) {
+    public void addProductIntoAdapter(Product product) {
         productsList.add(product);
     }
 
@@ -104,13 +104,8 @@ public class ProductFragment extends Fragment implements ProductView {
         myAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void showBottomProgressbar() {
-
-    }
-
-    @Override
-    public void hideBottomProgressbar() {
-
+    private void setControls(View view) {
+        productsList = new ArrayList<>();
+        gridView = view.findViewById(R.id.gridView);
     }
 }

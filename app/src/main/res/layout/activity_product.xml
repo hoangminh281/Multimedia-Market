@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -11,13 +12,11 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
 
-    <GridView
-        android:id="@+id/gridView"
+    <fragment
+        android:id="@+id/product_fragment"
+        class="com.thm.hoangminh.multimediamarket.view.fragment.ProductFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="3"
-        android:stretchMode="columnWidth"
-        android:padding="@dimen/spacing_cell"
-        android:verticalSpacing="20dp"
-        android:layout_below="@id/toolbar"/>
+        android:layout_below="@id/toolbar"
+        tools:layout="@layout/gridview_fragment_layout"/>
 </RelativeLayout>

@@ -19,10 +19,9 @@ import com.thm.hoangminh.multimediamarket.view.callback.SectionView;
 import java.util.ArrayList;
 
 public class SectionFragment extends Fragment implements SectionView {
-    private RecyclerView myRecyclerView;
-
     private SectionPresenter presenter;
     private AllSectionsAdapter adapter;
+    private RecyclerView myRecyclerView;
     private ArrayList<SectionDataModel> allSampleData;
 
     @Nullable

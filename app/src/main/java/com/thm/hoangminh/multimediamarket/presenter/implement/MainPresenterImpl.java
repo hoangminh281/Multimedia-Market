@@ -63,7 +63,7 @@ public class MainPresenterImpl implements MainPresenter {
                     User currentUser = dataSnapshot.getValue(User.class);
                     listener.updateUserUI(currentUser);
                     User.setInstance(currentUser);
-                    if (Validate.validateCurrentUser(context)) {
+                    if (Validate.validateCurrentUserStatus(context, currentUser.getStatus())) {
                         //setup menu with Role and rule
                         switch (currentUser.getRole()) {
                             case User.ADMIN:

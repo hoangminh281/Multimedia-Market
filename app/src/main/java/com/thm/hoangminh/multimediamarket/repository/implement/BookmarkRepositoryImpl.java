@@ -53,4 +53,9 @@ public class BookmarkRepositoryImpl implements BookmarkRepository {
         mRef.child(ROUTE.BOOKMARK(productBookmark.getUserId(), productBookmark.getCateId(), productBookmark.getProductId()))
                 .addListenerForSingleValueEvent(eventListener);
     }
+
+    @Override
+    public void findAll(String userId, String cateId, ValueEventListener eventListener) {
+        mRef.child(ROUTE.BOOKMARK(userId, cateId)).addListenerForSingleValueEvent(eventListener);
+    }
 }

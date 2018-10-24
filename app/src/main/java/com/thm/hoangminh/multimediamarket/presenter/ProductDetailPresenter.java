@@ -1,5 +1,6 @@
 package com.thm.hoangminh.multimediamarket.presenter;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.thm.hoangminh.multimediamarket.model.ProductRating;
@@ -15,7 +16,7 @@ public interface ProductDetailPresenter {
 
     void checkoutProduct();
 
-    void downLoadProduct();
+    void downLoadProduct(Context context);
 
     void addRating(ProductRating productRating);
 }

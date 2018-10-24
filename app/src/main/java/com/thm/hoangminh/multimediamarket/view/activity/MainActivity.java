@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
                 break;
             case R.id.menu_product_admin:
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.BundleKey, Constants.Admin);
+                bundle.putString(Constants.BundleOptionKey, Constants.AdminOption);
                 startActivity(BookmarkActivity.class, bundle);
                 break;
             case R.id.menu_logout:
@@ -339,11 +339,12 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
             public boolean onQueryTextSubmit(String query) {
                 ArrayList<String> searchResults = new ArrayList<>();
                 for (Map.Entry<String, String> row : suggestions.entrySet()) {
-                    if (row.getValue().toLowerCase().startsWith(query.toString().toLowerCase())) {
+                    if (row.getValue().toLowerCase().startsWith(query.toLowerCase())) {
                         searchResults.add(row.getKey());
                     }
                 }
                 Bundle bundle = new Bundle();
+                bundle.putString(Constants.BundleOptionKey, Constants.SearchOption);
                 bundle.putStringArrayList(Constants.SearchResults, searchResults);
                 startActivity(ProductActivity.class, bundle);
                 return false;

@@ -144,17 +144,4 @@ public class ProductDetail {
     public void setFileId(String fileId) {
         this.fileId = fileId;
     }
-
-    public void setBitmapImage(final ImageView img, String image_id,final Context context) {
-            final StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
-            mStorageRef.child("products/" + image_id).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    Picasso.with(context)
-                            .load(uri)
-                            .error(R.mipmap.icon_app_2)
-                            .into(img);
-                }
-            });
-        }
 }

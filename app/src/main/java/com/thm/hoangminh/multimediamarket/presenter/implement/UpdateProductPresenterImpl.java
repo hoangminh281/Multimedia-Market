@@ -19,7 +19,7 @@ import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.File;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
-import com.thm.hoangminh.multimediamarket.presenter.callback.UpdateProductPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.UpdateProductPresenter;
 import com.thm.hoangminh.multimediamarket.repository.FileStorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailStorageRepository;
@@ -149,7 +149,7 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter {
         });
     }
 
-    private void updateSectionProductUI(Map<String,String> productSections) {
+    private void updateSectionProductUI(Map<String, String> productSections) {
         this.productSections = new ArrayList<>(productSections.keySet());
         if (productSections.size() > 0) {
             String[] stArr = productSections.values().toArray(new String[productSections.size()]);
@@ -160,7 +160,7 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter {
         }
     }
 
-    private void updateSectionCategoriesUI(Map<String,String> sectionCategories) {
+    private void updateSectionCategoriesUI(Map<String, String> sectionCategories) {
         this.sectionCategories = sectionCategories;
         listener.setEventSectionCategories(sectionCategories);
     }
@@ -210,6 +210,41 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter {
                 });
     }
 
+    private void deleteProductSections() {
+        for (String sectionId : productSections) {
+            sectionRepository.setProductValue(cateId, sectionId, productId, Constants.SectionProductDisable,
+                    new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            listener.updateProgressDialog(R.string.dialog_successfully_delete_section);
+                        }
+                    }, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            listener.showMessage(R.string.dialog_failure_delete_section_product);
+                        }
+                    });
+        }
+    }
+
+    private void updateProductSections(ArrayList<String> selectedProductSections) {
+        for (String sectionId : selectedProductSections) {
+            sectionRepository.setProductValue(cateId, sectionId, productId, Constants.SectionProductEnable,
+                    new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            listener.updateProgressDialog(R.string.dialog_successfully_update_section);
+                        }
+                    },
+                    new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            listener.showMessage(R.string.dialog_failure_update_section_product);
+                        }
+                    });
+        }
+    }
+
     private void updateProductDetail(final ProductDetail productDetail, final String photoId, final Bitmap productImage) {
         currentProductDetail.setIntro(productDetail.getIntro());
         currentProductDetail.setDescription(productDetail.getDescription());
@@ -244,8 +279,8 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter {
             HashMap<String, String> imageList = currentProductDetail.getImageIdList();
             int minSize = imageList.size() < imgArr.length ? imageList.size() : imgArr.length;
             for (int i = 1; i < minSize + 1; i++) {
-                ImageLoader.loadImage(productDetailStorageRepository.getClass(), context, imgArr[i], String.valueOf(imageList.values().toArray()[i - 1]));
                 listener.setTagImageView(i, Constants.HasImageTag);
+                ImageLoader.loadImage(ProductDetailStorageRepository.class, context, imgArr[i], String.valueOf(imageList.values().toArray()[i - 1]));
             }
         }
     }
@@ -346,10 +381,10 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter {
     private void updateProductFile(final File updatedFile) {
         final String fileId = Tools.createFileNameRandom(updatedFile.getName());
         updatedFile.setName(fileId);
-        fileStorageRepository.update(currentProductDetail.getFileId(), updatedFile,
-                new OnSuccessListener<Void>() {
+        fileStorageRepository.updateOrCreate(currentProductDetail.getFileId(), updatedFile,
+                new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         productDetailRepository.setFileId(productId, fileId,
                                 new OnSuccessListener<Void>() {
                                     @Override
@@ -382,40 +417,5 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter {
                         listener.showMessage(R.string.dialog_failure_delete_file);
                     }
                 });
-    }
-
-    private void updateProductSections(ArrayList<String> selectedProductSections) {
-        for (String sectionId : selectedProductSections) {
-            sectionRepository.setProductValue(cateId, sectionId, productId, Constants.SectionProductEnable,
-                    new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            listener.updateProgressDialog(R.string.dialog_successfully_update_section);
-                        }
-                    },
-                    new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            listener.showMessage(R.string.dialog_failure_update_section_product);
-                        }
-                    });
-        }
-    }
-
-    private void deleteProductSections() {
-        for (String sectionId : productSections) {
-            sectionRepository.setProductValue(cateId, sectionId, productId, Constants.SectionProductDisable,
-                    new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            listener.updateProgressDialog(R.string.dialog_successfully_delete_section);
-                        }
-                    }, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            listener.showMessage(R.string.dialog_failure_delete_section_product);
-                        }
-                    });
-        }
     }
 }

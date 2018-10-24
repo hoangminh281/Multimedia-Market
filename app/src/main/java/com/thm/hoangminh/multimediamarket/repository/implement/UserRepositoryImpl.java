@@ -69,7 +69,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void destroyFindAndWatchRoleByUserId(String userId, ValueEventListener event) {
+    public void removeFindAndWatchRoleByUserIdListener(String userId, ValueEventListener event) {
         mRef.child(ROUTE.USER_ROLE(userId)).removeEventListener(event);
     }
 

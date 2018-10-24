@@ -47,12 +47,12 @@ public class SectionRepositoryImpl implements SectionRepository {
 
     @Override
     public void findAll(String cateId, String sectionId, ValueEventListener eventListener) {
-
+        mRef.child(ROUTE.SECTION(cateId, sectionId)).addListenerForSingleValueEvent(eventListener);
     }
 
     @Override
     public boolean checkProductIdInSection(DataSnapshot dataSnapshot, String productId) {
-        boolean validate = dataSnapshot.child(ROUTE.SECTION_PRODUCTIDARR(productId)) != null
+        boolean validate = dataSnapshot.child(ROUTE.SECTION_PRODUCTIDARR(productId)).exists()
                 && dataSnapshot.child(ROUTE.SECTION_PRODUCTIDARR(productId)).getValue(int.class) == Constants.SectionProductEnable;
         return validate;
     }

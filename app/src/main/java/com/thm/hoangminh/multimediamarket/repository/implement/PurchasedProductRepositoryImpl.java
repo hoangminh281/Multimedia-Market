@@ -50,7 +50,7 @@ public class PurchasedProductRepositoryImpl implements PurchasedProductRepositor
 
     @Override
     public void findAll(String cateId, String userId, ValueEventListener eventListener) {
-
+        mRef.child(ROUTE.PURCHASEDPRODUCT(userId, cateId)).addListenerForSingleValueEvent(eventListener);
     }
 
     @Override

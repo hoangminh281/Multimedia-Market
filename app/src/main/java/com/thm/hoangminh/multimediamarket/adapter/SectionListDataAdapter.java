@@ -10,26 +10,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.fomular.MoneyFormular;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.repository.ProductStorageRepository;
+import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 import com.thm.hoangminh.multimediamarket.view.activity.ProductDetailActivity;
 
 import java.util.ArrayList;
 
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
+    private Context context;
+    private ArrayList<Product> products;
 
-    private ArrayList<Product> itemsList;
-    private Context mContext;
-    private StorageReference mStorageRef;
-
-    public SectionListDataAdapter(Context context, ArrayList<Product> itemsList) {
-        this.itemsList = itemsList;
-        this.mContext = context;
-        this.mStorageRef = FirebaseStorage.getInstance().getReference();
+    public SectionListDataAdapter(Context context, ArrayList<Product> products) {
+        this.products = products;
+        this.context = context;
     }
 
     @Override
@@ -41,23 +40,24 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
     @Override
     public void onBindViewHolder(final SingleItemRowHolder holder, int i) {
-        Product product = itemsList.get(i);
-        product.setBitmapImage(holder.img, mContext);
+        Product product = products.get(i);
+        ImageLoader.loadImage(ProductStorageRepository.class, context, holder.img, product.getPhotoId());
+        Validate.validateImageProduct(holder.img, product.getStatus());
         holder.tvTitle.setText(product.getTitle());
-        holder.tvPrice.setText(Tools.FormatMoney(product.getPrice()));
+        holder.tvPrice.setText(MoneyFormular.format(product.getPrice()));
         holder.tvRate.setText(product.getRating() + "");
         holder.product = product;
     }
 
     @Override
     public int getItemCount() {
-        return (null != itemsList ? itemsList.size() : 0);
+        return (null != products ? products.size() : 0);
     }
 
     public class SingleItemRowHolder extends RecyclerView.ViewHolder {
-        private TextView tvTitle, tvRate, tvPrice;
         private ImageView img;
         private Product product;
+        private TextView tvTitle, tvRate, tvPrice;
 
         private SingleItemRowHolder(View view) {
             super(view);
@@ -68,12 +68,12 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, ProductDetailActivity.class);
+                    Intent intent = new Intent(context, ProductDetailActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.CateIdKey, product.getCateId());
                     bundle.putString(Constants.ProductIdKey, product.getProductId());
                     intent.putExtras(bundle);
-                    mContext.startActivity(intent);
+                    context.startActivity(intent);
                 }
             });
         }

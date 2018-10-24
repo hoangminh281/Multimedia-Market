@@ -40,9 +40,9 @@ public class RatingAdapter extends ArrayAdapter<ProductRating> {
     private int limit;
     private int resource;
     private Context context;
-    private ArrayList<ProductRating> productRatingList;
     private UserRepository userRepository;
     private RatingRepository ratingRepository;
+    private ArrayList<ProductRating> productRatingList;
 
     public RatingAdapter(@NonNull Context context, int resource, @NonNull ArrayList<ProductRating> productRatingList, int limit) {
         super(context, resource, productRatingList);

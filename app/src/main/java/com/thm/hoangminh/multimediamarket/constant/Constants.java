@@ -27,6 +27,7 @@ public class Constants {
     //Bundle
     public static String BundleKey = "bundle";
     public static String HomeKey = "home";
+    public static String BundleOptionKey = "optionKey";
     public final static String SectionIdKey = "sectionId";
     public final static String SectionTitleKey = "sectionTitle";
     public final static String CateIdKey = "cateId";
@@ -36,6 +37,12 @@ public class Constants {
     public final static String CardObjectKey = "cardObjectKey";
     public final static String TransactionKey = "transactionKey";
 
+    //Bundle option
+    public static String AdminOption = "admin";
+    public static String BookmarkOption = "bookmark";
+    public static String SectionOption = "section";
+    public static String UserOption="user";
+    public static String SearchOption = "search";
 
     //Request code
     public final static String Result = "result";
@@ -75,4 +82,5 @@ public class Constants {
     //Bookmark
     public static int BookMarkEnable = 1;
     public static int BookMarkDisable = 0;
+    public static String AdminProductKey = "adminKey";
 }

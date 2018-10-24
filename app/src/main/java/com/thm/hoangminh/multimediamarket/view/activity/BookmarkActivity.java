@@ -1,9 +1,7 @@
 package com.thm.hoangminh.multimediamarket.view.activity;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,13 +10,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Category;
-import com.thm.hoangminh.multimediamarket.model.User;
-import com.thm.hoangminh.multimediamarket.presenter.implement.BookmarkPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.BookmarkPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.BookmarkPresenterImpl;
 import com.thm.hoangminh.multimediamarket.view.callback.BookmarkView;
 import com.thm.hoangminh.multimediamarket.view.fragment.ProductFragment;
 
@@ -26,14 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookmarkActivity extends AppCompatActivity implements BookmarkView {
+    private Toolbar toolbar;
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private ViewPagerAdapter adapter;
-    private Toolbar toolbar;
     private BookmarkPresenter presenter;
-
-    public final static String bookmarkKey = "bookmark_cate_id";
-    public final static String productAdminKey = "productAdmin";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +40,36 @@ public class BookmarkActivity extends AppCompatActivity implements BookmarkView 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
 
+        initPresenter();
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null && bundle.getString(Constants.BundleKey).equals("admin")) {
-            showCategoriesTabLayout(productAdminKey);
-            getSupportActionBar().setTitle(getResources().getString(R.string.menu_product_admin) + "");
-            initPresenter();
-            presenter.findCurrentUserRole();
-        } else {
-            showCategoriesTabLayout(bookmarkKey);
-            getSupportActionBar().setTitle(getResources().getString(R.string.menu_bookmark) + "");
-        }
-        setEvents();
+        presenter.extractBundle(this, bundle);
     }
 
     private void initPresenter() {
-        presenter = new BookmarkPresenter(this);
+        presenter = new BookmarkPresenterImpl(this);
+    }
+
+    @Override
+    public void setTitle(int titleId) {
+        getSupportActionBar().setTitle(titleId);
+    }
+
+    @Override
+    public void setUpCategoriesTabLayout(String optionKey) {
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ArrayList<Category> categories = Category.getInstance();
+        for (int i = 1; i < categories.size(); i++) {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.BundleOptionKey, optionKey);
+            bundle.putString(Constants.CateIdKey, categories.get(i).getCateId());
+            ProductFragment productFragment = new ProductFragment();
+            productFragment.setArguments(bundle);
+            adapter.addFragment(productFragment, categories.get(i).getName());
+        }
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(Category.getInstance().size());
+        tabLayout.setupWithViewPager(viewPager);
+        setupTabIcons();
     }
 
     @Override
@@ -72,21 +81,6 @@ public class BookmarkActivity extends AppCompatActivity implements BookmarkView 
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void showCategoriesTabLayout(String key) {
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        for (Category category : Category.getInstance()) {
-            Bundle bundle = new Bundle();
-            bundle.putString(key, category.getCateId());
-            ProductFragment productFragment = new ProductFragment();
-            productFragment.setArguments(bundle);
-            adapter.addFragment(productFragment, category.getName());
-        }
-        viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(Category.getInstance().size());
-        tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
     }
 
     private void setupTabIcons() {
@@ -119,26 +113,10 @@ public class BookmarkActivity extends AppCompatActivity implements BookmarkView 
     }
 
     @Override
-    public void bindingUserRole(Integer role_id) {
-        if (role_id != User.ADMIN) {
-            Handler handler = new Handler();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(BookmarkActivity.this, R.string.info_fail_role, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
-            });
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (presenter != null)
-            presenter.RemoveListener();
+            presenter.removeListener();
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -169,9 +147,6 @@ public class BookmarkActivity extends AppCompatActivity implements BookmarkView 
             return "";
         }
 
-    }
-
-    private void setEvents() {
     }
 
     private void setControls() {

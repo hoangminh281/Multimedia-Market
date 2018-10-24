@@ -10,31 +10,30 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.fomular.MoneyFormular;
 import com.thm.hoangminh.multimediamarket.model.Product;
-import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.repository.ProductStorageRepository;
+import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 
 import java.util.List;
 
 public class ProductAdapter extends ArrayAdapter<Product> {
-    private Context context;
     private int resource;
-    private List<Product> objects;
-    private StorageReference mStorageRef;
+    private Context context;
+    private List<Product> products;
 
-    public ProductAdapter(@NonNull Context context, int resource, @NonNull List<Product> objects) {
-        super(context, resource, objects);
+    public ProductAdapter(@NonNull Context context, int resource, @NonNull List<Product> products) {
+        super(context, resource, products);
         this.context = context;
         this.resource = resource;
-        this.objects = objects;
-        this.mStorageRef = FirebaseStorage.getInstance().getReference();
+        this.products = products;
     }
 
     private class ViewHolder {
-        ImageView img;
-        TextView txtTitle, txtRate, txtPrice;
+        private ImageView img;
+        private TextView txtTitle, txtRate, txtPrice;
     }
 
     @NonNull
@@ -54,11 +53,12 @@ public class ProductAdapter extends ArrayAdapter<Product> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Product product = objects.get(position);
+        Product product = products.get(position);
         holder.txtTitle.setText(product.getTitle());
         holder.txtRate.setText(product.getRating() + "");
-        holder.txtPrice.setText(Tools.FormatMoney(product.getPrice()));
-        product.setBitmapImage(holder.img, context);
+        holder.txtPrice.setText(MoneyFormular.format(product.getPrice()));
+        ImageLoader.loadImage(ProductStorageRepository.class, context, holder.img, product.getPhotoId());
+        Validate.validateImageProduct(holder.img, product.getStatus());
         return convertView;
     }
 }

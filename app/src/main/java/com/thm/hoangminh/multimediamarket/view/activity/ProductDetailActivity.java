@@ -42,6 +42,7 @@ import com.thm.hoangminh.multimediamarket.references.ConvertNumberToString;
 import com.thm.hoangminh.multimediamarket.repository.ProductStorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.UserStorageRepository;
 import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 import com.thm.hoangminh.multimediamarket.view.callback.ProductDetailView;
 import com.thm.hoangminh.multimediamarket.view.fragment.RatingFragment;
 
@@ -163,6 +164,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     public void showProduct(Product product) {
         this.product = product;
         ImageLoader.loadImage(ProductStorageRepository.class, this, imgProduct, this.product.getPhotoId());
+        Validate.validateImageProduct(imgProduct, product.getStatus());
         txtTitle.setText(product.getTitle());
         txtRating.setText(product.getRating() + "");
         ratingBarOverview.setRating((float) product.getRating());
@@ -336,7 +338,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                 public void onClick(View view) {
                     btnBuy.setBackgroundColor(getResources().getColor(R.color.grey_50));
                     btnBuy.setText(R.string.btn_loading);
-                    presenter.downLoadProduct();
+                    presenter.downLoadProduct(ProductDetailActivity.this);
                 }
             });
         } else {

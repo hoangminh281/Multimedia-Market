@@ -109,7 +109,7 @@
     <string name="txt_Category">Category</string>
     <string name="hint_category">Choose category</string>
     <string name="menu_remove">Remove</string>
-    <string name="menu_pickImage">Pick an image</string>
+    <string name="menu_pickImage">Choose from gallery</string>
     <string name="menu_takeImage">Take an image</string>
     <string name="menu_bookmark">Favorite list</string>
     <string name="menu_upload">Upload</string>

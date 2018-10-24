@@ -66,7 +66,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void setStatus(String productId, int status, OnSuccessListener successListener, OnFailureListener failureListener) {
-        mRef.child(ROUTE.PRODUCT(productId)).setValue(status)
+        mRef.child(ROUTE.PRODUCT_STATUS(productId)).setValue(status)
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
     }

@@ -3,11 +3,11 @@ package com.thm.hoangminh.multimediamarket.view.callback;
 import com.thm.hoangminh.multimediamarket.model.Product;
 
 public interface ProductView {
-    public void addProducttoAdapter(Product product);
+    void addProductIntoAdapter(Product product);
 
-    public void refreshAdapter();
+    void refreshAdapter();
 
-    public void showBottomProgressbar();
+    void setTitle(String title);
 
-    public void hideBottomProgressbar();
+    void setTitle(int titleId);
 }

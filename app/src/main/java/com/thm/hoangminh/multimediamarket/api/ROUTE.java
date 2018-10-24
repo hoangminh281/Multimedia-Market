@@ -35,8 +35,8 @@ public class ROUTE {
 
     private static final String PRODUCTDETAIL = "product_detail/";
     private static final String PRODUCTDETAIL_CAPACITY = "/capacity/";
-    private static final String PRODUCTDETAIL_IMAGELIST = "/imageList/";
-    private static final String PRODUCTDETAIL_FILE = "/downloadLink/";
+    private static final String PRODUCTDETAIL_IMAGELIST = "/imageIdList/";
+    private static final String PRODUCTDETAIL_FILE = "/fileId/";
     private static final String PRODUCTDETAIL_PURCHASEDQUANTITY = "/downloaded/";
 
     private static final String PRODUCTDETAILSTORAGE_IMAGE = "products/";
@@ -120,8 +120,12 @@ public class ROUTE {
         return SECTION + cateId;
     }
 
+    public static String SECTION(String cateId, String sectionId) {
+        return SECTION + cateId + "/" +  sectionId + SECTION_PRODUCTIDARR;
+    }
+
     public static String SECTION(String cateId, String sectionId, String productId) {
-        return SECTION + cateId + "/" +  sectionId + SECTION_PRODUCTIDARR + productId;
+        return SECTION(cateId, sectionId) + productId;
     }
 
     public static String SECTION_PRODUCTIDARR(String productId) {
@@ -168,12 +172,20 @@ public class ROUTE {
         return PRODUCTSTORAGE_IMAGE + productImageId;
     }
 
+    public static String BOOKMARK(String userId, String cateId) {
+        return BOOKMARK + userId + "/" + cateId;
+    }
+
     public static String BOOKMARK(String userId, String cateId, String productId) {
-        return BOOKMARK + userId + "/" + cateId + "/" + productId;
+        return BOOKMARK(userId, cateId) + "/" + productId;
+    }
+
+    public static String PURCHASEDPRODUCT(String userId, String cateId) {
+        return PURCHASEDPRODUCT + userId + "/" + cateId;
     }
 
     public static String PURCHASEDPRODUCT(String userId, String cateId, String productId) {
-        return PURCHASEDPRODUCT + userId + "/" + cateId + "/" + productId;
+        return PURCHASEDPRODUCT(userId, cateId) + "/" + productId;
     }
 
     public static String RATING(String productId) {

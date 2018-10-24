@@ -1,4 +1,4 @@
-package com.thm.hoangminh.multimediamarket.presenter.callback;
+package com.thm.hoangminh.multimediamarket.presenter;
 
 import android.content.Context;
 import android.graphics.Bitmap;

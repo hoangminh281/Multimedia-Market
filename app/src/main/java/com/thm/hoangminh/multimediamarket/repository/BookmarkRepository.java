@@ -6,4 +6,6 @@ import com.thm.hoangminh.multimediamarket.repository.base.Repository;
 
 public interface BookmarkRepository extends Repository<ProductBookmark, String> {
     void findByProductBookmark(ProductBookmark productBookmark, ValueEventListener eventListener);
+
+    void findAll(String userId, String cateId, ValueEventListener eventListener);
 }

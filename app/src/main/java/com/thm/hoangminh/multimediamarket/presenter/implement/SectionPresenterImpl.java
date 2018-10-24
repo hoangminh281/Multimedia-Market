@@ -116,9 +116,9 @@ public class SectionPresenterImpl implements SectionPresenter {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
-                                if (User.getInstance().getRole() == User.ADMIN || dataSnapshot.child(Constants.ProductStatus)
-                                        .getValue(int.class).equals(Constants.ProductEnable)) {
-                                    sectionDataModel.addItemInSection(dataSnapshot.getValue(Product.class));
+                                Product product = dataSnapshot.getValue(Product.class);
+                                if (User.getInstance().getRole() == User.ADMIN || product.getStatus() == Constants.ProductEnable) {
+                                    sectionDataModel.addItemInSection(product);
                                 }
                                 listener.refreshAdapter();
                                 sectionDataModel.setRequestLock(false);

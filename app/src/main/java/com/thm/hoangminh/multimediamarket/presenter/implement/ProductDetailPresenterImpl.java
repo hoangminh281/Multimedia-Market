@@ -1,5 +1,6 @@
 package com.thm.hoangminh.multimediamarket.presenter.implement;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.thm.hoangminh.multimediamarket.model.PurchasedProduct;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.ProductDetailPresenter;
 import com.thm.hoangminh.multimediamarket.repository.BookmarkRepository;
+import com.thm.hoangminh.multimediamarket.repository.FileStorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
 import com.thm.hoangminh.multimediamarket.repository.PurchasedProductRepository;
@@ -28,6 +30,7 @@ import com.thm.hoangminh.multimediamarket.repository.RatingRepository;
 import com.thm.hoangminh.multimediamarket.repository.UserRepository;
 import com.thm.hoangminh.multimediamarket.repository.base.StorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.implement.BookmarkRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.FileStorageRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductDetailRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductStorageRepositoryImpl;
@@ -41,10 +44,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.Callable;
 
 public class ProductDetailPresenterImpl implements ProductDetailPresenter {
-    private User ownerUser;
     private Product product;
+    private User dbCurrentUser;
     private FirebaseUser currentUser;
     private ProductDetailView listener;
     private ProductDetail productDetail;
@@ -53,6 +57,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
     private ProductRepository productRepository;
     private BookmarkRepository bookmarkRepository;
     private StorageRepository productStorageRepository;
+    private FileStorageRepository fileStorageRepository;
     private ProductDetailRepository productDetailRepository;
     private PurchasedProductRepository purchasedProductRepository;
 
@@ -62,6 +67,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
         ratingRepository = new RatingRepositoryImpl();
         productRepository = new ProductRepositoryImpl();
         bookmarkRepository = new BookmarkRepositoryImpl();
+        fileStorageRepository = new FileStorageRepositoryImpl();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         productDetailRepository = new ProductDetailRepositoryImpl();
         productStorageRepository = new ProductStorageRepositoryImpl();
@@ -73,12 +79,30 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
         String cateId = bundle.getString(Constants.CateIdKey);
         String productId = bundle.getString(Constants.ProductIdKey);
 
+        bindCurrentUser();
         loadProduct(productId);
         loadProductDetail(productId);
         loadProductBookmark(cateId, productId);
         checkPurchasedProductHistory(cateId, productId);
         loadProductRating(productId);
         checkUserRating(productId);
+    }
+
+    private void bindCurrentUser() {
+        userRepository.findAndWatchById(currentUser.getUid(), new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    dbCurrentUser = dataSnapshot.getValue(User.class);
+                    validateProduct();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -145,9 +169,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    ownerUser = dataSnapshot.getValue(User.class);
-                    listener.showOwner(ownerUser);
-                    validateProduct();
+                    listener.showOwner(dataSnapshot.getValue(User.class));
                 }
             }
 
@@ -160,10 +182,10 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
 
     private void validateProduct() {
         if (product == null || currentUser.getUid() == null || productDetail == null
-                || ownerUser == null) return;
+                || dbCurrentUser == null) return;
         String userId = currentUser.getUid();
         String ownerId = productDetail.getOwnerId();
-        int currentUserRole = ownerUser.getRole();
+        int currentUserRole = dbCurrentUser.getRole();
         int productStatus = product.getStatus();
         if (ownerId.equals(userId) || currentUserRole == User.ADMIN) {
             listener.setVisibleItemMenu(R.id.menu_update, true);
@@ -441,7 +463,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
     }
 
     @Override
-    public void downLoadProduct() {
+    public void downLoadProduct(final Context context) {
         listener.enableOrDisableDownloadButton(false);
         String fileId = productDetail.getFileId();
         if (fileId == null || fileId.equals("")) {
@@ -449,22 +471,21 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
             listener.enableOrDisableDownloadButton(true);
             return;
         }
-        String[] splitFileName = fileId.split("\\.");
-        final File localFile;
-        try {
-            if (splitFileName.length == 1)
-                localFile = File.createTempFile(splitFileName[0], "");
-            else
-                localFile = File.createTempFile(splitFileName[0], "." + splitFileName[1]);
-        } catch (IOException e) {
-            listener.showMessage(R.string.info_downloadFireFailure);
-            listener.enableOrDisableDownloadButton(true);
-            return;
-        }
-        if (localFile == null) {
-            listener.showMessage(R.string.info_downloadFireFailure);
-            listener.enableOrDisableDownloadButton(true);
-            return;
-        }
+        fileStorageRepository.downloadFile(fileId, context,
+                new Callable<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+                        listener.showMessage(R.string.info_downloadFileSuccess);
+                        fileStorageRepository.unRegisterReceiver(context);
+                        listener.enableOrDisableDownloadButton(true);
+                        return null;
+                    }
+                }, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.showMessage(R.string.info_downloadFireFailure);
+                        listener.enableOrDisableDownloadButton(true);
+                    }
+                });
     }
 }
