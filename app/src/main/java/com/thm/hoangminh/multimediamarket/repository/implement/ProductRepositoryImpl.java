@@ -70,4 +70,14 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
     }
+
+    @Override
+    public DatabaseReference createDataRef() {
+        return mRef.child(ROUTE.PRODUCT()).push();
+    }
+
+    @Override
+    public void addByDataRef(DatabaseReference dataRef, Product product, OnSuccessListener successListener, OnFailureListener failureListener) {
+        dataRef.setValue(product).addOnSuccessListener(successListener).addOnFailureListener(failureListener);
+    }
 }

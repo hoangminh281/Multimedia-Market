@@ -2,19 +2,30 @@ package com.thm.hoangminh.multimediamarket.presenter.implement;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.File;
+import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.model.Section;
 import com.thm.hoangminh.multimediamarket.presenter.AddProductPresenter;
 import com.thm.hoangminh.multimediamarket.presenter.ModifyProductPresenters.ModifyProductInteractor;
 import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.repository.ProductDetailRepository;
+import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
 import com.thm.hoangminh.multimediamarket.repository.SectionRepository;
+import com.thm.hoangminh.multimediamarket.repository.implement.ProductDetailRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.ProductRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.SectionRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.view.callback.ModifyProductView;
 
@@ -23,25 +34,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddProductPresenterImpl implements AddProductPresenter {
+    private String cateId;
     private ModifyProductView listener;
     private ModifyProductInteractor interactor;
-    private String cateId;
-    private String photoId;
-    private String fileName;
-    private ArrayList<Bitmap> bitmaps;
-    private ArrayList<String> photoNames;
-    private Map<String, String> currentProductSections;
+    private FirebaseUser currentUser;
+    private Map<String, String> sectionList;
     private SectionRepository sectionRepository;
+    private ProductRepository productRepository;
+    private Map<String, String> currentProductSections;
+    private ProductDetailRepository productDetailRepository;
 
     public AddProductPresenterImpl(ModifyProductView listener) {
         this.listener = listener;
         sectionRepository = new SectionRepositoryImpl();
+        productRepository = new ProductRepositoryImpl();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        productDetailRepository = new ProductDetailRepositoryImpl();
         interactor = new ModifyProductInteractor(this);
     }
 
     @Override
     public void extractBundle(Bundle bundle) {
-        cateId = bundle.getString(Constants.CateIdKey);
+        String cateId = bundle.getString(Constants.CateIdKey);
+        this.cateId = cateId;
         bindingCurrentUserRole();
         loadCategoryProduct(cateId);
     }
@@ -55,6 +70,7 @@ public class AddProductPresenterImpl implements AddProductPresenter {
             listener.hideEdtYoutube();
         }
         sectionRepository.findById(cateId, new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -64,6 +80,7 @@ public class AddProductPresenterImpl implements AddProductPresenter {
                         Section section = item.getValue(Section.class);
                         sections.put(section.getSectionId(), section.getTitle());
                     }
+                    sectionList = sections;
                     listener.showSectionList(sections);
                 }
             }
@@ -76,30 +93,87 @@ public class AddProductPresenterImpl implements AddProductPresenter {
     }
 
     @Override
-    public void addProduct(String title, String key_cate, ArrayList<Bitmap> bitmaps, double price, String intro, String desc, int age_limit, String video, File file, Map<String, String> sections) {
-        photoId = Tools.createImageNameRandom();
-        interactor.CreateNewProduct(title, key_cate, photoId, price, intro, desc, age_limit, video, file);
-        this.bitmaps = bitmaps;
-        this.currentProductSections = sections;
+    public void addProduct(Product product, final ProductDetail productDetail, final ArrayList<Integer> selectedSections, final ArrayList<Bitmap> selectedBitmaps, final File pickedFile) {
+        DatabaseReference mRef = productRepository.createDataRef();
+        final String productId = mRef.getKey();
+        product.setProductId(productId);
+        String avatarId = Tools.createRandomImageName();
+        product.setPhotoId(avatarId);
+
+        productDetail.setId(productId);
+        productDetail.setOwnerId(currentUser.getUid());
+        String fileId = Tools.createRandomFileName(pickedFile.getName());
+        productDetail.setFileId(fileId);
+        pickedFile.setName(fileId);
+
+        final Map<String, Bitmap> preparedSelectedImages = prepareImages(avatarId, selectedBitmaps);
+        productRepository.addByDataRef(mRef, product, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.updateProgressMessage("Created successfully product");
+                addProductSection(productId, selectedSections);
+                addProductDetail(productDetail, preparedSelectedImages);
+                addFile(pickedFile);
+            }
+        }, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.showMessage("Created failure product");
+            }
+        });
     }
 
-    @Override
-    public void onCreateNewProductSuccess(String id, String intro, String description, File file, int ageLimit, String owner_id, String video) {
-        listener.updateProgress("Created successfully product");
-        fileName = new String(file.getName());
-        String downloadLink = Tools.createFileNameRandom(file.getName());
-        file.setName(downloadLink);
-        photoNames = new ArrayList<>();
-        photoNames.add(photoId);
-        for (int i = 1; i < bitmaps.size(); i++) {
-            String photoId = Tools.createImageNameRandom();
-            while (photoNames.contains(photoId))
-                photoId = Tools.createImageNameRandom();
-            photoNames.add(photoId);
+    private void addProductSection(String productId, ArrayList<Integer> selectedSections) {
+        for (int i : selectedSections) {
+            String sectionId = sectionList.keySet().toArray()[i].toString();
+            final String sectionTitle = sectionList.values().toArray()[i].toString();
+            sectionRepository.setProductValue(cateId, sectionId, productId, Constants.ProductEnable,
+                    new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            listener.updateProgressMessage("Updated successfully section " + sectionTitle);
+                        }
+                    }, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
         }
-        interactor.CreateProductDetailById(new ProductDetail(id, intro, description, (int) file.getSize().getValue(), 0, ageLimit, owner_id, video, downloadLink), photoNames);
-        interactor.UploadFile(file);
-        interactor.UpdateSection(cateId, currentProductSections, id);
+    }
+
+    private void addProductDetail(ProductDetail productDetail, final Map<String, Bitmap> preparedSelectedImages) {
+        productDetailRepository.add(productDetail, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                addProductDetailImages(preparedSelectedImages);
+            }
+        }, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.showMessage("Created failure product detail");
+            }
+        });
+    }
+
+    private void addProductDetailImages(Map<String,Bitmap> preparedSelectedImages) {
+
+    }
+
+    private void addFile(File pickedFile) {
+    }
+
+    private Map<String, Bitmap> prepareImages(String avatarId, ArrayList<Bitmap> selectedBitmaps) {
+        Map<String, Bitmap> preparedSelectedImages = new HashMap<>();
+        preparedSelectedImages.put(avatarId, selectedBitmaps.get(0));
+        for (int i = 1; i < selectedBitmaps.size(); i++) {
+            String imageId;
+            do {
+                imageId = Tools.createRandomImageName();
+            } while (imageId != null && preparedSelectedImages.keySet().contains(imageId));
+            preparedSelectedImages.put(imageId, selectedBitmaps.get(i));
+        }
+        return preparedSelectedImages;
     }
 
     @Override
@@ -109,13 +183,13 @@ public class AddProductPresenterImpl implements AddProductPresenter {
 
     @Override
     public void onUploadPhotoSucceed(int photoIndex) {
-        listener.updateProgress("Created successfully product detail");
+        listener.updateProgressMessage("Created successfully product detail");
         interactor.UploadPhoto(photoIndex, photoNames.get(photoIndex), bitmaps.get(photoIndex));
     }
 
     @Override
     public void onUploadPhotoSuccess(int photoIndex) {
-        listener.updateProgress("Uploaded successfully image " + (photoIndex + 1));
+        listener.updateProgressMessage("Uploaded successfully image " + (photoIndex + 1));
     }
 
     @Override
@@ -125,11 +199,11 @@ public class AddProductPresenterImpl implements AddProductPresenter {
 
     @Override
     public void onUploadFileSuccess() {
-        listener.updateProgress("Uploaded successfully file " + fileName);
+        listener.updateProgressMessage("Uploaded successfully file " + fileName);
     }
 
     @Override
     public void onUpdateSectionSuccess(String section) {
-        listener.updateProgress("Updated successfully section " + section);
+        listener.updateProgressMessage("Updated successfully section " + section);
     }
 }

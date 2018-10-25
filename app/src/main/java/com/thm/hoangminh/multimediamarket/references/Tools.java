@@ -66,11 +66,6 @@ public class Tools {
         listView.requestLayout();
     }
 
-    public static String FormatMoney(double value) {
-        DecimalFormat format = new DecimalFormat("##,###,###.##");
-        return format.format(value) + " đ";
-    }
-
     public static int getAge(int day, int month, int year) throws IllegalArgumentException {
         final Calendar birthDay = Calendar.getInstance();
         birthDay.set(year, month, day);
@@ -85,12 +80,12 @@ public class Tools {
         return age;
     }
 
-    public static String createImageNameRandom() {
+    public static String createRandomImageName() {
         Calendar calendar = Calendar.getInstance();
         return "image" + calendar.getTimeInMillis() + ".png";
     }
 
-    public static String createFileNameRandom(String name) {
+    public static String createRandomFileName(String name) {
         String suffix = name.split("\\.")[1];
         Calendar calendar = Calendar.getInstance();
         return "file" + calendar.getTimeInMillis() + "." + suffix;

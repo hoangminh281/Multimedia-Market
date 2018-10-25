@@ -32,6 +32,8 @@ import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.File;
+import com.thm.hoangminh.multimediamarket.model.Product;
+import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.presenter.AddProductPresenter;
 import com.thm.hoangminh.multimediamarket.presenter.implement.AddProductPresenterImpl;
 import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
@@ -48,13 +50,12 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
     private LinearLayout videoLayout;
     private ProgressDialog progressDialog;
     private TextView txtSection, txtAgeLimit, txtFile;
-    private EditText edtTitle, edtPrice, edtIntro, edtDes, edtVideo;
+    private EditText edtTitle, edtPrice, edtIntro, edtDescription, edtVideo;
 
     private String cateId;
     private File pickedFile;
     private AddProductPresenter presenter;
-    private Map<String, String> sections;
-    private ArrayList<Integer> mSelectedItems;
+    private ArrayList<Integer> selectedSections;
 
     private int imgPosition;
 
@@ -124,17 +125,16 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
 
     @Override
     public void showSectionList(Map<String, String> sections) {
-        this.sections = sections;
         txtSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSectionDialog();
+                showSectionDialog(sections);
             }
         });
     }
 
-    public void showSectionDialog() {
-        mSelectedItems.clear();
+    public void showSectionDialog(Map<String, String> sections) {
+        selectedSections.clear();
         txtSection.setText("");
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.hint_category)
@@ -144,20 +144,20 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
                             public void onClick(DialogInterface dialog, int which,
                                                 boolean isChecked) {
                                 if (isChecked) {
-                                    mSelectedItems.add(which);
-                                } else if (mSelectedItems.contains(which)) {
-                                    mSelectedItems.remove(Integer.valueOf(which));
+                                    selectedSections.add(which);
+                                } else if (selectedSections.contains(which)) {
+                                    selectedSections.remove(Integer.valueOf(which));
                                 }
                             }
                         })
                 .setPositiveButton(R.string.button_save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        if (mSelectedItems.size() != 0) {
+                        if (selectedSections.size() != 0) {
                             String[] stArr = sections.values().toArray(new String[sections.size()]);
-                            String st = stArr[mSelectedItems.get(0)];
-                            for (int i = 1; i < mSelectedItems.size(); i++) {
-                                st += ", " + stArr[mSelectedItems.get(i)];
+                            String st = stArr[selectedSections.get(0)];
+                            for (int i = 1; i < selectedSections.size(); i++) {
+                                st += ", " + stArr[selectedSections.get(i)];
                             }
                             txtSection.setText(st);
                         }
@@ -284,48 +284,39 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
             AnimationSupport.shake(getContext(), imgArr[0]);
             return;
         }
-        boolean validate = Validate.validateEditTextsToString(getContext(), edtTitle, edtPrice)
-                & Validate.validateTextViewsToString(getContext(), txtSection, txtAgeLimit);
+        boolean validate = Validate.validateEditTextsToString(getContext(), edtTitle, edtPrice, edtIntro, edtDescription, edtVideo)
+                & Validate.validateTextViewsToString(getContext(), txtSection, txtAgeLimit, txtFile);
+        if (!validate) return;
+
         String title = edtTitle.getText().toString().trim();
         String price = edtPrice.getText().toString().trim();
+        Product product = new Product();
+        product.setTitle(title);
+        product.setPrice(Double.valueOf(price));
+
         String ageLimit = txtAgeLimit.getText().toString().trim();
         String intro = edtIntro.getText().toString().trim();
-        if (edtIntro.getVisibility() == View.VISIBLE && intro.length() == 0) {
-            edtIntro.setError(getContext().getResources().getString(R.string.err_empty));
-            return;
-        }
-        String desc = edtDes.getText().toString().trim();
-        if (edtDes.getVisibility() == View.VISIBLE && desc.length() == 0) {
-            edtDes.setError(getContext().getResources().getString(R.string.err_empty));
-            return;
-        }
+        String description = edtDescription.getText().toString().trim();
         String video = edtVideo.getText().toString().trim();
-        if (videoLayout.getVisibility() == View.VISIBLE && video.length() == 0) {
-            edtVideo.setError(getContext().getResources().getString(R.string.err_empty));
-            return;
-        }
-        String filePath = txtFile.getText().toString().trim();
-        if (txtFile.getVisibility() == View.VISIBLE && filePath.length() == 0) {
-            txtFile.setError(getContext().getResources().getString(R.string.err_empty));
-            return;
-        }
-        ArrayList<Bitmap> bitmaps = new ArrayList<>();
+        ProductDetail productDetail = new ProductDetail();
+        productDetail.setIntro(intro);
+        productDetail.setDescription(description);
+        productDetail.setAgeLimit(Integer.parseInt(ageLimit.replace("+", "")));
+        productDetail.setVideoId(video);
+
+        ArrayList<Bitmap> selectedBitmaps = new ArrayList<>();
         for (ImageView img : imgArr) {
             if (((int[]) img.getTag())[1] == Constants.HasImageTag) {
-                bitmaps.add(((BitmapDrawable) img.getDrawable()).getBitmap());
+                selectedBitmaps.add(((BitmapDrawable) img.getDrawable()).getBitmap());
             }
         }
 
         progressDialog.setProgress(0);
         progressDialog.setMessage("Creating product...");
-        progressDialog.setMax(3 + bitmaps.size() + mSelectedItems.size());
+        progressDialog.setMax(3 + selectedBitmaps.size() + selectedSections.size());
         progressDialog.show();
-        Map<String, String> sections = new HashMap<>();
-        for (int i : mSelectedItems) {
-            sections.put((String) this.sections.keySet().toArray()[i], (String) this.sections.values().toArray()[i]);
-        }
-        presenter.addProduct(title, cateId, bitmaps, Double.valueOf(price),
-                intro, desc, Integer.valueOf(ageLimit.replace("+", "")), video, pickedFile, sections);
+
+        presenter.addProduct(product, productDetail, selectedSections, selectedBitmaps, pickedFile);
     }
 
     @Override
@@ -340,7 +331,7 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
     }
 
     @Override
-    public synchronized void updateProgress(String s) {
+    public synchronized void updateProgressMessage(String s) {
         progressDialog.setMessage(s);
         int i = progressDialog.getProgress() + 1;
         progressDialog.setProgress(i);
@@ -406,13 +397,13 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
         edtTitle = view.findViewById(R.id.editTextTitle);
         edtPrice = view.findViewById(R.id.editTextPrice);
         edtIntro = view.findViewById(R.id.editTextIntro);
-        edtDes = view.findViewById(R.id.editTextDescription);
+        edtDescription = view.findViewById(R.id.editTextDescription);
         edtVideo = view.findViewById(R.id.editTextVideo);
         txtSection = view.findViewById(R.id.textViewSection);
         txtAgeLimit = view.findViewById(R.id.textViewAgeLimit);
         txtFile = view.findViewById(R.id.textViewFile);
         toolbar = view.findViewById(R.id.toolbar);
-        mSelectedItems = new ArrayList();
+        selectedSections = new ArrayList();
         videoLayout = view.findViewById(R.id.videoLayout);
         progressDialog = new ProgressDialog(getContext());
     }

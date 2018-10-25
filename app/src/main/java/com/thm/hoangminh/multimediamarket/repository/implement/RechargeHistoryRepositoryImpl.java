@@ -43,7 +43,7 @@ public class RechargeHistoryRepositoryImpl implements RechargeHistoryRepository<
     }
 
     @Override
-    public void pushByDataRef(DatabaseReference dataRef, RechargedHistory rechargedHistory, OnSuccessListener successListener, OnFailureListener failureListener) {
+    public void addByDataRef(DatabaseReference dataRef, RechargedHistory rechargedHistory, OnSuccessListener successListener, OnFailureListener failureListener) {
         dataRef.setValue(rechargedHistory).addOnSuccessListener(successListener).addOnFailureListener(failureListener);
     }
 

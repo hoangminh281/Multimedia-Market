@@ -7,7 +7,7 @@ public interface ModifyProductView {
 
     void showMessage(int messageId);
 
-    void updateProgress(String s);
+    void updateProgressMessage(String message);
 
     void showSectionList(Map<String,String> sections);
 }

@@ -124,7 +124,7 @@ public class UpdateProductInteractorImpl implements UpdateProductInteractor {
         mStorageRef.child("products/" + image_old_id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                final String id = Tools.createImageNameRandom();
+                final String id = Tools.createRandomImageName();
                 mRef.child("products/" + product_id + "/photoId").setValue(id).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -157,7 +157,7 @@ public class UpdateProductInteractorImpl implements UpdateProductInteractor {
         String[] oldImageValues = imageOldIds.values().toArray(new String[imageOldIds.size()]);
         for (int i = 0; i < bitmaps.size(); i++) {
             final int finalI = i;
-            final String id = Tools.createImageNameRandom();
+            final String id = Tools.createRandomImageName();
             final int index = newBitmapIndexs[i];
             if (index < imageOldIds.size()) {
                 mStorageRef.child("products/" + oldImageValues[index]).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -281,7 +281,7 @@ public class UpdateProductInteractorImpl implements UpdateProductInteractor {
         mStorageRef.child("files/" + oldFileId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                final String id = Tools.createFileNameRandom(file.getName());
+                final String id = Tools.createRandomFileName(file.getName());
                 mRef.child("product_detail/" + product_id + "/downloadLink").setValue(id).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -326,7 +326,7 @@ public class UpdateProductInteractorImpl implements UpdateProductInteractor {
                 mStorageRef.child("files/" + oldFileId).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        final String id = Tools.createFileNameRandom(file.getName());
+                        final String id = Tools.createRandomFileName(file.getName());
                         mRef.child("product_detail/" + product_id + "/downloadLink").setValue(id).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
