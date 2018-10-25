@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.thm.hoangminh.multimediamarket.R;
-import com.thm.hoangminh.multimediamarket.view.fragment.OptionModifyProductFragment;
+import com.thm.hoangminh.multimediamarket.view.fragment.OptionAddProductFragment;
 
-public class ModifyProductActivity extends AppCompatActivity {
+public class AddProductActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +15,7 @@ public class ModifyProductActivity extends AppCompatActivity {
         setContentView(R.layout.frame_layout);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.frameLayout, new OptionModifyProductFragment());
+        transaction.add(R.id.frameLayout, new OptionAddProductFragment());
         transaction.commit();
     }
 

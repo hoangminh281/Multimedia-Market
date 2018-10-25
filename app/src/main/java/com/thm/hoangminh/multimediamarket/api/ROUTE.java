@@ -116,12 +116,16 @@ public class ROUTE {
         return RECHARGEHISTORY + userId;
     }
 
+    public static String RECHARGEHISTORY(String userId, String transactionId) {
+        return RECHARGEHISTORY(userId) + "/" + transactionId;
+    }
+
     public static String SECTION(String cateId) {
         return SECTION + cateId;
     }
 
     public static String SECTION(String cateId, String sectionId) {
-        return SECTION + cateId + "/" +  sectionId + SECTION_PRODUCTIDARR;
+        return SECTION + cateId + "/" + sectionId + SECTION_PRODUCTIDARR;
     }
 
     public static String SECTION(String cateId, String sectionId, String productId) {
@@ -198,5 +202,17 @@ public class ROUTE {
 
     public static String RATING_LIKEDLIST(String currentUserId, String userId, String productId) {
         return RATING(userId, productId) + RATING_LIKEDLIST + currentUserId;
+    }
+
+    public static String CARD(int category, int value) {
+        return CARD + category + "/" + value;
+    }
+
+    public static String CARD(int category, int value, String cardId) {
+        return CARD(category, value) + "/" + cardId;
+    }
+
+    public static String CARD_STATUS(int category, int value, String cardId) {
+        return CARD(category, value, cardId) + CARD_STATUS;
     }
 }

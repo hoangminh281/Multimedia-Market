@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.view.activity.ProfileActivity;
 import com.thm.hoangminh.multimediamarket.view.activity.UserActivity;
@@ -20,15 +21,15 @@ import com.thm.hoangminh.multimediamarket.view.activity.UserActivity;
 import java.util.ArrayList;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SingleItemRowHolder> {
-    private ArrayList<User> itemsList;
     private Context mContext;
+    private ArrayList<User> users;
 
     public final static int ACTIVE_MENU_ID = 2222;
     public final static int INACTIVE_MENU_ID = 3333;
     public final static int ROLE_MENU_ID = 4444;
 
-    public UserAdapter(Context context, ArrayList<User> itemsList) {
-        this.itemsList = itemsList;
+    public UserAdapter(Context context, ArrayList<User> users) {
+        this.users = users;
         this.mContext = context;
     }
 
@@ -41,7 +42,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SingleItemRowH
 
     @Override
     public void onBindViewHolder(SingleItemRowHolder holder, int position) {
-        User user = itemsList.get(position);
+        User user = users.get(position);
         holder.user = user;
         user.LoadUserImageView(holder.imgAvatar, mContext);
         user.LoadUserImageGender(holder.imgGender);
@@ -53,7 +54,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SingleItemRowH
 
     @Override
     public int getItemCount() {
-        return itemsList == null ? 0 : itemsList.size();
+        return users == null ? 0 : users.size();
     }
 
     public class SingleItemRowHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
@@ -74,7 +75,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SingleItemRowH
                 public void onClick(View view) {
                     Intent intent = new Intent(mContext, ProfileActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("user_id", user.getId());
+                    bundle.putString(Constants.UserIdKey, user.getId());
                     intent.putExtras(bundle);
                     ((Activity)mContext).startActivityForResult(intent, UserActivity.requestCode);
                 }
@@ -86,7 +87,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SingleItemRowH
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
             contextMenu.add(0, ROLE_MENU_ID, getAdapterPosition(), mContext.getResources().getString(R.string.menu_role));
-
             if (user.getStatus() == 0)
                 contextMenu.add(0, ACTIVE_MENU_ID, getAdapterPosition(), mContext.getResources().getString(R.string.menu_active));
             else

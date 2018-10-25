@@ -7,38 +7,34 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.fomular.MoneyFormular;
 import com.thm.hoangminh.multimediamarket.model.Card;
 import com.thm.hoangminh.multimediamarket.model.RechargedHistory;
-import com.thm.hoangminh.multimediamarket.presenter.implement.RechargeHistoryPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.RechargeHistoryPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.RechargeHistoryPresenterImpl;
 import com.thm.hoangminh.multimediamarket.references.Tools;
 import com.thm.hoangminh.multimediamarket.view.callback.RechargeHistoryView;
 
 public class RechargeHistoryActivity extends AppCompatActivity implements RechargeHistoryView {
-    private String trans_code;
+    private TextView txtValueHeader, txtTransCode, txtTime, txtCardCategory, txtValue,
+            txtSeriNum, txtStatus, txtStatusHeader;
+
     private RechargeHistoryPresenter presenter;
-    private TextView txtValueHeader, txtTransCode, txtTime, txtCardCategory, txtValue, txtSeriNum, txtStatus, txtStatusHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recharge_history_layout);
-
         setControls();
 
         initPresenter();
-
         Bundle bundle = getIntent().getExtras();
-
-        if (bundle != null) {
-            trans_code = bundle.getString("trans_code");
-            presenter.LoadRechargeHistory(trans_code);
-        }
-
-        setEvents();
+        presenter.extractBundle(bundle);
     }
 
     private void initPresenter() {
-        presenter = new RechargeHistoryPresenter(this);
+        presenter = new RechargeHistoryPresenterImpl(this);
     }
 
     public void NewRecharge(View view) {
@@ -47,27 +43,22 @@ public class RechargeHistoryActivity extends AppCompatActivity implements Rechar
     }
 
     @Override
-    public void onLoadRechargeHistorySuccess(RechargedHistory rechargedHistory) {
-        int cardValue = Card.cardValueList[rechargedHistory.getCardValue()];
-        String value = Tools.FormatMoney(cardValue);
-
+    public void showRechargeHistory(RechargedHistory rechargedHistory) {
+        int cardValue = Constants.CardValueList[rechargedHistory.getCardValue()];
+        String value = MoneyFormular.format(cardValue);
         txtValueHeader.setText(value + "");
         txtValue.setText(value + "");
-        txtTransCode.setText(trans_code);
+        txtCardCategory.setText(Constants.CardCategoryList[rechargedHistory.getCardCategory()]);
+        txtTransCode.setText(rechargedHistory.getId());
         txtTime.setText(rechargedHistory.getTime());
-        txtCardCategory.setText(Card.cardCategoryList[rechargedHistory.getCardCategory()]);
 
     }
 
     @Override
-    public void onLoadCardDetailSuccess(Card card) {
+    public void showCard(Card card) {
         txtSeriNum.setText(card.getSeri());
         txtStatus.setText(card.getStatus() == 1 ? getResources().getString(R.string.txt_unRecharge) : getResources().getString(R.string.txt_recharged));
         txtStatusHeader.setText(card.getStatus() == 1 ? getResources().getString(R.string.txt_failure) : getResources().getString(R.string.txt_success));
-    }
-
-    private void setEvents() {
-
     }
 
     private void setControls() {

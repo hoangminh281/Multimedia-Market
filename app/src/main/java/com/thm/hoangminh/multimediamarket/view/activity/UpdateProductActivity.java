@@ -421,7 +421,7 @@ public class UpdateProductActivity extends AppCompatActivity implements UpdatePr
         edtIntro = findViewById(R.id.editTextIntro);
         edtDesc = findViewById(R.id.editTextDescription);
         edtVideo = findViewById(R.id.editTextVideo);
-        txtCategory = findViewById(R.id.textViewCategory);
+        txtCategory = findViewById(R.id.textViewSection);
         txtAgeLimit = findViewById(R.id.textViewAgeLimit);
         txtFile = findViewById(R.id.textViewFile);
         toolbar = findViewById(R.id.toolbar);

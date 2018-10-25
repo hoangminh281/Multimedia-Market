@@ -34,7 +34,7 @@ public class CardInteractor {
                         Iterable<DataSnapshot> cardItems = cardValue.getChildren();
                         for (DataSnapshot cardItem : cardItems) {
                             Card card = cardItem.getValue(Card.class);
-                            card.setId(cardItem.getKey());
+                            card.setCardId(cardItem.getKey());
                             card.setCategory(Integer.parseInt(cardCategory.getKey()));
                             card.setValue(Integer.parseInt(cardValue.getKey()));
                             cards.add(card);

@@ -100,7 +100,7 @@ public class ProductPresenterImpl implements ProductPresenter {
     }
 
     private void loadProductByUserId(String userId, String cateId) {
-        purchasedProductRepository.findAll(cateId, userId, new ValueEventListener() {
+        purchasedProductRepository.findAll(userId, cateId, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

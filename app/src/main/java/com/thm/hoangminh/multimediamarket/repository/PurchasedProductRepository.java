@@ -5,7 +5,7 @@ import com.thm.hoangminh.multimediamarket.model.PurchasedProduct;
 import com.thm.hoangminh.multimediamarket.repository.base.Repository;
 
 public interface PurchasedProductRepository extends Repository<PurchasedProduct, String> {
-    void findAll(String cateId, String userId, ValueEventListener eventListener);
+    void findAll(String userId, String cateId, ValueEventListener eventListener);
 
-    void findAndWatch(String uid, String cateId, String productId, ValueEventListener eventListener);
+    void findAndWatch(String userId, String cateId, String productId, ValueEventListener eventListener);
 }

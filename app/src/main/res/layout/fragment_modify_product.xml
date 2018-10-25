@@ -194,7 +194,7 @@
                         android:textSize="18sp" />
 
                     <TextView
-                        android:id="@+id/textViewCategory"
+                        android:id="@+id/textViewSection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/spacing_cell"

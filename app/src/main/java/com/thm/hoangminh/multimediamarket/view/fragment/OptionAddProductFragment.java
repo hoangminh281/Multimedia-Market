@@ -15,14 +15,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
 
-public class OptionModifyProductFragment extends Fragment {
-    private RelativeLayout optionLayout;
-    private ImageView imgGame, imgImage, imgVideo, imgMusic;
+public class OptionAddProductFragment extends Fragment {
     private Toolbar toolbar;
+    private ImageView imgGame, imgImage, imgVideo, imgMusic;
+
     private int requestCode;
+    private RelativeLayout optionLayout;
 
     @Nullable
     @Override
@@ -35,7 +37,6 @@ public class OptionModifyProductFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setControls(view);
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -62,7 +63,7 @@ public class OptionModifyProductFragment extends Fragment {
         imgGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createModifyProductFragment(Category.getInstance().get(0).getCateId(), imgGame);
+                createAddProductFragment(Category.getInstance().get(1).getCateId(), imgGame);
                 requestCode = 0;
             }
         });
@@ -71,7 +72,7 @@ public class OptionModifyProductFragment extends Fragment {
         imgImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createModifyProductFragment(Category.getInstance().get(1).getCateId(), imgImage);
+                createAddProductFragment(Category.getInstance().get(2).getCateId(), imgImage);
                 requestCode = 1;
             }
         });
@@ -80,7 +81,7 @@ public class OptionModifyProductFragment extends Fragment {
         imgVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createModifyProductFragment(Category.getInstance().get(2).getCateId(), imgVideo);
+                createAddProductFragment(Category.getInstance().get(3).getCateId(), imgVideo);
                 requestCode = 2;
             }
         });
@@ -89,13 +90,13 @@ public class OptionModifyProductFragment extends Fragment {
         imgMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createModifyProductFragment(Category.getInstance().get(3).getCateId(), imgMusic);
+                createAddProductFragment(Category.getInstance().get(4).getCateId(), imgMusic);
                 requestCode = 3;
             }
         });
     }
 
-    private void createModifyProductFragment(final String cate_key, final ImageView img) {
+    private void createAddProductFragment(final String cateId, final ImageView img) {
         AnimationSupport.zoomIn(getContext(), img);
         AnimationSupport.fadeOut(getContext(), optionLayout);
         new Thread(new Runnable() {
@@ -110,9 +111,9 @@ public class OptionModifyProductFragment extends Fragment {
                                 optionLayout.clearAnimation();
                                 optionLayout.setVisibility(View.GONE);
                                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                ModifyProductFragment fragment = new ModifyProductFragment();
+                                AddProductFragment fragment = new AddProductFragment();
                                 Bundle bundle = new Bundle();
-                                bundle.putString("keyCategory", cate_key);
+                                bundle.putString(Constants.CateIdKey, cateId);
                                 fragment.setArguments(bundle);
                                 transaction.add(R.id.frameLayout, fragment).addToBackStack(null);
                                 transaction.commit();

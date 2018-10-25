@@ -29,39 +29,38 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.File;
-import com.thm.hoangminh.multimediamarket.model.User;
-import com.thm.hoangminh.multimediamarket.presenter.implement.ModifyProductPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.AddProductPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.AddProductPresenterImpl;
 import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
-import com.thm.hoangminh.multimediamarket.view.activity.MainActivity;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 import com.thm.hoangminh.multimediamarket.view.callback.ModifyProductView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ModifyProductFragment extends Fragment implements ModifyProductView {
-    private ImageView[] imgArr;
-    private EditText edtTitle, edtPrice, edtIntro, edtDes, edtVideo;
-    private ArrayList<Integer> mSelectedItems;
-    private ModifyProductPresenter presenter;
-    private Map<String, String> categoryList;
-    private TextView txtCategory, txtAgeLimit, txtFile;
+public class AddProductFragment extends Fragment implements ModifyProductView {
     private Toolbar toolbar;
+    private ImageView[] imgArr;
     private LinearLayout videoLayout;
-    private String key_category;
-    private com.thm.hoangminh.multimediamarket.model.File pickedFile;
     private ProgressDialog progressDialog;
+    private TextView txtSection, txtAgeLimit, txtFile;
+    private EditText edtTitle, edtPrice, edtIntro, edtDes, edtVideo;
+
+    private String cateId;
+    private File pickedFile;
+    private AddProductPresenter presenter;
+    private Map<String, String> sections;
+    private ArrayList<Integer> mSelectedItems;
 
     private int imgPosition;
 
-    private final int REQUEST_CODE_TAKEPHOTO = 1;
-    private final int REQUEST_CODE_PICKPHOTO = 2;
-    private final int REQUEST_CODE_PICKFILE = 3;
-
-    private final int TAG_CLICKEDIMAGE = 0;
-    private final int TAG_UNCLICKIMAGE = 1;
+    private final int REQUESTCODE_TAKEPHOTO = 1;
+    private final int REQUESTCODE_PICKPHOTO = 2;
+    private final int REQUESTCODE_PICKFILE = 3;
 
 
     @Nullable
@@ -92,6 +91,20 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            presenter.extractBundle(bundle);
+            setEvents();
+        }
+    }
+
+    private void initPresenter() {
+        presenter = new AddProductPresenterImpl(this);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.save_menu, menu);
     }
@@ -103,76 +116,50 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
                 getFragmentManager().popBackStack();
                 return true;
             case R.id.menu_save:
-                SaveContent();
+                saveContent();
                 return true;
         }
         return false;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            key_category = bundle.getString("keyCategory");
-            if (key_category.trim().length() != 0) {
-                presenter.LoadCategoryProduct(key_category);
-            }
-
-            setEvents();
-        }
-    }
-
-    private void initPresenter() {
-        presenter = new ModifyProductPresenter(this);
-    }
-
-    @Override
-    public void ShowCategory(Map<String, String> categoryList) {
-        this.categoryList = categoryList;
-        txtCategory.setOnClickListener(new View.OnClickListener() {
+    public void showSectionList(Map<String, String> sections) {
+        this.sections = sections;
+        txtSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCategoryDialog();
+                showSectionDialog();
             }
         });
     }
 
-    public void showCategoryDialog() {
+    public void showSectionDialog() {
         mSelectedItems.clear();
-        txtCategory.setText("");
+        txtSection.setText("");
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        // Set the dialog title
         builder.setTitle(R.string.hint_category)
-                // Specify the list array, the items to be selected by default (null for none),
-                // and the listener through which to receive callbacks when items are selected
-                .setMultiChoiceItems(categoryList.values().toArray(new String[categoryList.size()]), null,
+                .setMultiChoiceItems(sections.values().toArray(new String[sections.size()]), null,
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which,
                                                 boolean isChecked) {
                                 if (isChecked) {
-                                    // If the user checked the item, add it to the selected items
                                     mSelectedItems.add(which);
                                 } else if (mSelectedItems.contains(which)) {
-                                    // Else, if the item is already in the array, remove it
                                     mSelectedItems.remove(Integer.valueOf(which));
                                 }
                             }
                         })
-                // Set the action buttons
                 .setPositiveButton(R.string.button_save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         if (mSelectedItems.size() != 0) {
-                            String[] stArr = categoryList.values().toArray(new String[categoryList.size()]);
+                            String[] stArr = sections.values().toArray(new String[sections.size()]);
                             String st = stArr[mSelectedItems.get(0)];
                             for (int i = 1; i < mSelectedItems.size(); i++) {
                                 st += ", " + stArr[mSelectedItems.get(i)];
                             }
-                            txtCategory.setText(st);
+                            txtSection.setText(st);
                         }
                     }
                 })
@@ -185,13 +172,12 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
 
     public void showAgePickerDialog() {
         View viewDialog = getLayoutInflater().inflate(R.layout.number_edit_dialog, null);
-
         TextView txtTitle = viewDialog.findViewById(R.id.textViewTitle);
         txtTitle.setText(R.string.txt_ageLimit);
 
         final NumberPicker numberPicker = viewDialog.findViewById(R.id.numberPicker);
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(100);
+        numberPicker.setMinValue(Constants.MinAgeLimit);
+        numberPicker.setMaxValue(Constants.MaxAgeLimit);
         if (txtAgeLimit.getText().toString() != "")
             numberPicker.setValue(Integer.valueOf(txtAgeLimit.getText().toString().replace("+", "")));
         numberPicker.setWrapSelectorWheel(false);
@@ -220,23 +206,23 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
 
     public void showFilePicker() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        if (key_category.equals(Category.getInstance().get(0).getCateId())) {
+        if (cateId.equals(Category.getInstance().get(1).getCateId())) {
             intent.setType("application/vnd.android.package-archive");
-        } else if (key_category.equals(Category.getInstance().get(1).getCateId())) {
+        } else if (cateId.equals(Category.getInstance().get(2).getCateId())) {
             intent.setType("image/*");
-        } else if (key_category.equals(Category.getInstance().get(2).getCateId())) {
+        } else if (cateId.equals(Category.getInstance().get(3).getCateId())) {
             intent.setType("video/*");
-        } else if (key_category.equals(Category.getInstance().get(3).getCateId())) {
+        } else if (cateId.equals(Category.getInstance().get(4).getCateId())) {
             intent.setType("audio/*");
         }
-        startActivityForResult(intent, REQUEST_CODE_PICKFILE);
+        startActivityForResult(intent, REQUESTCODE_PICKFILE);
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         getActivity().getMenuInflater().inflate(R.menu.img_dialog_menu, menu);
-        if (((int[]) imgArr[imgPosition].getTag())[1] == TAG_UNCLICKIMAGE)
+        if (((int[]) imgArr[imgPosition].getTag())[1] == Constants.NotHasImageTag)
             menu.findItem(R.id.menuRemove).setVisible(false);
     }
 
@@ -245,16 +231,16 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
         switch (item.getItemId()) {
             case R.id.menuTakepic:
                 Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePhoto, REQUEST_CODE_TAKEPHOTO);
+                startActivityForResult(takePhoto, REQUESTCODE_TAKEPHOTO);
                 return true;
             case R.id.menuChoosepic:
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto, REQUEST_CODE_PICKPHOTO);
+                startActivityForResult(pickPhoto, REQUESTCODE_PICKPHOTO);
                 return true;
             case R.id.menuRemove:
                 imgArr[imgPosition].setImageResource(R.mipmap.add_new_image);
-                imgArr[imgPosition].setTag(new int[]{imgPosition, TAG_UNCLICKIMAGE});
+                imgArr[imgPosition].setTag(new int[]{imgPosition, Constants.NotHasImageTag});
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -265,21 +251,21 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case REQUEST_CODE_TAKEPHOTO:
+            case REQUESTCODE_TAKEPHOTO:
                 if (resultCode == getActivity().RESULT_OK && data != null) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     imgArr[imgPosition].setImageBitmap(bitmap);
-                    imgArr[imgPosition].setTag(new int[]{imgPosition, TAG_CLICKEDIMAGE});
+                    imgArr[imgPosition].setTag(new int[]{imgPosition, Constants.HasImageTag});
                 }
                 break;
-            case REQUEST_CODE_PICKPHOTO:
+            case REQUESTCODE_PICKPHOTO:
                 if (resultCode == getActivity().RESULT_OK && data != null) {
                     Uri selectedImage = data.getData();
                     imgArr[imgPosition].setImageURI(selectedImage);
-                    imgArr[imgPosition].setTag(new int[]{imgPosition, TAG_CLICKEDIMAGE});
+                    imgArr[imgPosition].setTag(new int[]{imgPosition, Constants.HasImageTag});
                 }
                 break;
-            case REQUEST_CODE_PICKFILE:
+            case REQUESTCODE_PICKFILE:
                 if (resultCode == getActivity().RESULT_OK && data != null) {
                     Uri selectedFile = data.getData();
                     if (selectedFile != null) {
@@ -292,37 +278,17 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
         }
     }
 
-    public void SaveContent() {
-        if (User.getInstance().getRole() == User.USER) {
-            Toast.makeText(getContext(), R.string.info_fail_role, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        int imgStatus = ((int[]) imgArr[0].getTag())[1];
-        if (imgStatus == TAG_UNCLICKIMAGE) {
+    public void saveContent() {
+        int productImgStatus = ((int[]) imgArr[0].getTag())[1];
+        if (productImgStatus == Constants.NotHasImageTag) {
             AnimationSupport.shake(getContext(), imgArr[0]);
             return;
         }
+        boolean validate = Validate.validateEditTextsToString(getContext(), edtTitle, edtPrice)
+                & Validate.validateTextViewsToString(getContext(), txtSection, txtAgeLimit);
         String title = edtTitle.getText().toString().trim();
-        if (edtTitle.getVisibility() == View.VISIBLE && title.length() == 0) {
-            edtTitle.setError(getContext().getResources().getString(R.string.err_empty));
-            return;
-        }
         String price = edtPrice.getText().toString().trim();
-        if (edtPrice.getVisibility() == View.VISIBLE && price.length() == 0) {
-            edtPrice.setError(getContext().getResources().getString(R.string.err_empty));
-            return;
-        }
-        int cate = mSelectedItems.size();
-        if (txtCategory.getVisibility() == View.VISIBLE && cate == 0) {
-            txtCategory.setError(getContext().getResources().getString(R.string.err_empty));
-            return;
-        }
         String ageLimit = txtAgeLimit.getText().toString().trim();
-        if (txtAgeLimit.getVisibility() == View.VISIBLE && ageLimit.length() == 0) {
-            txtAgeLimit.setError(getContext().getResources().getString(R.string.err_empty));
-            return;
-        }
         String intro = edtIntro.getText().toString().trim();
         if (edtIntro.getVisibility() == View.VISIBLE && intro.length() == 0) {
             edtIntro.setError(getContext().getResources().getString(R.string.err_empty));
@@ -345,7 +311,7 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
         }
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         for (ImageView img : imgArr) {
-            if (((int[]) img.getTag())[1] == TAG_CLICKEDIMAGE) {
+            if (((int[]) img.getTag())[1] == Constants.HasImageTag) {
                 bitmaps.add(((BitmapDrawable) img.getDrawable()).getBitmap());
             }
         }
@@ -356,9 +322,9 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
         progressDialog.show();
         Map<String, String> sections = new HashMap<>();
         for (int i : mSelectedItems) {
-            sections.put((String) categoryList.keySet().toArray()[i], (String) categoryList.values().toArray()[i]);
+            sections.put((String) this.sections.keySet().toArray()[i], (String) this.sections.values().toArray()[i]);
         }
-        presenter.CreateNewProduct(title, key_category, bitmaps, Double.valueOf(price),
+        presenter.addProduct(title, cateId, bitmaps, Double.valueOf(price),
                 intro, desc, Integer.valueOf(ageLimit.replace("+", "")), video, pickedFile, sections);
     }
 
@@ -368,9 +334,9 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
     }
 
     @Override
-    public void showMessage(String message) {
+    public void showMessage(int messageId) {
         if (progressDialog.isShowing()) progressDialog.dismiss();
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), messageId, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -407,7 +373,7 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
         for (final ImageView img : imgArr) {
             registerForContextMenu(img);
             img.setLongClickable(false);
-            img.setTag(new int[]{pos++, TAG_UNCLICKIMAGE});
+            img.setTag(new int[]{pos++, Constants.NotHasImageTag});
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -442,11 +408,11 @@ public class ModifyProductFragment extends Fragment implements ModifyProductView
         edtIntro = view.findViewById(R.id.editTextIntro);
         edtDes = view.findViewById(R.id.editTextDescription);
         edtVideo = view.findViewById(R.id.editTextVideo);
-        txtCategory = view.findViewById(R.id.textViewCategory);
+        txtSection = view.findViewById(R.id.textViewSection);
         txtAgeLimit = view.findViewById(R.id.textViewAgeLimit);
         txtFile = view.findViewById(R.id.textViewFile);
         toolbar = view.findViewById(R.id.toolbar);
-        mSelectedItems = new ArrayList();          // Where we track the selected items
+        mSelectedItems = new ArrayList();
         videoLayout = view.findViewById(R.id.videoLayout);
         progressDialog = new ProgressDialog(getContext());
     }

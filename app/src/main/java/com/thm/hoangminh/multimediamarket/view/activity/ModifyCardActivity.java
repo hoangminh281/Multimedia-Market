@@ -104,7 +104,7 @@ public class ModifyCardActivity extends AppCompatActivity implements ModifyCardV
                 } else if (mode == 0) {
                     if (number == null || number.equals("")) number = card.getNumber();
                     else number =  Tools.md5(number);
-                    presenter.editCard(new Card(card.getId(), checkPositionCardCategory, checkedPositionCardValue, number, seri, 1), card);
+                    presenter.editCard(new Card(card.getCardId(), checkPositionCardCategory, checkedPositionCardValue, number, seri, 1), card);
                 }
                 return true;
         }

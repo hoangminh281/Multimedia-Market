@@ -32,10 +32,10 @@
         <activity android:name=".view.activity.RatingActivity" />
         <activity android:name=".view.activity.ProfileActivity" />
         <activity
-            android:name=".view.fragment.ModifyProductFragment"
+            android:name=".view.fragment.AddProductFragment"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".view.activity.BookmarkActivity" />
-        <activity android:name=".view.activity.ModifyProductActivity" />
+        <activity android:name=".view.activity.AddProductActivity" />
         <activity
             android:name=".view.activity.UpdateProductActivity"
             android:windowSoftInputMode="stateHidden" />

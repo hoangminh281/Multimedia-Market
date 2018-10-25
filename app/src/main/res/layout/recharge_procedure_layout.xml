@@ -20,8 +20,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:orientation="vertical">
 
@@ -49,43 +49,43 @@
                 android:padding="15dp">
 
                 <RadioButton
+                    android:id="@+id/radioButtonCardCategory1"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:background="@drawable/custom_btn_radio_viettel"
-                    android:button="@android:color/transparent"
-                    android:id="@+id/radioButtonCardCategory1"/>
+                    android:button="@android:color/transparent" />
 
                 <RadioButton
+                    android:id="@+id/radioButtonCardCategory2"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/custom_btn_radio_mobiphone"
-                    android:button="@android:color/transparent"
-                    android:id="@+id/radioButtonCardCategory2"/>
+                    android:button="@android:color/transparent" />
 
                 <RadioButton
+                    android:id="@+id/radioButtonCardCategory3"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/custom_btn_radio_vinaphone"
-                    android:button="@android:color/transparent"
-                    android:id="@+id/radioButtonCardCategory3"/>
+                    android:button="@android:color/transparent" />
 
                 <RadioButton
+                    android:id="@+id/radioButtonCardCategory4"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/custom_btn_radio_vietnammobi"
-                    android:button="@android:color/transparent"
-                    android:id="@+id/radioButtonCardCategory4"/>
+                    android:button="@android:color/transparent" />
 
                 <RadioButton
+                    android:id="@+id/radioButtonCardCategory5"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/custom_btn_radio_garena"
-                    android:button="@android:color/transparent"
-                    android:id="@+id/radioButtonCardCategory5"/>
+                    android:button="@android:color/transparent" />
 
             </RadioGroup> <!--Card category-->
 
@@ -159,8 +159,8 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp">
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
 
                 <RadioButton
                     android:id="@+id/radioButtonCardValue4"
@@ -205,8 +205,8 @@
 
             <TextView
                 style="@style/separate_line"
-                android:layout_marginBottom="0dp"
-                android:layout_marginTop="@dimen/activity_horizontal_margin" />
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="0dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -225,10 +225,10 @@
 
                 <TextView
                     style="@style/separate_line_vertical"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="0dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="0dp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginBottom="10dp" />
 
                 <EditText
                     android:id="@+id/editTextCardNumber"
@@ -266,10 +266,10 @@
 
                 <TextView
                     style="@style/separate_line_vertical"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="0dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="0dp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginBottom="10dp" />
 
                 <EditText
                     android:id="@+id/editTextCardSeri"
@@ -295,12 +295,12 @@
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/WalletLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="15dp"
-        android:orientation="vertical"
-        android:id="@+id/WalletLayout">
+        android:orientation="vertical">
 
         <TextView
             style="@style/separate_line"
@@ -311,8 +311,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:orientation="horizontal">
 
             <TextView
@@ -338,13 +338,13 @@
             android:id="@+id/buttonNext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:background="@drawable/grey_radius_background"
             android:enabled="false"
-            android:onClick="onClicked_btnNext"
+            android:onClick="handleRechargeCard"
             android:text="@string/btn_next"
             android:textColor="@color/white" />
 

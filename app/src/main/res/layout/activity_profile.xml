@@ -25,7 +25,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:layout_centerHorizontal="true"
-                    android:onClick="ShowImageChooseDialog"
+                    android:onClick="showImageChooseDialog"
                     android:scaleType="fitCenter" />
 
                 <LinearLayout
@@ -104,7 +104,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:onClick="ShowGamesPurchased"
+                    android:onClick="showGamesPurchased"
                     android:orientation="vertical">
 
                     <TextView
@@ -132,7 +132,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:onClick="ShowImagesPurchased"
+                    android:onClick="showImagesPurchased"
                     android:orientation="vertical">
 
                     <TextView
@@ -160,7 +160,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:onClick="ShowVideosPurchased"
+                    android:onClick="showVideosPurchased"
                     android:orientation="vertical">
 
                     <TextView
@@ -188,7 +188,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:onClick="ShowMusicsPurchased"
+                    android:onClick="showMusicsPurchased"
                     android:orientation="vertical">
 
                     <TextView
@@ -229,7 +229,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="EditBalance"
+                    android:onClick="editBalance"
                     android:src="@mipmap/ic_pencil"
                     android:visibility="gone"
                     android:id="@+id/imageViewBalance"
@@ -282,7 +282,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:onClick="EditUsername"
+                                android:onClick="editUsername"
                                 android:src="@mipmap/ic_pencil" />
 
                         </LinearLayout>
@@ -451,7 +451,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:onClick="EditBirthday"
+                                android:onClick="editBirthday"
                                 android:src="@mipmap/ic_pencil" />
 
                         </LinearLayout>
@@ -510,7 +510,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:onClick="EditGender"
+                                android:onClick="editGender"
                                 android:src="@mipmap/ic_pencil" />
 
                         </LinearLayout>

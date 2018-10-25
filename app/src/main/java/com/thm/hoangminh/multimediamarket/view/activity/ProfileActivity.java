@@ -6,12 +6,12 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.ContextMenu;
@@ -29,27 +29,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
-import com.thm.hoangminh.multimediamarket.model.Category;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.fomular.MoneyFormular;
 import com.thm.hoangminh.multimediamarket.model.User;
-import com.thm.hoangminh.multimediamarket.presenter.implement.ProfilePresenter;
-import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.presenter.ProfilePresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.ProfilePresenterImpl;
+import com.thm.hoangminh.multimediamarket.repository.UserStorageRepository;
+import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
+import com.thm.hoangminh.multimediamarket.utility.Tools;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 import com.thm.hoangminh.multimediamarket.view.callback.ProfileView;
 
 public class ProfileActivity extends AppCompatActivity implements ProfileView {
     private Toolbar toolbar;
-    private ImageView img, imgGender, imgEmail, imgPass;
-    private TextView txtName, txtAge, txtRole, txtBalance, txtGame, txtImage, txtVideo, txtMusic, txtUsername, txtEmail, txtBirthday, txtGender;
-    private ProfilePresenter presenter;
-    private User currentUser;
     private AlertDialog dialog;
-    private LinearLayout layoutEdit;
-    private ProgressBar pgbDialog;
     private ImageView imgBalance;
-    private String user_id;
+    private ProgressBar pgbDialog;
+    private LinearLayout layoutEdit;
+    private ImageView imgUser, imgGender, imgEmail, imgPass;
+    private TextView txtName, txtAge, txtRole, txtBalance, txtGame, txtImage,
+            txtVideo, txtMusic, txtUsername, txtEmail, txtBirthday, txtGender;
 
+    private User user;
+    private boolean editable;
+    private ProfilePresenter presenter;
     private final int REQUEST_CODE_TAKEPHOTO = 1;
     private final int REQUEST_CODE_PICKPHOTO = 2;
-    private boolean editable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,28 +63,18 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         setControls();
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            user_id = bundle.getString("user_id");
-            initPresenter(user_id);
-            imgBalance.setVisibility(View.VISIBLE); // allow admin edit balance user
-        } else {
-            initPresenter("");
-        }
-
-        presenter.LoadCurrentUserInformation();
+        initPresenter();
+        presenter.extractBundle(bundle);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
-
-        registerForContextMenu(img);
-        img.setLongClickable(false);
     }
 
-    private void initPresenter(String user_id) {
-        presenter = new ProfilePresenter(this, user_id);
+    private void initPresenter() {
+        presenter = new ProfilePresenterImpl(this);
     }
 
     @Override
@@ -97,23 +92,38 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         getMenuInflater().inflate(R.menu.img_dialog_menu, menu);
+        if (user.getImage().equals(Constants.UserImageDefault)) {
+            if (menu != null) {
+                menu.findItem(R.id.menuRemove).setVisible(false);
+            }
+        }
     }
 
-    public void ShowImageChooseDialog(View view) {
-        img.showContextMenu();
+    public void showImageChooseDialog(View view) {
+        if (user != null) {
+            imgUser.showContextMenu();
+        }
+    }
+
+    @Override
+    public void registerImageUser() {
+        registerForContextMenu(imgUser);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuTakepic:
-                Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePhoto, REQUEST_CODE_TAKEPHOTO);
+                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePhotoIntent, REQUEST_CODE_TAKEPHOTO);
                 return true;
             case R.id.menuChoosepic:
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto, REQUEST_CODE_PICKPHOTO);
+                startActivityForResult(pickPhotoIntent, REQUEST_CODE_PICKPHOTO);
+                return true;
+            case R.id.menuRemove:
+                presenter.removeAvatarUser();
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -126,15 +136,15 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
             case REQUEST_CODE_TAKEPHOTO:
                 if (resultCode == RESULT_OK && data != null) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    img.setImageBitmap(bitmap);
-                    currentUser.UpdateImageCurrentUser(this, bitmap);
+                    imgUser.setImageBitmap(bitmap);
+                    presenter.updateImageCurrentUser(bitmap);
                 }
                 break;
             case REQUEST_CODE_PICKPHOTO:
                 if (resultCode == RESULT_OK && data != null) {
                     Uri selectedImage = data.getData();
-                    img.setImageURI(selectedImage);
-                    currentUser.UpdateImageCurrentUser(this, ((BitmapDrawable) img.getDrawable()).getBitmap());
+                    imgUser.setImageURI(selectedImage);
+                    presenter.updateImageCurrentUser(((BitmapDrawable) imgUser.getDrawable()).getBitmap());
                 }
                 break;
         }
@@ -142,26 +152,26 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     }
 
     @Override
-    public void ShowCurrentUserInformation(User user) {
-        if (user.getRole() == User.ADMIN) {
-            imgBalance.setVisibility(View.VISIBLE); // allow admin edit balance user
-        }
-        this.currentUser = user;
-        user.LoadUserImageView(img, this);
-        user.LoadUserRole(txtRole);
-        user.LoadUserImageGender(imgGender);
+    public void showCurrentUserInformation(User user) {
+        this.user = user;
+        ImageLoader.loadImage(UserStorageRepository.class, this, imgUser, user.getImage());
+        imgGender.setImageResource(Validate.validateGenderToResource(user.getSex()));
         txtName.setText(user.getName());
         if (!user.getBirthday().equals("")) {
             String[] birthdate = user.getBirthday().split("/");
             txtAge.setText(Tools.getAge(Integer.parseInt(birthdate[0]), Integer.parseInt(birthdate[1])
                     , Integer.parseInt(birthdate[2])) + "");
         }
-        txtBalance.setText(Tools.FormatMoney(user.getBalance()));
-
+        txtBalance.setText(MoneyFormular.format(user.getBalance()));
         txtUsername.setText(user.getName());
         txtEmail.setText(user.getEmail());
         txtBirthday.setText(user.getBirthday());
-        txtGender.setText(user.getSex() == 0 ? R.string.info_male : user.getSex() == 1 ? R.string.info_female : R.string.info_others);
+        txtGender.setText(Validate.validateGenderToString(user.getSex()));
+    }
+
+    @Override
+    public void showUserRole(String role) {
+        txtRole.setText(role);
     }
 
     @Override
@@ -185,35 +195,36 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     }
 
     @Override
-    public void EnableChangeCurrentUserEmail() {
+    public void showEditableBalance(boolean b) {
+        if (b) imgBalance.setVisibility(View.VISIBLE); // allow admin edit balance user
+        else imgBalance.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void enableChangeCurrentUserEmail() {
         ImageViewCompat.setImageTintList(imgEmail, ColorStateList.valueOf(ContextCompat.getColor(this, R.color.theme_app)));
         imgEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditEmail();
+                editEmail();
             }
         });
     }
 
     @Override
-    public void EnableChangeCurrentUserPassword() {
+    public void enableChangeCurrentUserPassword() {
         ImageViewCompat.setImageTintList(imgPass, ColorStateList.valueOf(ContextCompat.getColor(this, R.color.theme_app)));
         imgPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditPassword();
+                editPassword();
             }
         });
     }
 
     @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showMessageFromResource(int resource) {
-        Toast.makeText(this, getResources().getString(resource), Toast.LENGTH_SHORT).show();
+    public void showMessage(int messageId) {
+        Toast.makeText(this, messageId, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -240,23 +251,9 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         editable = true;
     }
 
-    public void EditBalance(View view) {
-        View viewDialog = getLayoutInflater().inflate(R.layout.edit_dialog, null);
-
-        TextView txtTitle = viewDialog.findViewById(R.id.textViewTitle);
-        txtTitle.setText(R.string.menu_balance);
-
-        final EditText edt = viewDialog.findViewById(R.id.editText);
-        edt.setHint(R.string.hint_balance);
-        if (currentUser.getBalance() != 0)
-            edt.setText(currentUser.getBalance() + "");
-
-        edt.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        dialog = new AlertDialog.Builder(this)
-                .setView(viewDialog)
-                .setPositiveButton(R.string.button_save, null)
-                .create();
+    public void editBalance(View view) {
+        dialog = buildInputDialog(R.string.menu_balance, R.string.hint_balance,
+                String.valueOf(user.getBalance()), InputType.TYPE_CLASS_NUMBER);
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
             @Override
@@ -266,12 +263,12 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
                     @Override
                     public void onClick(View view) {
-                        String balance = edt.getText().toString().trim();
-                        if (balance.length() == 0) {
-                            edt.setError(getResources().getString(R.string.err_empty));
-                            return;
+                        EditText edtBalance = dialog.findViewById(R.id.editText);
+                        boolean validate = Validate.validateEditTextsToNumber(ProfileActivity.this, edtBalance);
+                        if (validate) {
+                            double balance = Double.parseDouble(edtBalance.getText().toString());
+                            presenter.updateUserBalance(balance);
                         }
-                        presenter.setBalance(Double.valueOf(balance));
                     }
                 });
             }
@@ -279,25 +276,32 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         dialog.show();
     }
 
-    public void EditUsername(final View view) {
-        View viewDialog = getLayoutInflater().inflate(R.layout.edit_dialog, null);
+    public void editUsername(final View view) {
+        dialog = buildInputDialog(R.string.hint_username, R.string.hint_enter_username, user.getName(), InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button b = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
 
-        TextView txtTitle = viewDialog.findViewById(R.id.textViewTitle);
-        txtTitle.setText(R.string.hint_username);
+                    @Override
+                    public void onClick(View view) {
+                        EditText edtUserName = dialog.findViewById(R.id.editText);
+                        boolean validate = Validate.validateEditTextsToString(ProfileActivity.this, edtUserName);
+                        if (validate) {
+                            String userName = edtUserName.getText().toString();
+                            presenter.updateUsername(userName);
+                        }
+                    }
+                });
+            }
+        });
+        dialog.show();
+    }
 
-        final EditText edt = viewDialog.findViewById(R.id.editText);
-        edt.setHint(R.string.hint_enter_username);
-        if (currentUser.getName() != null)
-            edt.setText(currentUser.getName());
-        edt.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-
-        layoutEdit = viewDialog.findViewById(R.id.layoutEdit);
-        pgbDialog = viewDialog.findViewById(R.id.progressBar);
-
-        dialog = new AlertDialog.Builder(this)
-                .setView(viewDialog)
-                .setPositiveButton(R.string.button_save, null)
-                .create();
+    private void editEmail() {
+        dialog = buildInputDialog(R.string.hint_email, R.string.hint_enter_email,
+                user.getEmail(), InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
             @Override
@@ -307,13 +311,12 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
                     @Override
                     public void onClick(View view) {
-                        String st = edt.getText().toString().trim();
-                        if (st.length() == 0) {
-                            edt.setError(getResources().getString(R.string.err_empty));
-                            return;
+                        EditText edtEmail = dialog.findViewById(R.id.editText);
+                        boolean validate = Validate.validateEditTextsToString(ProfileActivity.this, edtEmail);
+                        if (validate) {
+                            String email = edtEmail.getText().toString();
+                            presenter.updateUserEmail(email);
                         }
-
-                        presenter.EditUsername(st);
                     }
                 });
             }
@@ -321,91 +324,35 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         dialog.show();
     }
 
-    private void EditEmail() {
-        View viewDialog = getLayoutInflater().inflate(R.layout.edit_dialog, null);
-
-        TextView txtTitle = viewDialog.findViewById(R.id.textViewTitle);
-        txtTitle.setText(R.string.hint_email);
-
-        final EditText edt = viewDialog.findViewById(R.id.editText);
-        edt.setHint(R.string.hint_enter_email);
-        if (currentUser.getEmail() != null)
-            edt.setText(currentUser.getEmail());
-        edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-
-        layoutEdit = viewDialog.findViewById(R.id.layoutEdit);
-        pgbDialog = viewDialog.findViewById(R.id.progressBar);
-
-        dialog = new AlertDialog.Builder(this)
-                .setView(viewDialog)
-                .setPositiveButton(R.string.button_save, null)
-                .create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button b = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        String st = edt.getText().toString().trim();
-                        if (st.length() == 0) {
-                            edt.setError(getResources().getString(R.string.err_empty));
-                            return;
-                        }
-
-                        presenter.EditEmail(st);
-                    }
-                });
-            }
-        });
-        dialog.show();
-    }
-
-    private void EditPassword() {
-        View viewDialog = getLayoutInflater().inflate(R.layout.password_edit_dialog, null);
-
-        TextView txtTitle = viewDialog.findViewById(R.id.textViewTitle);
-        txtTitle.setText(R.string.txt_password);
-
-        final EditText edt = viewDialog.findViewById(R.id.editText);
-        edt.setHint(R.string.hint_password);
-
-        CheckBox cbEye = viewDialog.findViewById(R.id.checkBoxEye);
+    private void editPassword() {
+        dialog = buildInputDialog(R.string.txt_password, R.string.hint_password, "", 0);
+        final EditText edtPassword = dialog.findViewById(R.id.editText);
+        CheckBox cbEye = dialog.findViewById(R.id.checkBoxEye);
         cbEye.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b)
-                    edt.setInputType(InputType.TYPE_CLASS_TEXT);
+                    edtPassword.setInputType(InputType.TYPE_CLASS_TEXT);
                 else
-                    edt.setInputType(InputType.TYPE_CLASS_TEXT |
+                    edtPassword.setInputType(InputType.TYPE_CLASS_TEXT |
                             InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         });
 
-        final EditText edtRe = viewDialog.findViewById(R.id.editTextRe);
-        edtRe.setHint(R.string.hint_repassword);
+        final EditText edtRepassword = dialog.findViewById(R.id.editTextRe);
+        edtRepassword.setHint(R.string.hint_repassword);
 
-        CheckBox cbEyeRe = viewDialog.findViewById(R.id.checkBoxEyeRe);
+        CheckBox cbEyeRe = dialog.findViewById(R.id.checkBoxEyeRe);
         cbEyeRe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b)
-                    edtRe.setInputType(InputType.TYPE_CLASS_TEXT);
+                    edtRepassword.setInputType(InputType.TYPE_CLASS_TEXT);
                 else
-                    edtRe.setInputType(InputType.TYPE_CLASS_TEXT |
+                    edtRepassword.setInputType(InputType.TYPE_CLASS_TEXT |
                             InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         });
-
-        layoutEdit = viewDialog.findViewById(R.id.layoutEdit);
-        pgbDialog = viewDialog.findViewById(R.id.progressBar);
-
-        dialog = new AlertDialog.Builder(this)
-                .setView(viewDialog)
-                .setPositiveButton(R.string.button_save, null)
-                .create();
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
             @Override
@@ -415,26 +362,11 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
                     @Override
                     public void onClick(View view) {
-                        String st = edt.getText().toString().trim();
-                        String stRe = edtRe.getText().toString().trim();
-                        if (st.length() == 0) {
-                            edt.setError(getResources().getString(R.string.err_empty));
-                            return;
-                        } else if (st.length() < 6) {
-                            edt.setError(getResources().getString(R.string.err_notlength));
-                            return;
-                        } else if (stRe.length() == 0) {
-                            edtRe.setError(getResources().getString(R.string.err_empty));
-                            return;
-                        } else if (stRe.length() < 6) {
-                            edtRe.setError(getResources().getString(R.string.err_notlength));
-                            return;
-                        } else if (!st.equals(stRe)) {
-                            edtRe.setError(getResources().getString(R.string.err_passnotsame));
-                            return;
-                        }
-
-                        presenter.EditPassword(st);
+                        boolean validate = Validate.validatePassword(ProfileActivity.this, edtPassword, edtRepassword)
+                                && Validate.validateSamePassword(ProfileActivity.this, edtPassword, edtRepassword);
+                        if (!validate) return;
+                        String password = edtPassword.getText().toString().trim();
+                        presenter.updatePassword(password);
                     }
                 });
             }
@@ -442,15 +374,16 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         dialog.show();
     }
 
-    public void EditBirthday(View view) {
+    public void editBirthday(View view) {
         View viewDialog = getLayoutInflater().inflate(R.layout.birthday_edit_dialog, null);
 
         TextView txtTitle = viewDialog.findViewById(R.id.textViewTitle);
         txtTitle.setText(R.string.hint_birthday);
 
         final DatePicker datePicker = viewDialog.findViewById(R.id.datePicker);
-        if (currentUser.getBirthday() != null && !currentUser.getBirthday().equals("")) {
-            String[] dateArr = currentUser.getBirthday().split("/");
+        String birthday = user.getBirthday();
+        if (birthday != null && !birthday.equals("")) {
+            String[] dateArr = birthday.split("/");
             datePicker.updateDate(Integer.valueOf(dateArr[2]), Integer.valueOf(dateArr[1]) - 1, Integer.valueOf(dateArr[0]));
         }
 
@@ -470,13 +403,12 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
                     @Override
                     public void onClick(View view) {
-                        try {
-                            Tools.getAge(datePicker.getDayOfMonth(), datePicker.getMonth() + 1, datePicker.getYear());
-                        } catch (IllegalArgumentException e) {
-                            Toast.makeText(ProfileActivity.this, R.string.err_ageExceed, Toast.LENGTH_SHORT).show();
-                            return;
+                        boolean validate = Validate.validateAge(ProfileActivity.this, datePicker.getDayOfMonth()
+                                , datePicker.getMonth() + 1, datePicker.getYear());
+                        if (validate) {
+                            presenter.updateBirthday(datePicker.getDayOfMonth(), datePicker.getMonth() + 1
+                                    , datePicker.getYear());
                         }
-                        presenter.EditBirthday(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
                     }
                 });
             }
@@ -484,68 +416,88 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         dialog.show();
     }
 
-    public void EditGender(View view) {
+    public void editGender(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // Set the dialog title
         builder.setTitle(R.string.hint_gender)
-                // Specify the list array, the items to be selected by default (null for none),
-                // and the listener through which to receive callbacks when items are selected
                 .setItems(R.array.gender, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.EditGender(i);
+                        presenter.updateGender(i);
                     }
                 });
         builder.show();
     }
 
-    public void ShowGamesPurchased(View view) {
-        Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("user_id", currentUser.getId());
-        bundle.putString("cateProduct", Category.getInstance().get(0).getCateId());
-        bundle.putString("cateTitle", Category.getInstance().get(0).getName());
-        intent.putExtras(bundle);
-        startActivity(intent);
+    private AlertDialog buildInputDialog(int title, int hint, String data, int inputType) {
+        View viewDialog = getLayoutInflater().inflate(R.layout.edit_dialog, null);
+
+        TextView txtTitle = viewDialog.findViewById(R.id.textViewTitle);
+        txtTitle.setText(title);
+
+        final EditText edt = viewDialog.findViewById(R.id.editText);
+        edt.setHint(hint);
+        edt.setText(data);
+        edt.setInputType(inputType);
+
+        layoutEdit = viewDialog.findViewById(R.id.layoutEdit);
+        pgbDialog = viewDialog.findViewById(R.id.progressBar);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(viewDialog)
+                .setPositiveButton(R.string.button_save, null)
+                .create();
+        return dialog;
     }
 
-    public void ShowImagesPurchased(View view) {
-        Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("user_id", currentUser.getId());
-        bundle.putString("cateProduct", Category.getInstance().get(1).getCateId());
-        bundle.putString("cateTitle", Category.getInstance().get(1).getName());
-        intent.putExtras(bundle);
-        startActivity(intent);
+    public void showGamesPurchased(View view) {
+        presenter.redirectToProductActivity(1);
     }
 
-    public void ShowVideosPurchased(View view) {
-        Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("user_id", currentUser.getId());
-        bundle.putString("cateProduct", Category.getInstance().get(2).getCateId());
-        bundle.putString("cateTitle", Category.getInstance().get(2).getName());
-        intent.putExtras(bundle);
-        startActivity(intent);
+    public void showImagesPurchased(View view) {
+        presenter.redirectToProductActivity(2);
+
     }
 
-    public void ShowMusicsPurchased(View view) {
-        Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("user_id", currentUser.getId());
-        bundle.putString("cateProduct", Category.getInstance().get(3).getCateId());
-        bundle.putString("cateTitle", Category.getInstance().get(3).getName());
-        intent.putExtras(bundle);
-        startActivity(intent);
+    public void showVideosPurchased(View view) {
+        presenter.redirectToProductActivity(3);
+
+    }
+
+    public void showMusicsPurchased(View view) {
+        presenter.redirectToProductActivity(4);
+
     }
 
     public void Null(View view) {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (editable) {
+            Intent intent = new Intent();
+            intent.putExtra(Constants.Result, Constants.UserRequestCode);
+            setResult(RESULT_OK, intent);
+        }
+        finish();
+    }
+
+    @Override
+    public void startActivity(Class<?> clazz) {
+        startActivity(new Intent(this, clazz));
+    }
+
+    @Override
+    public void startActivity(Class<?> clazz, Bundle bundle) {
+        Intent intent = new Intent(this, clazz);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
     private void setControls() {
         toolbar = findViewById(R.id.toolbar);
-        img = findViewById(R.id.imageViewUser);
+        imgUser = findViewById(R.id.imageViewUser);
+        imgUser.setLongClickable(false);
         imgGender = findViewById(R.id.imageViewGender);
         txtName = findViewById(R.id.textviewName);
         txtAge = findViewById(R.id.textViewAge);
@@ -562,15 +514,5 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         imgEmail = findViewById(R.id.imageViewEmail);
         imgPass = findViewById(R.id.imageViewPassword);
         imgBalance = findViewById(R.id.imageViewBalance);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (editable) {
-            Intent intent = new Intent();
-            intent.putExtra("result", 1);
-            setResult(RESULT_OK, intent);
-        }
-        finish();
     }
 }

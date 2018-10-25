@@ -1,15 +1,9 @@
 package com.thm.hoangminh.multimediamarket.view.callback;
 
-import android.os.Bundle;
+import com.thm.hoangminh.multimediamarket.view.callback.base.BundleBaseView;
 
-public interface RechargeView {
+public interface RechargeView extends BundleBaseView {
+    void showTotal(double balance);
 
-    public void showTotal(double balance);
-
-    public void showMessage(String message);
-
-    public void showMessageFromResource(int resource);
-
-    public void startRechargeHistoryActivity(Bundle bundle);
-
+    void showMessage(int messageId);
 }

@@ -1,16 +1,22 @@
 package com.thm.hoangminh.multimediamarket.model;
 
 public class RechargedHistory {
-    private String id, card_id, time;
+    private String id, cardId, time;
     private int cardCategory, cardValue;
 
     public RechargedHistory() {
-
     }
 
-    public RechargedHistory(String id, String card_id, int cardCategory, int cardValue, String time) {
+    public RechargedHistory(String cardId, int cardCategory, int cardValue, String time) {
+        this.cardId = cardId;
+        this.cardCategory = cardCategory;
+        this.cardValue = cardValue;
+        this.time = time;
+    }
+
+    public RechargedHistory(String id, String cardId, int cardCategory, int cardValue, String time) {
         this.id = id;
-        this.card_id = card_id;
+        this.cardId = cardId;
         this.cardCategory = cardCategory;
         this.cardValue = cardValue;
         this.time = time;
@@ -24,12 +30,12 @@ public class RechargedHistory {
         this.id = id;
     }
 
-    public String getCard_id() {
-        return card_id;
+    public String getCardId() {
+        return cardId;
     }
 
-    public void setCard_id(String card_id) {
-        this.card_id = card_id;
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
     }
 
     public int getCardCategory() {

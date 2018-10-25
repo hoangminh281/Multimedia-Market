@@ -3,11 +3,11 @@ package com.thm.hoangminh.multimediamarket.view.callback;
 import java.util.Map;
 
 public interface ModifyProductView {
-    public void ShowCategory(Map<String, String> categoryList);
+    void hideEdtYoutube();
 
-    public void hideEdtYoutube();
-
-    public void showMessage(String message);
+    void showMessage(int messageId);
 
     void updateProgress(String s);
+
+    void showSectionList(Map<String,String> sections);
 }

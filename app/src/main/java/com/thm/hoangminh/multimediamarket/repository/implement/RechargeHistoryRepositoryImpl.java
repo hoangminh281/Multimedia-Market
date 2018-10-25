@@ -46,4 +46,9 @@ public class RechargeHistoryRepositoryImpl implements RechargeHistoryRepository<
     public void pushByDataRef(DatabaseReference dataRef, RechargedHistory rechargedHistory, OnSuccessListener successListener, OnFailureListener failureListener) {
         dataRef.setValue(rechargedHistory).addOnSuccessListener(successListener).addOnFailureListener(failureListener);
     }
+
+    @Override
+    public void findById(String userId, String transactionId, ValueEventListener eventListener) {
+        mRef.child(ROUTE.RECHARGEHISTORY(userId, transactionId)).addListenerForSingleValueEvent(eventListener);
+    }
 }

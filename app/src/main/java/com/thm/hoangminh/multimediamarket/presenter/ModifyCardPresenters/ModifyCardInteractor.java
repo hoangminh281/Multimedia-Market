@@ -36,11 +36,11 @@ public class ModifyCardInteractor {
     }
 
     public void editCard(final Card newCard, final Card oldCard) {
-        mRef.child("cards/" + newCard.getCategory() + "/" + newCard.getValue() + "/" + newCard.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.child("cards/" + newCard.getCategory() + "/" + newCard.getValue() + "/" + newCard.getCardId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    mRef.child("cards/" + newCard.getCategory() + "/" + newCard.getValue() + "/" + newCard.getId()).setValue(newCard).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mRef.child("cards/" + newCard.getCategory() + "/" + newCard.getValue() + "/" + newCard.getCardId()).setValue(newCard).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             listener.onEditCardSuccess();
@@ -52,7 +52,7 @@ public class ModifyCardInteractor {
                         }
                     });
                 } else {
-                    mRef.child("cards/" + oldCard.getCategory() + "/" + oldCard.getValue() + "/" + oldCard.getId() + "/status").setValue(0).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mRef.child("cards/" + oldCard.getCategory() + "/" + oldCard.getValue() + "/" + oldCard.getCardId() + "/status").setValue(0).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             mRef.child("cards/" + newCard.getCategory() + "/" + newCard.getValue()).push().setValue(newCard).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -63,7 +63,7 @@ public class ModifyCardInteractor {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    mRef.child("cards/" + oldCard.getCategory() + "/" + oldCard.getValue() + "/" + oldCard.getId() + "/status").setValue(1);
+                                    mRef.child("cards/" + oldCard.getCategory() + "/" + oldCard.getValue() + "/" + oldCard.getCardId() + "/status").setValue(1);
                                     listener.onEditCardFailure();
                                 }
                             });

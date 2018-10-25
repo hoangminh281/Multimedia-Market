@@ -106,8 +106,8 @@
     <string name="hint_price">Enter amount of money</string>
     <string name="hint_title">Enter the amazing title</string>
     <string name="hint_ageLimit">Choose age limit</string>
-    <string name="txt_Category">Category</string>
-    <string name="hint_category">Choose category</string>
+    <string name="txt_Category">Section</string>
+    <string name="hint_category">Choose sections</string>
     <string name="menu_remove">Remove</string>
     <string name="menu_pickImage">Choose from gallery</string>
     <string name="menu_takeImage">Take an image</string>

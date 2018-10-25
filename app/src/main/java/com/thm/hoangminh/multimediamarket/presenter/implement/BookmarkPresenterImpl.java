@@ -32,7 +32,7 @@ public class BookmarkPresenterImpl implements BookmarkPresenter {
     public void extractBundle(Context context, Bundle bundle) {
         if (bundle != null) {
             String optionKey = bundle.getString(Constants.BundleOptionKey);
-            if (optionKey != null) {
+            if (optionKey.equals(Constants.AdminOption)) {
                 listener.setTitle(R.string.menu_product_admin);
                 bindingCurrentUserRole(context);
                 listener.setUpCategoriesTabLayout(optionKey);

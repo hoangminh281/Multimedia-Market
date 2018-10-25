@@ -11,11 +11,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
-import com.thm.hoangminh.multimediamarket.fomular.MoneyFormular;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.MainPresenter;
-import com.thm.hoangminh.multimediamarket.presenter.MainPresenters.MainInteractor;
 import com.thm.hoangminh.multimediamarket.repository.CategoryRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
 import com.thm.hoangminh.multimediamarket.repository.RoleRepository;
@@ -27,7 +25,6 @@ import com.thm.hoangminh.multimediamarket.repository.implement.RoleRepositoryImp
 import com.thm.hoangminh.multimediamarket.repository.implement.UserRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.UserStorageRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.utility.Validate;
-import com.thm.hoangminh.multimediamarket.view.activity.MainActivity;
 import com.thm.hoangminh.multimediamarket.view.callback.MainView;
 
 import java.util.ArrayList;
@@ -107,7 +104,7 @@ public class MainPresenterImpl implements MainPresenter {
                             }
                         });
                         //Load user gender
-                        listener.showUserGenderImage(Validate.validateGender(currentUser.getSex()));
+                        listener.showUserGenderImage(Validate.validateGenderToResource(currentUser.getSex()));
                     }
                 }
             }

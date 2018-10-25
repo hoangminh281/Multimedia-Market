@@ -86,8 +86,8 @@ public class ProductFragment extends Fragment implements ProductView {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("cate_id", productsList.get(i).getCateId());
-                bundle.putString("product_id", productsList.get(i).getProductId());
+                bundle.putString(Constants.CateIdKey, productsList.get(i).getCateId());
+                bundle.putString(Constants.ProductIdKey, productsList.get(i).getProductId());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

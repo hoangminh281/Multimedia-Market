@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
                 startActivity(BookmarkActivity.class);
                 break;
             case R.id.menu_upload:
-                startActivity(ModifyProductActivity.class);
+                startActivity(AddProductActivity.class);
                 break;
             case R.id.menu_user_admin:
                 startActivity(UserActivity.class);

@@ -43,8 +43,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public void findAll(ValueEventListener event) {
-
+    public void findAll(ValueEventListener eventListener) {
+        mRef.child(ROUTE.PRODUCT()).addListenerForSingleValueEvent(eventListener);
     }
 
     @Override

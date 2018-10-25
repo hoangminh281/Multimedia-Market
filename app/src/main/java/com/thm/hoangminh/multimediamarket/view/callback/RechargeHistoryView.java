@@ -4,7 +4,7 @@ import com.thm.hoangminh.multimediamarket.model.Card;
 import com.thm.hoangminh.multimediamarket.model.RechargedHistory;
 
 public interface RechargeHistoryView {
-    public void onLoadRechargeHistorySuccess(RechargedHistory rechargedHistory);
+    void showRechargeHistory(RechargedHistory rechargedHistory);
 
-    public void onLoadCardDetailSuccess(Card card);
+    void showCard(Card card);
 }

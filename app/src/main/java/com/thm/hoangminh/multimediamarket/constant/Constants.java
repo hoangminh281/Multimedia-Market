@@ -11,6 +11,8 @@ public class Constants {
     public final static String ProductTitle = "title";
     public final static String ProductStatus = "status";
     public final static int entireProductLimitInSection = 15;
+    public static final int MinAgeLimit = 0;
+    public static final int MaxAgeLimit = 100;
 
     //User
     public final static int UserEnable = 1;
@@ -69,6 +71,8 @@ public class Constants {
     public static int CardInactive = 0;
     public static int EditCard = 0;
     public static int AddCard = 1;
+    public final static int[] CardValueList = {10000, 20000, 50000, 100000, 200000, 500000};
+    public final static String[] CardCategoryList = {"Viettel", "Mobiphone", "Vinaphone", "Vietnamobile", "Garena"};
 
     //Section
     public static int SectionProductEnable = 1;

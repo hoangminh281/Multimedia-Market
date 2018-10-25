@@ -11,9 +11,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Card;
 import com.thm.hoangminh.multimediamarket.model.RechargedHistory;
 import com.thm.hoangminh.multimediamarket.presenter.callback.RechargeListener;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -53,7 +55,7 @@ public class RechargeInteractor {
                     for (final DataSnapshot item : iterable) {
                         Card card1 = item.getValue(Card.class);
                         if (card1.getStatus() == 0) continue;
-                        if (card.compareTo(card1)) {
+                        if (Validate.validateSameCard(card1, card)) {
                             mRef.child("cards/" + category + "/" + value + "/" + item.getKey() + "/status").setValue(0)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -65,7 +67,7 @@ public class RechargeInteractor {
                                             if (dataSnapshot.exists()) {
                                                 mRef.child("users/" + firebaseUser.getUid() + "/balance")
                                                         .setValue(dataSnapshot.getValue(double.class)
-                                                                + Card.cardValueList[value])
+                                                                + Constants.CardValueList[value])
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {

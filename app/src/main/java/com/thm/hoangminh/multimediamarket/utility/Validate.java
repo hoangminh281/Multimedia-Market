@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.model.Card;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.view.activity.BookmarkActivity;
 import com.thm.hoangminh.multimediamarket.view.activity.MainActivity;
@@ -30,7 +31,7 @@ public class Validate {
                     Intent intent = new Intent(context, SigninActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
-                    ((Activity)context).finish();
+                    ((Activity) context).finish();
                 }
             });
             return false;
@@ -48,7 +49,7 @@ public class Validate {
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
-                    ((Activity)context).finish();
+                    ((Activity) context).finish();
                 }
             });
             return false;
@@ -56,13 +57,42 @@ public class Validate {
         return true;
     }
 
-    public static int validateGender(int gender) {
-        if (gender == 0) {
-            return R.mipmap.ic_male;
-        } else if (gender == 1) {
-            return R.mipmap.ic_female;
-        } else {
-            return R.mipmap.ic_male_female;
+    public static int validateGenderToResource(int gender) {
+        switch (gender) {
+            case 0:
+                return R.mipmap.ic_male;
+            case 1:
+                return R.mipmap.ic_female;
+            default:
+                return R.mipmap.ic_male_female;
+        }
+    }
+
+    public static int validateGenderToString(int gender) {
+        switch (gender) {
+            case 0:
+                return R.string.info_male;
+            case 1:
+                return R.string.info_female;
+            default:
+                return R.string.info_others;
+        }
+    }
+
+    public static int validateCardCategoryToResource(int category) {
+        switch (category) {
+            case 0:
+                return R.drawable.ic_viettel_checked;
+            case 1:
+                return R.drawable.ic_mobiphone_checked;
+            case 2:
+                return R.drawable.ic_vinaphone_checked;
+            case 3:
+                return R.drawable.ic_vietnammobi_checked;
+            case 4:
+                return R.drawable.ic_garena_checked;
+            default:
+                return -1;
         }
     }
 
@@ -142,11 +172,16 @@ public class Validate {
 
     public static boolean validateAge(Context context, int day, int month, int year) {
         try {
-            com.thm.hoangminh.multimediamarket.references.Tools.getAge(day, month, year);
+            Tools.getAge(day, month, year);
         } catch (IllegalArgumentException e) {
             Toast.makeText(context, R.string.err_ageExceed, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
+    }
+
+    public static boolean validateSameCard(Card baseCard, Card card) {
+        return baseCard.getSeri().equals(card.getSeri())
+                & baseCard.getNumber().equals(card.getNumber());
     }
 }

@@ -26,8 +26,6 @@ public class RechargeHistoryInteractor {
         mRef.child("recharge_histories/" + firebaseUser.getUid() + "/" + trans_code).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists())
-                    listener.onLoadRechargeHistorySuccess(dataSnapshot.getValue(RechargedHistory.class));
             }
 
             @Override

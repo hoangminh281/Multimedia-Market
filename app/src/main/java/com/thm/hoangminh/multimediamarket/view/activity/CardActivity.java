@@ -96,10 +96,10 @@ public class CardActivity extends AppCompatActivity implements CardView {
         Card card = cards.get(position);
         switch (item.getItemId()) {
             case UserAdapter.ACTIVE_MENU_ID:
-                presenter.activeCard(card.getCategory(), card.getValue(), card.getId(), 1);
+                presenter.activeCard(card.getCategory(), card.getValue(), card.getCardId(), 1);
                 break;
             case UserAdapter.INACTIVE_MENU_ID:
-                presenter.activeCard(card.getCategory(), card.getValue(), card.getId(), 0);
+                presenter.activeCard(card.getCategory(), card.getValue(), card.getCardId(), 0);
                 break;
         }
         return super.onContextItemSelected(item);

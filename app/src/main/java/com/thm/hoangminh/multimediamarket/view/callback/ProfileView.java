@@ -1,32 +1,36 @@
 package com.thm.hoangminh.multimediamarket.view.callback;
 
 import com.thm.hoangminh.multimediamarket.model.User;
+import com.thm.hoangminh.multimediamarket.view.callback.base.BundleBaseView;
 
-public interface ProfileView {
+public interface ProfileView extends BundleBaseView {
+    void showEditableBalance(boolean b);
 
-    public void ShowCurrentUserInformation(User user);
+    void showCurrentUserInformation(User currentUser);
 
-    public void showGameNumber(int size);
+    void showUserRole(String value);
 
-    public void showImageNumber(int size);
+    void showGameNumber(int size);
 
-    public void showVideoNumber(int size);
+    void showImageNumber(int size);
 
-    public void showMusicNumber(int size);
+    void showVideoNumber(int size);
 
-    public void EnableChangeCurrentUserEmail();
+    void showMusicNumber(int size);
 
-    public void EnableChangeCurrentUserPassword();
+    void enableChangeCurrentUserEmail();
 
-    public void showMessage(String message);
+    void enableChangeCurrentUserPassword();
 
-    public void showMessageFromResource(int resource);
+    void showMessage(int messageId);
 
-    public void dismissDialog();
-
-    public void showProgresbarDialog();
-
-    public void hideProgresbarDialog();
+    void dismissDialog();
 
     void editable();
+
+    void showProgresbarDialog();
+
+    void hideProgresbarDialog();
+
+    void registerImageUser();
 }
