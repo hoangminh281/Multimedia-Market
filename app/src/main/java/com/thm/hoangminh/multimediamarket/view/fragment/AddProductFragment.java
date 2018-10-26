@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
@@ -41,7 +41,6 @@ import com.thm.hoangminh.multimediamarket.utility.Validate;
 import com.thm.hoangminh.multimediamarket.view.callback.ModifyProductView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AddProductFragment extends Fragment implements ModifyProductView {
@@ -94,7 +93,7 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            presenter.extractBundle(bundle);
+            presenter.extractBundle(getContext(), bundle);
             setEvents();
         }
     }
@@ -363,6 +362,12 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.removeEventListener();
+    }
+
     private void setEvents() {
         int pos = 0;
         for (final ImageView img : imgArr) {
@@ -411,5 +416,4 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
         videoLayout = view.findViewById(R.id.videoLayout);
         progressDialog = new ProgressDialog(getContext());
     }
-
 }

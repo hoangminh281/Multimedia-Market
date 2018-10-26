@@ -1,7 +1,5 @@
 package com.thm.hoangminh.multimediamarket.repository.implement;
 
-import android.support.annotation.NonNull;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -39,8 +37,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void findAll(ValueEventListener event) {
-
+    public void findAll(ValueEventListener eventListener) {
+        mRef.child(ROUTE.USER()).addListenerForSingleValueEvent(eventListener);
     }
 
     @Override
@@ -54,8 +52,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void findAndWatch(ValueEventListener event) {
-
+    public void findAndWatch(ValueEventListener eventListener) {
+        mRef.child(ROUTE.USER()).addValueEventListener(eventListener);
     }
 
     @Override
@@ -64,12 +62,12 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public ValueEventListener findAndWatchRoleByUserId(String userId, ValueEventListener event) {
+    public ValueEventListener findAndWatchRole(String userId, ValueEventListener event) {
         return mRef.child(ROUTE.USER_ROLE(userId)).addValueEventListener(event);
     }
 
     @Override
-    public void removeFindAndWatchRoleByUserIdListener(String userId, ValueEventListener event) {
+    public void removeFindAndWatchRoleListener(String userId, ValueEventListener event) {
         mRef.child(ROUTE.USER_ROLE(userId)).removeEventListener(event);
     }
 
@@ -118,5 +116,19 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void findImageId(String userId, ValueEventListener eventListener) {
         mRef.child(ROUTE.USER_IMAGE(userId)).addListenerForSingleValueEvent(eventListener);
+    }
+
+    @Override
+    public void setStatus(String userId, int status, OnSuccessListener<Void> successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.USER_STATUS(userId)).setValue(status)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
+    }
+
+    @Override
+    public void setRole(String userId, int roleId, OnSuccessListener<Void> successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.USER_ROLE(userId)).setValue(roleId)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 }

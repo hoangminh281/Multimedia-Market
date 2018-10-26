@@ -30,7 +30,7 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public void findAll(ValueEventListener event) {
-
+        mRef.child(ROUTE.ROLE()).addListenerForSingleValueEvent(event);
     }
 
     @Override

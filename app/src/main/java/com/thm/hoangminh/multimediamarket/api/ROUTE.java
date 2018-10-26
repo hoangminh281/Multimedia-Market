@@ -1,5 +1,7 @@
 package com.thm.hoangminh.multimediamarket.api;
 
+import com.thm.hoangminh.multimediamarket.model.User;
+
 public class ROUTE {
     private static final String USER = "users/";
     private static final String USER_BALANCE = "/balance/";
@@ -9,6 +11,7 @@ public class ROUTE {
     private static final String USER_EMAIL = "/email/";
     private static final String USER_GENDER = "/sex/";
     private static final String USER_BIRTHDAY = "/birthday/";
+    private static final String USER_STATUS = "/status/";
 
     private static final String ROLE = "roles/";
     private static final String CATEGORY = "categories/";
@@ -48,6 +51,10 @@ public class ROUTE {
     private static final String RATING = "rating/";
     private static String RATING_LIKEDLIST = "/likedList/";
 
+    public static String USER() {
+        return USER;
+    }
+
     public static String USER(String userId) {
         return USER + userId;
     }
@@ -80,6 +87,13 @@ public class ROUTE {
         return USER(userId) + USER_BIRTHDAY;
     }
 
+    public static String USER_STATUS(String userId) {
+        return USER(userId) + USER_STATUS;
+    }
+
+    public static String ROLE() {
+        return ROLE;
+    }
     public static String ROLE(int roleId) {
         return ROLE + roleId;
     }

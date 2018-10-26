@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public interface UserView {
 
-    void ShowUserList(ArrayList<User> users);;
+    void showUsers(ArrayList<User> users);;
 
     void dissmissDialog();
 

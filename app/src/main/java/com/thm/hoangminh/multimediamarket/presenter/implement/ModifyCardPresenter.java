@@ -2,7 +2,7 @@ package com.thm.hoangminh.multimediamarket.presenter.implement;
 
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.model.Card;
-import com.thm.hoangminh.multimediamarket.presenter.ModifyCardPresenters.ModifyCardInteractor;
+import com.thm.hoangminh.multimediamarket.presenter.ModifyCardPresenter.ModifyCardInteractor;
 import com.thm.hoangminh.multimediamarket.presenter.callback.ModifyCardListener;
 import com.thm.hoangminh.multimediamarket.view.callback.ModifyCardView;
 

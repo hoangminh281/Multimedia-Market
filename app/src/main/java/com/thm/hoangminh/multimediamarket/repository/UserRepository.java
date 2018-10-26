@@ -9,9 +9,9 @@ import com.thm.hoangminh.multimediamarket.repository.base.WatchingRepository;
 public interface UserRepository extends WatchingRepository<User, String> {
     void findBalance(String userId, ValueEventListener event);
 
-    ValueEventListener findAndWatchRoleByUserId(String userId, ValueEventListener event);
+    ValueEventListener findAndWatchRole(String userId, ValueEventListener event);
 
-    void removeFindAndWatchRoleByUserIdListener(String userId, ValueEventListener event);
+    void removeFindAndWatchRoleListener(String userId, ValueEventListener event);
 
     void setBalance(String userId, double balance, OnSuccessListener successListener, OnFailureListener failureListener);
 
@@ -26,4 +26,8 @@ public interface UserRepository extends WatchingRepository<User, String> {
     void setGender(String userId, int genderId, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 
     void findImageId(String userId, ValueEventListener eventListener);
+
+    void setStatus(String userId, int status, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
+
+    void setRole(String userId, int roleId, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 }

@@ -19,9 +19,11 @@ import com.thm.hoangminh.multimediamarket.view.activity.BookmarkActivity;
 import com.thm.hoangminh.multimediamarket.view.activity.MainActivity;
 import com.thm.hoangminh.multimediamarket.view.activity.SigninActivity;
 
+import java.util.ArrayList;
+
 public class Validate {
-    public static boolean validateCurrentUserStatus(final Context context, int status) {
-        if (status != Constants.UserEnable) {
+    public static boolean validateCurrentUserStatus(final Context context, int status, int userStatus) {
+        if (status != userStatus) {
             Handler handler = new Handler();
             handler.post(new Runnable() {
                 @Override
@@ -39,8 +41,15 @@ public class Validate {
         return true;
     }
 
-    public static boolean validateCurrentUserRole(final Context context, int roleId) {
-        if (roleId != User.ADMIN) {
+    public static boolean validateCurrentUserRole(final Context context, int roleId, int[] userRoles) {
+        boolean validate = true;
+        for (int userRole : userRoles) {
+            if (roleId == userRole) {
+                validate = false;
+                break;
+            }
+        }
+        if (validate) {
             Handler handler = new Handler();
             handler.post(new Runnable() {
                 @Override

@@ -11,11 +11,12 @@ public class Constants {
     public final static String ProductTitle = "title";
     public final static String ProductStatus = "status";
     public final static int entireProductLimitInSection = 15;
-    public static final int MinAgeLimit = 0;
-    public static final int MaxAgeLimit = 100;
+    public final static int MinAgeLimit = 0;
+    public final static int MaxAgeLimit = 100;
 
     //User
     public final static int UserEnable = 1;
+    public static final int UserDisable = 0;
     public static String UserImageDefault = "user.png";
 
     //

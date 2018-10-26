@@ -48,7 +48,7 @@ public class BookmarkPresenterImpl implements BookmarkPresenter {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Validate.validateCurrentUserRole(context, dataSnapshot.getValue(int.class));
+                    Validate.validateCurrentUserRole(context, dataSnapshot.getValue(int.class), new int[]{Constants.AdminRole});
                 }
             }
 

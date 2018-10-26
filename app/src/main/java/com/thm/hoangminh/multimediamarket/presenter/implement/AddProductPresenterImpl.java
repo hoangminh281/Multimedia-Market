@@ -1,5 +1,6 @@
 package com.thm.hoangminh.multimediamarket.presenter.implement;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,11 +26,14 @@ import com.thm.hoangminh.multimediamarket.repository.ProductDetailRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailStorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
 import com.thm.hoangminh.multimediamarket.repository.SectionRepository;
+import com.thm.hoangminh.multimediamarket.repository.UserRepository;
 import com.thm.hoangminh.multimediamarket.repository.implement.FileStorageRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductDetailRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductDetailStorageRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.SectionRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.UserRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 import com.thm.hoangminh.multimediamarket.view.callback.ModifyProductView;
 
 import java.util.ArrayList;
@@ -40,7 +44,9 @@ public class AddProductPresenterImpl implements AddProductPresenter {
     private String cateId;
     private ModifyProductView listener;
     private FirebaseUser currentUser;
+    private UserRepository userRepository;
     private Map<String, String> sectionList;
+    private ValueEventListener eventListener;
     private SectionRepository sectionRepository;
     private ProductRepository productRepository;
     private FileStorageRepository fileStorageRepository;
@@ -49,6 +55,7 @@ public class AddProductPresenterImpl implements AddProductPresenter {
 
     public AddProductPresenterImpl(ModifyProductView listener) {
         this.listener = listener;
+        userRepository = new UserRepositoryImpl();
         sectionRepository = new SectionRepositoryImpl();
         productRepository = new ProductRepositoryImpl();
         fileStorageRepository = new FileStorageRepositoryImpl();
@@ -58,16 +65,29 @@ public class AddProductPresenterImpl implements AddProductPresenter {
     }
 
     @Override
-    public void extractBundle(Bundle bundle) {
+    public void extractBundle(Context context, Bundle bundle) {
         String cateId = bundle.getString(Constants.CateIdKey);
         this.cateId = cateId;
-        bindingCurrentUserRole();
+        bindingCurrentUserRole(context);
         loadSectionProduct(cateId);
         listener.setCateId(cateId);
     }
 
-    private void bindingCurrentUserRole() {
-        //if role == user then out
+    private void bindingCurrentUserRole(final Context context) {
+        eventListener = userRepository.findAndWatchRole(currentUser.getUid(), new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Validate.validateCurrentUserRole(context, dataSnapshot.getValue(int.class),
+                            new int[]{Constants.AdminRole, Constants.ModRole});
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void loadSectionProduct(String cateId) {
@@ -181,8 +201,7 @@ public class AddProductPresenterImpl implements AddProductPresenter {
                         listener.updateProgressMessage("Uploaded failure product avatar");
                     }
                 });
-            }
-            else {
+            } else {
                 productDetailRepository.pushImageId(productId, entry.getKey(), new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
@@ -229,5 +248,12 @@ public class AddProductPresenterImpl implements AddProductPresenter {
             preparedSelectedImages.put(imageId, selectedBitmaps.get(i));
         }
         return preparedSelectedImages;
+    }
+
+    @Override
+    public void removeEventListener() {
+        if (eventListener != null) {
+            userRepository.removeFindAndWatchRoleListener(currentUser.getUid(), eventListener);
+        }
     }
 }

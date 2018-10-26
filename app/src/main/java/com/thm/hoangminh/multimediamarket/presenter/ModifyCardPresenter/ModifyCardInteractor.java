@@ -1,4 +1,4 @@
-package com.thm.hoangminh.multimediamarket.presenter.ModifyCardPresenters;
+package com.thm.hoangminh.multimediamarket.presenter.ModifyCardPresenter;
 
 import android.support.annotation.NonNull;
 
