@@ -58,6 +58,7 @@ public class Constants {
     public final static int RatingLimit = 3;
     public final static int RatingLiked = 1;
     public final static int RatingUnlike = 0;
+    public static final double RatingMaxPoint = 5;
 
     //
     public final static String SearchResults = "searchResults";

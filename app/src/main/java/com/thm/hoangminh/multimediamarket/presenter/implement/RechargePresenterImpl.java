@@ -95,7 +95,7 @@ public class RechargePresenterImpl implements RechargePresenter {
                                                                                 DatabaseReference mRef = rechargeHistoryRepository.createDataRef(currentUser.getUid());
                                                                                 final String transactionId = mRef.getKey();
                                                                                 rechargeHistory.setId(transactionId);
-                                                                                rechargeHistoryRepository.pushByDataRef(mRef, rechargeHistory,
+                                                                                rechargeHistoryRepository.addByDataRef(mRef, rechargeHistory,
                                                                                         new OnSuccessListener<Void>() {
                                                                                             @Override
                                                                                             public void onSuccess(Void aVoid) {

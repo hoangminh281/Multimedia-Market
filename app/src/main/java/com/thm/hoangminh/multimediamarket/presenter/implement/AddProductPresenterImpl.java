@@ -19,12 +19,15 @@ import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.model.Section;
 import com.thm.hoangminh.multimediamarket.presenter.AddProductPresenter;
-import com.thm.hoangminh.multimediamarket.presenter.ModifyProductPresenters.ModifyProductInteractor;
 import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.repository.FileStorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailRepository;
+import com.thm.hoangminh.multimediamarket.repository.ProductDetailStorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
 import com.thm.hoangminh.multimediamarket.repository.SectionRepository;
+import com.thm.hoangminh.multimediamarket.repository.implement.FileStorageRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductDetailRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.ProductDetailStorageRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.SectionRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.view.callback.ModifyProductView;
@@ -36,21 +39,22 @@ import java.util.Map;
 public class AddProductPresenterImpl implements AddProductPresenter {
     private String cateId;
     private ModifyProductView listener;
-    private ModifyProductInteractor interactor;
     private FirebaseUser currentUser;
     private Map<String, String> sectionList;
     private SectionRepository sectionRepository;
     private ProductRepository productRepository;
-    private Map<String, String> currentProductSections;
+    private FileStorageRepository fileStorageRepository;
     private ProductDetailRepository productDetailRepository;
+    private ProductDetailStorageRepository productDetailStorageRepository;
 
     public AddProductPresenterImpl(ModifyProductView listener) {
         this.listener = listener;
         sectionRepository = new SectionRepositoryImpl();
         productRepository = new ProductRepositoryImpl();
+        fileStorageRepository = new FileStorageRepositoryImpl();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         productDetailRepository = new ProductDetailRepositoryImpl();
-        interactor = new ModifyProductInteractor(this);
+        productDetailStorageRepository = new ProductDetailStorageRepositoryImpl();
     }
 
     @Override
@@ -58,14 +62,15 @@ public class AddProductPresenterImpl implements AddProductPresenter {
         String cateId = bundle.getString(Constants.CateIdKey);
         this.cateId = cateId;
         bindingCurrentUserRole();
-        loadCategoryProduct(cateId);
+        loadSectionProduct(cateId);
+        listener.setCateId(cateId);
     }
 
     private void bindingCurrentUserRole() {
         //if role == user then out
     }
 
-    private void loadCategoryProduct(String cateId) {
+    private void loadSectionProduct(String cateId) {
         if (cateId.equals(Category.getInstance().get(2).getCateId()) || cateId.equals(Category.getInstance().get(4).getCateId())) {
             listener.hideEdtYoutube();
         }
@@ -97,8 +102,11 @@ public class AddProductPresenterImpl implements AddProductPresenter {
         DatabaseReference mRef = productRepository.createDataRef();
         final String productId = mRef.getKey();
         product.setProductId(productId);
-        String avatarId = Tools.createRandomImageName();
+        final String avatarId = Tools.createRandomImageName();
+        product.setCateId(cateId);
         product.setPhotoId(avatarId);
+        product.setRating(Constants.RatingMaxPoint);
+        product.setStatus(Constants.ProductEnable);
 
         productDetail.setId(productId);
         productDetail.setOwnerId(currentUser.getUid());
@@ -112,13 +120,13 @@ public class AddProductPresenterImpl implements AddProductPresenter {
             public void onSuccess(Void aVoid) {
                 listener.updateProgressMessage("Created successfully product");
                 addProductSection(productId, selectedSections);
-                addProductDetail(productDetail, preparedSelectedImages);
+                addProductDetail(productDetail, preparedSelectedImages, avatarId);
                 addFile(pickedFile);
             }
         }, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                listener.showMessage("Created failure product");
+                listener.updateProgressMessage("Created failure product");
             }
         });
     }
@@ -136,31 +144,78 @@ public class AddProductPresenterImpl implements AddProductPresenter {
                     }, new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-
+                            listener.updateProgressMessage("Updated failure section " + sectionTitle);
                         }
                     });
         }
     }
 
-    private void addProductDetail(ProductDetail productDetail, final Map<String, Bitmap> preparedSelectedImages) {
+    private void addProductDetail(final ProductDetail productDetail, final Map<String, Bitmap> preparedSelectedImages, final String avatarId) {
         productDetailRepository.add(productDetail, new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-                addProductDetailImages(preparedSelectedImages);
+                listener.updateProgressMessage("Created successfully product detail");
+                addProductDetailImages(productDetail.getId(), preparedSelectedImages, avatarId);
             }
         }, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                listener.showMessage("Created failure product detail");
+                listener.updateProgressMessage("Created failure product detail");
             }
         });
     }
 
-    private void addProductDetailImages(Map<String,Bitmap> preparedSelectedImages) {
-
+    private void addProductDetailImages(String productId, Map<String, Bitmap> preparedSelectedImages, String avatarId) {
+        //set and upload product detail images
+        for (final Map.Entry<String, Bitmap> entry : preparedSelectedImages.entrySet()) {
+            if (entry.getKey().equals(avatarId)) {
+                //upload avatar
+                productDetailStorageRepository.add(avatarId, entry.getValue(), new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        listener.updateProgressMessage("Uploaded successfully product avatar");
+                    }
+                }, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.updateProgressMessage("Uploaded failure product avatar");
+                    }
+                });
+            }
+            else {
+                productDetailRepository.pushImageId(productId, entry.getKey(), new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        final int[] i = {1};
+                        productDetailStorageRepository.add(entry.getKey(), entry.getValue(), new OnSuccessListener() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                listener.updateProgressMessage("Uploaded successfully product detail image " + i[0]++);
+                            }
+                        }, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                listener.updateProgressMessage("Uploaded failure product detail image " + i[0]++);
+                            }
+                        });
+                    }
+                }, null);
+            }
+        }
     }
 
     private void addFile(File pickedFile) {
+        fileStorageRepository.add(pickedFile.getName(), pickedFile, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                listener.updateProgressMessage("Uploaded successfully file");
+            }
+        }, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.updateProgressMessage("Uploaded failure file");
+            }
+        });
     }
 
     private Map<String, Bitmap> prepareImages(String avatarId, ArrayList<Bitmap> selectedBitmaps) {
@@ -174,36 +229,5 @@ public class AddProductPresenterImpl implements AddProductPresenter {
             preparedSelectedImages.put(imageId, selectedBitmaps.get(i));
         }
         return preparedSelectedImages;
-    }
-
-    @Override
-    public void onCreateNewProductFailure() {
-        listener.showMessage("Created failure product");
-    }
-
-    @Override
-    public void onUploadPhotoSucceed(int photoIndex) {
-        listener.updateProgressMessage("Created successfully product detail");
-        interactor.UploadPhoto(photoIndex, photoNames.get(photoIndex), bitmaps.get(photoIndex));
-    }
-
-    @Override
-    public void onUploadPhotoSuccess(int photoIndex) {
-        listener.updateProgressMessage("Uploaded successfully image " + (photoIndex + 1));
-    }
-
-    @Override
-    public void onUploadPhotoFailure(int photoIndex) {
-        listener.showMessage("Upload failure image " + (photoIndex + 1));
-    }
-
-    @Override
-    public void onUploadFileSuccess() {
-        listener.updateProgressMessage("Uploaded successfully file " + fileName);
-    }
-
-    @Override
-    public void onUpdateSectionSuccess(String section) {
-        listener.updateProgressMessage("Updated successfully section " + section);
     }
 }

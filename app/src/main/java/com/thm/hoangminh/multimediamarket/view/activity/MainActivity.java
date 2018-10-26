@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.fomular.MoneyFormular;
 import com.thm.hoangminh.multimediamarket.presenter.MainPresenter;
 import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
 import com.thm.hoangminh.multimediamarket.view.callback.MainView;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
     @Override
     public void updateUserUI(User user) {
         txtUserName.setText(user.getName());
-        txtBalance.setText(Tools.FormatMoney(user.getBalance()));
+        txtBalance.setText(MoneyFormular.format(user.getBalance()));
     }
 
     @Override

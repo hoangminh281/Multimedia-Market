@@ -54,10 +54,9 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
 
     private String cateId;
     private File pickedFile;
+    private int imgPosition;
     private AddProductPresenter presenter;
     private ArrayList<Integer> selectedSections;
-
-    private int imgPosition;
 
     private final int REQUESTCODE_TAKEPHOTO = 1;
     private final int REQUESTCODE_PICKPHOTO = 2;
@@ -88,7 +87,6 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
         progressDialog.setTitle("Upload");
 
         initPresenter();
-
     }
 
     @Override
@@ -103,6 +101,11 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
 
     private void initPresenter() {
         presenter = new AddProductPresenterImpl(this);
+    }
+
+    @Override
+    public void setCateId(String cateId) {
+        this.cateId = cateId;
     }
 
     @Override
@@ -124,7 +127,7 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
     }
 
     @Override
-    public void showSectionList(Map<String, String> sections) {
+    public void showSectionList(final Map<String, String> sections) {
         txtSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,7 +136,7 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
         });
     }
 
-    public void showSectionDialog(Map<String, String> sections) {
+    public void showSectionDialog(final Map<String, String> sections) {
         selectedSections.clear();
         txtSection.setText("");
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -322,6 +325,7 @@ public class AddProductFragment extends Fragment implements ModifyProductView {
     @Override
     public void hideEdtYoutube() {
         videoLayout.setVisibility(View.GONE);
+        edtVideo.setVisibility(View.GONE);
     }
 
     @Override

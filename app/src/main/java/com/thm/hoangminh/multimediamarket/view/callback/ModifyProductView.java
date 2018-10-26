@@ -10,4 +10,6 @@ public interface ModifyProductView {
     void updateProgressMessage(String message);
 
     void showSectionList(Map<String,String> sections);
+
+    void setCateId(String cateId);
 }
