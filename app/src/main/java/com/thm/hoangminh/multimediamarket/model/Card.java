@@ -6,9 +6,9 @@ import android.os.Parcelable;
 public class Card implements Parcelable {
     private String cardId;
     private String number, seri;
-    private int category; /*0: viettel, 1: mobiphone, 2: vinaphone, 3: vietnamobile, 4: garena*/
-    private int value; /*0: 10000, 1: 20000, 2: 50000, 3: 100000, 4: 200000, 5: 500000*/
-    private int status; /*1: available, 0: unavailable */
+    private int category;
+    private int value;
+    private int status;
 
     public Card() {
     }

@@ -66,7 +66,7 @@ public class Validate {
         return true;
     }
 
-    public static int validateGenderToResource(int gender) {
+    public static int validateGenderToMipmap(int gender) {
         switch (gender) {
             case 0:
                 return R.mipmap.ic_male;
@@ -192,5 +192,17 @@ public class Validate {
     public static boolean validateSameCard(Card baseCard, Card card) {
         return baseCard.getSeri().equals(card.getSeri())
                 & baseCard.getNumber().equals(card.getNumber());
+    }
+
+    public static int validateRoleToColor(int roleId) {
+        switch (roleId) {
+            case Constants.AdminRole:
+                return R.color.red;
+            case Constants.ModRole:
+                return R.color.green;
+            case Constants.UserRole:
+                return R.color.purple_50;
+        }
+        return -1;
     }
 }

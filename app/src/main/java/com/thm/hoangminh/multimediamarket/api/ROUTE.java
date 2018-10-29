@@ -1,7 +1,5 @@
 package com.thm.hoangminh.multimediamarket.api;
 
-import com.thm.hoangminh.multimediamarket.model.User;
-
 public class ROUTE {
     private static final String USER = "users/";
     private static final String USER_BALANCE = "/balance/";
@@ -216,6 +214,10 @@ public class ROUTE {
 
     public static String RATING_LIKEDLIST(String currentUserId, String userId, String productId) {
         return RATING(userId, productId) + RATING_LIKEDLIST + currentUserId;
+    }
+
+    public static String CARD() {
+        return CARD;
     }
 
     public static String CARD(int category, int value) {

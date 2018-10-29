@@ -11,7 +11,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.UserPresenter;
-import com.thm.hoangminh.multimediamarket.presenter.UserPresenters.UserInteractor;
 import com.thm.hoangminh.multimediamarket.repository.RoleRepository;
 import com.thm.hoangminh.multimediamarket.repository.UserRepository;
 import com.thm.hoangminh.multimediamarket.repository.implement.RoleRepositoryImpl;

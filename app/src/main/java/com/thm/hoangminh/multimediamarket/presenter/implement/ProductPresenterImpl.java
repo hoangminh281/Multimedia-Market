@@ -86,7 +86,7 @@ public class ProductPresenterImpl implements ProductPresenter {
                     Iterable<DataSnapshot> dataSnapshots = dataSnapshot.getChildren();
                     for (DataSnapshot item : dataSnapshots) {
                         if (item.getValue(int.class) == Constants.ProductEnable)
-                        productIdArr.add(item.getKey());
+                            productIdArr.add(item.getKey());
                     }
                     firstLoadProductPaging();
                 }
@@ -191,7 +191,7 @@ public class ProductPresenterImpl implements ProductPresenter {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            if (User.getInstance().getRole() == User.ADMIN
+                            if (User.getInstance().getRole() == Constants.AdminRole
                                     || dataSnapshot.child(Constants.ProductStatus).getValue(int.class).equals(Constants.ProductEnable)) {
                                 listener.addProductIntoAdapter(dataSnapshot.getValue(Product.class));
                                 listener.refreshAdapter();

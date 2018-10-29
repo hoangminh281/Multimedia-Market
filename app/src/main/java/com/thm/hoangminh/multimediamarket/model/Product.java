@@ -25,8 +25,7 @@ public class Product {
     private String photoId;
     private double rating;
     private double price;
-    private String imageUri;
-    private int status; //0: inactive, 1: active
+    private int status;
 
     public Product() {
     }

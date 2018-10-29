@@ -108,10 +108,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.SingleItemRowH
 
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            if (card.getStatus() == 0)
+            if (card.getStatus() == Constants.CardDeactive) {
                 contextMenu.add(0, ACTIVE_MENU_ID, getAdapterPosition(), context.getResources().getString(R.string.menu_active));
-            else
+            }
+            else if (card.getStatus() == Constants.CardActive) {
                 contextMenu.add(0, INACTIVE_MENU_ID, getAdapterPosition(), context.getResources().getString(R.string.menu_inactive));
+            }
         }
     }
 }

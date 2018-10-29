@@ -68,6 +68,8 @@ public class AddUpdateCardPresenterImpl implements AddUpdateCardPresenter {
         card.setCardId(baseCard.getCardId());
         if (card.getNumber() == null || card.getNumber().equals("")) {
             card.setNumber(baseCard.getNumber());
+        } else {
+            card.setNumber(Tools.md5(card.getNumber()));
         }
         cardRepository.remove(baseCard, new OnSuccessListener() {
             @Override

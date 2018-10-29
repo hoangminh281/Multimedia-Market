@@ -10,14 +10,20 @@ import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.view.fragment.RatingFragment;
 
 public class RatingActivity extends AppCompatActivity {
-    private RatingFragment ratingFragment;
     private Toolbar toolbar;
+    private RatingFragment ratingFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating_layout);
-        toolbar = findViewById(R.id.toolbar);
+        setControls();
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             ratingFragment = new RatingFragment();
@@ -36,5 +42,9 @@ public class RatingActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setControls() {
+        toolbar = findViewById(R.id.toolbar);
     }
 }

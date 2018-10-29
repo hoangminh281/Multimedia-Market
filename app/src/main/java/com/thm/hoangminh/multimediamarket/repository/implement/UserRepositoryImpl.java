@@ -131,4 +131,9 @@ public class UserRepositoryImpl implements UserRepository {
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
     }
+
+    @Override
+    public void findAndWatchStatus(String userId, ValueEventListener eventListener) {
+        mRef.child(ROUTE.USER_STATUS(userId)).addValueEventListener(eventListener);
+    }
 }

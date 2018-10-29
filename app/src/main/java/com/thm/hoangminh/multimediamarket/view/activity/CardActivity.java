@@ -2,23 +2,20 @@ package com.thm.hoangminh.multimediamarket.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.adapter.CardAdapter;
 import com.thm.hoangminh.multimediamarket.adapter.UserAdapter;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Card;
-import com.thm.hoangminh.multimediamarket.model.User;
-import com.thm.hoangminh.multimediamarket.presenter.AddUpdateCardPresenter;
-import com.thm.hoangminh.multimediamarket.presenter.implement.CardPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.CardPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.CardPresenterImpl;
 import com.thm.hoangminh.multimediamarket.view.callback.CardView;
 
 import java.util.ArrayList;
@@ -45,9 +42,21 @@ public class CardActivity extends AppCompatActivity implements CardView {
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
 
         initPresenter();
-
         presenter.loadCardList();
-        presenter.findCurrentUserRole();
+        presenter.bidingCurrentUser(this);
+    }
+
+    private void initPresenter() {
+        presenter = new CardPresenterImpl(this);
+    }
+
+    @Override
+    public void showCardList(ArrayList<Card> cards) {
+        if (this.cards != null) {
+            this.cards.clear();
+        }
+        this.cards = cards;
+        initAdapter();
     }
 
     @Override
@@ -79,10 +88,6 @@ public class CardActivity extends AppCompatActivity implements CardView {
         }
     }
 
-    private void initPresenter() {
-        presenter = new CardPresenter(this);
-    }
-
     private void initAdapter() {
         myRecyclerView.setHasFixedSize(true);
         adapter = new CardAdapter(this, cards);
@@ -96,41 +101,19 @@ public class CardActivity extends AppCompatActivity implements CardView {
         Card card = cards.get(position);
         switch (item.getItemId()) {
             case UserAdapter.ACTIVE_MENU_ID:
-                presenter.activeCard(card.getCategory(), card.getValue(), card.getCardId(), 1);
+                presenter.activeOrDeactiveCard(card, Constants.CardActive);
                 break;
             case UserAdapter.INACTIVE_MENU_ID:
-                presenter.activeCard(card.getCategory(), card.getValue(), card.getCardId(), 0);
+                presenter.activeOrDeactiveCard(card, Constants.CardDeactive);
                 break;
         }
         return super.onContextItemSelected(item);
     }
 
     @Override
-    public void showCardList(ArrayList<Card> cards) {
-        this.cards = cards;
-        initAdapter();
-    }
-
-    @Override
-    public void bindingUserRole(Integer role_id) {
-        if (role_id != User.ADMIN) {
-            Handler handler = new Handler();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(CardActivity.this, R.string.info_fail_role, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
-            });
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.RemoveListener();
+        presenter.removeListener();
     }
 
     private void setControls() {

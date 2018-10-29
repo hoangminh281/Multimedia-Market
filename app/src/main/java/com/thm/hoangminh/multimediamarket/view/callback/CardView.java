@@ -6,6 +6,4 @@ import java.util.ArrayList;
 
 public interface CardView {
     void showCardList(ArrayList<Card> cards);
-
-    void bindingUserRole(Integer role_id);
 }

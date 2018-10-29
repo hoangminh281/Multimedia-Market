@@ -74,7 +74,7 @@ public class RechargePresenterImpl implements RechargePresenter {
                         final Card baseCard = item.getValue(Card.class);
                         boolean validate = Validate.validateSameCard(baseCard, card);
                         if (validate) {
-                            cardRepository.setStatus(baseCard, Constants.CardInactive,
+                            cardRepository.setStatus(baseCard, Constants.CardDeactive,
                                     new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {

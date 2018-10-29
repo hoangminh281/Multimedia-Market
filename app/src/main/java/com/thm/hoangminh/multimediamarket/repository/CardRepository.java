@@ -6,8 +6,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.model.Card;
 import com.thm.hoangminh.multimediamarket.repository.base.Repository;
+import com.thm.hoangminh.multimediamarket.repository.base.WatchingRepository;
 
-public interface CardRepository extends Repository<Card, String> {
+public interface CardRepository extends WatchingRepository<Card, String> {
     void findAll(int category, int value, ValueEventListener eventListener);
 
     void setStatus(Card card, int status, OnSuccessListener successListener, OnFailureListener failureListener);

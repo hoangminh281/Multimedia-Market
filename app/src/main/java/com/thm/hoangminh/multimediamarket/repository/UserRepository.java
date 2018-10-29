@@ -30,4 +30,6 @@ public interface UserRepository extends WatchingRepository<User, String> {
     void setStatus(String userId, int status, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 
     void setRole(String userId, int roleId, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
+
+    void findAndWatchStatus(String userId, ValueEventListener eventListener);
 }

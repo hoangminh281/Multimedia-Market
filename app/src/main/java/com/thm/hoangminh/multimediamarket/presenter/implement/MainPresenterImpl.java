@@ -63,19 +63,19 @@ public class MainPresenterImpl implements MainPresenter {
                     if (Validate.validateCurrentUserStatus(context, currentUser.getStatus(), Constants.UserEnable)) {
                         //setup menu with Role and rule
                         switch (currentUser.getRole()) {
-                            case User.ADMIN:
+                            case Constants.AdminRole:
                                 listener.setVisibleItemMenu(R.id.menu_user_admin, true);
                                 listener.setVisibleItemMenu(R.id.menu_card_admin, true);
                                 listener.setVisibleItemMenu(R.id.menu_product_admin, true);
                                 listener.setVisibleItemMenu(R.id.menu_upload, true);
                                 break;
-                            case User.MOD:
+                            case Constants.ModRole:
                                 listener.setVisibleItemMenu(R.id.menu_user_admin, false);
                                 listener.setVisibleItemMenu(R.id.menu_card_admin, false);
                                 listener.setVisibleItemMenu(R.id.menu_product_admin, false);
                                 listener.setVisibleItemMenu(R.id.menu_upload, true);
                                 break;
-                            case User.USER:
+                            case Constants.UserRole:
                                 listener.setVisibleItemMenu(R.id.menu_user_admin, false);
                                 listener.setVisibleItemMenu(R.id.menu_card_admin, false);
                                 listener.setVisibleItemMenu(R.id.menu_product_admin, false);
@@ -104,7 +104,7 @@ public class MainPresenterImpl implements MainPresenter {
                             }
                         });
                         //Load user gender
-                        listener.showUserGenderImage(Validate.validateGenderToResource(currentUser.getSex()));
+                        listener.showUserGenderImage(Validate.validateGenderToMipmap(currentUser.getSex()));
                     }
                 }
             }
@@ -150,7 +150,7 @@ public class MainPresenterImpl implements MainPresenter {
                 Map<String, String> suggestions = new HashMap<>();
                 Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                 for (DataSnapshot item : iterable) {
-                    if (User.getInstance().getRole() == User.ADMIN
+                    if (User.getInstance().getRole() == Constants.AdminRole
                             || item.child(Constants.ProductStatus).getValue(int.class) == Constants.ProductEnable) {
                         suggestions.put(item.getKey(), item.child(Constants.ProductTitle).getValue(String.class));
                     }

@@ -38,7 +38,7 @@ public class CardRepositoryImpl implements CardRepository {
 
     @Override
     public void findAll(ValueEventListener eventListener) {
-
+        mRef.child(ROUTE.CARD()).addListenerForSingleValueEvent(eventListener);
     }
 
     @Override
@@ -78,5 +78,15 @@ public class CardRepositoryImpl implements CardRepository {
     @Override
     public void addByDataRef(DatabaseReference dataRef, Card card, OnSuccessListener successListener, OnFailureListener failureListener) {
         dataRef.setValue(card).addOnSuccessListener(successListener).addOnFailureListener(failureListener);
+    }
+
+    @Override
+    public void findAndWatchById(String s, ValueEventListener eventListener) {
+
+    }
+
+    @Override
+    public void findAndWatch(ValueEventListener eventListener) {
+        mRef.child(ROUTE.CARD()).addValueEventListener(eventListener);
     }
 }

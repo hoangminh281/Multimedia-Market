@@ -70,7 +70,7 @@ public class Constants {
 
     //Card
     public static int CardActive = 1;
-    public static int CardInactive = 0;
+    public static int CardDeactive = 0;
     public static int EditCard = 0;
     public static int AddCard = 1;
     public final static int[] CardValueList = {10000, 20000, 50000, 100000, 200000, 500000};

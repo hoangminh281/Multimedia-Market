@@ -187,7 +187,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
         String ownerId = productDetail.getOwnerId();
         int currentUserRole = dbCurrentUser.getRole();
         int productStatus = product.getStatus();
-        if (ownerId.equals(userId) || currentUserRole == User.ADMIN) {
+        if (ownerId.equals(userId) || currentUserRole == Constants.AdminRole) {
             listener.setVisibleItemMenu(R.id.menu_update, true);
             if (productStatus == Constants.ProductDisable) {
                 listener.setVisibleItemMenu(R.id.menu_active, true);

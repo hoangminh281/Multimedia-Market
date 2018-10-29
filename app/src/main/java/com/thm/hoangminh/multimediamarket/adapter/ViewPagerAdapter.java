@@ -17,9 +17,9 @@ import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
 
 public class ViewPagerAdapter extends PagerAdapter {
-    private ArrayList<Uri> imageUriList;
     private Context context;
     private LayoutInflater inflater;
+    private ArrayList<Uri> imageUriList;
 
     public ViewPagerAdapter(Context context, ArrayList<Uri> imageUriList) {
         this.imageUriList = imageUriList;

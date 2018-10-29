@@ -8,8 +8,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.api.ROUTE;
 import com.thm.hoangminh.multimediamarket.repository.RoleRepository;
 
-import java.util.ArrayList;
-
 public class RoleRepositoryImpl implements RoleRepository {
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
@@ -34,7 +32,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public void findById(Integer RID, ValueEventListener event) {
-        mRef.child(ROUTE.ROLE(RID)).addListenerForSingleValueEvent(event);
+    public void findById(Integer roleId, ValueEventListener event) {
+        mRef.child(ROUTE.ROLE(roleId)).addListenerForSingleValueEvent(event);
     }
 }

@@ -10,19 +10,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.User;
+import com.thm.hoangminh.multimediamarket.repository.RoleRepository;
+import com.thm.hoangminh.multimediamarket.repository.UserRepository;
+import com.thm.hoangminh.multimediamarket.repository.UserStorageRepository;
+import com.thm.hoangminh.multimediamarket.repository.implement.RoleRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.UserRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.utility.ImageLoader;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
 import com.thm.hoangminh.multimediamarket.view.activity.ProfileActivity;
 import com.thm.hoangminh.multimediamarket.view.activity.UserActivity;
 
 import java.util.ArrayList;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SingleItemRowHolder> {
-    private Context mContext;
+    private Context context;
     private ArrayList<User> users;
+    private UserRepository userRepository;
+    private RoleRepository roleRepository;
 
     public final static int ACTIVE_MENU_ID = 2222;
     public final static int INACTIVE_MENU_ID = 3333;
@@ -30,7 +43,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SingleItemRowH
 
     public UserAdapter(Context context, ArrayList<User> users) {
         this.users = users;
-        this.mContext = context;
+        this.context = context;
+        userRepository = new UserRepositoryImpl();
+        roleRepository = new RoleRepositoryImpl();
     }
 
     @Override
@@ -41,15 +56,48 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SingleItemRowH
     }
 
     @Override
-    public void onBindViewHolder(SingleItemRowHolder holder, int position) {
-        User user = users.get(position);
+    public void onBindViewHolder(final SingleItemRowHolder holder, int position) {
+        final User user = users.get(position);
         holder.user = user;
-        user.LoadUserImageView(holder.imgAvatar, mContext);
-        user.LoadUserImageGender(holder.imgGender);
+        ImageLoader.loadImage(UserStorageRepository.class, context, holder.imgAvatar, user.getImage());
+        holder.imgGender.setImageResource(Validate.validateGenderToMipmap(user.getSex()));
+        holder.txtRole.setTextColor(context.getResources().getColor(Validate.validateRoleToColor(user.getRole())));
+        roleRepository.findById(user.getRole(), new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    holder.txtRole.setText(dataSnapshot.getValue(String.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        userRepository.findAndWatchStatus(user.getId(), new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    int status = dataSnapshot.getValue(int.class);
+                    switch (status) {
+                        case Constants.UserEnable:
+                            holder.imgStatus.setColorFilter(R.color.theme_app);
+                            break;
+                        case Constants.UserDisable:
+                            holder.imgStatus.clearColorFilter();
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         holder.txtUsername.setText(user.getName());
-        user.LoadUserRoleWithColor(holder.txtRole, mContext);
         holder.txtEmail.setText(user.getEmail());
-        user.LoadUserStatus(holder.imgStatus);
     }
 
     @Override
@@ -73,11 +121,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SingleItemRowH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(mContext, ProfileActivity.class);
+                    Intent intent = new Intent(context, ProfileActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.UserIdKey, user.getId());
                     intent.putExtras(bundle);
-                    ((Activity)mContext).startActivityForResult(intent, UserActivity.requestCode);
+                    ((Activity) context).startActivityForResult(intent, UserActivity.requestCode);
                 }
             });
             itemView.setLongClickable(true);
@@ -86,11 +134,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SingleItemRowH
 
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            contextMenu.add(0, ROLE_MENU_ID, getAdapterPosition(), mContext.getResources().getString(R.string.menu_role));
+            contextMenu.add(0, ROLE_MENU_ID, getAdapterPosition(), context.getResources().getString(R.string.menu_role));
             if (user.getStatus() == 0)
-                contextMenu.add(0, ACTIVE_MENU_ID, getAdapterPosition(), mContext.getResources().getString(R.string.menu_active));
+                contextMenu.add(0, ACTIVE_MENU_ID, getAdapterPosition(), context.getResources().getString(R.string.menu_active));
             else
-                contextMenu.add(0, INACTIVE_MENU_ID, getAdapterPosition(), mContext.getResources().getString(R.string.menu_inactive));
+                contextMenu.add(0, INACTIVE_MENU_ID, getAdapterPosition(), context.getResources().getString(R.string.menu_inactive));
         }
     }
 }

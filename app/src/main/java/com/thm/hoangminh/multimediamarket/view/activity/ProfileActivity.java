@@ -155,7 +155,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     public void showCurrentUserInformation(User user) {
         this.user = user;
         ImageLoader.loadImage(UserStorageRepository.class, this, imgUser, user.getImage());
-        imgGender.setImageResource(Validate.validateGenderToResource(user.getSex()));
+        imgGender.setImageResource(Validate.validateGenderToMipmap(user.getSex()));
         txtName.setText(user.getName());
         if (!user.getBirthday().equals("")) {
             String[] birthdate = user.getBirthday().split("/");
