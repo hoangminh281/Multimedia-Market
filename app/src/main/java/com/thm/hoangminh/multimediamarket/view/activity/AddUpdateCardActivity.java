@@ -2,13 +2,12 @@ package com.thm.hoangminh.multimediamarket.view.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -17,26 +16,25 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Card;
-import com.thm.hoangminh.multimediamarket.presenter.implement.ModifyCardPresenter;
-import com.thm.hoangminh.multimediamarket.references.Tools;
-import com.thm.hoangminh.multimediamarket.view.callback.ModifyCardView;
+import com.thm.hoangminh.multimediamarket.presenter.AddUpdateCardPresenter;
+import com.thm.hoangminh.multimediamarket.presenter.implement.AddUpdateCardPresenterImpl;
+import com.thm.hoangminh.multimediamarket.utility.Validate;
+import com.thm.hoangminh.multimediamarket.view.callback.AddUpdateCardView;
 
 import java.util.ArrayList;
 
-public class ModifyCardActivity extends AppCompatActivity implements ModifyCardView {
+public class AddUpdateCardActivity extends AppCompatActivity implements AddUpdateCardView {
     private Toolbar toolbar;
-    private Card card;
+    private LinearLayout walletLayout;
     private RadioGroup rgCardCategory;
-    private ArrayList<RadioButton> rbCardValueList;
-    private int checkedPositionCardValue = -1;
-    private int checkPositionCardCategory = -1;
     private EditText edtCardNumber, edtCardSeri;
-    private Button btnNext;
-    private boolean flag_num, flag_seri;
-    private LinearLayout WalletLayout;
-    private int mode;
-    private ModifyCardPresenter presenter;
+
+    private AddUpdateCardPresenter presenter;
+    private int checkPositionCardCategory = -1;
+    private int checkedPositionCardValue = -1;
+    private ArrayList<RadioButton> rbCardValueList;
     private ArrayList<RadioButton> rbCardCategoryList;
 
     @SuppressLint("ResourceType")
@@ -52,26 +50,30 @@ public class ModifyCardActivity extends AppCompatActivity implements ModifyCardV
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrowleft);
 
-        WalletLayout.setVisibility(View.GONE);
-
         initPresenter();
-
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            getSupportActionBar().setTitle(getResources().getString(R.string.menu_editCard) + "");
-            card = getIntent().getParcelableExtra(CardActivity.requestCode);
-            showCardInfomation(card);
-            mode = 0;
-        } else {
-            getSupportActionBar().setTitle(getResources().getString(R.string.menu_addCard) + "");
-            rbCardCategoryList.get(0).setChecked(true);
-            rbCardValueList.get(0).setChecked(true);
-            mode = 1;
-        }
+        presenter.extractBundle(bundle);
     }
 
     private void initPresenter() {
-        presenter = new ModifyCardPresenter(this);
+        presenter = new AddUpdateCardPresenterImpl(this);
+    }
+
+    public void setTitle(int titleId) {
+        getSupportActionBar().setTitle(titleId);
+    }
+
+    @Override
+    public void showCard(Card card) {
+        rbCardCategoryList.get(card.getCategory()).setChecked(true);
+        rbCardValueList.get(card.getValue()).setChecked(true);
+        edtCardSeri.setText(card.getSeri());
+    }
+
+    @Override
+    public void initCardUI() {
+        rbCardCategoryList.get(0).setChecked(true);
+        rbCardValueList.get(0).setChecked(true);
     }
 
     @Override
@@ -87,25 +89,11 @@ public class ModifyCardActivity extends AppCompatActivity implements ModifyCardV
                 backToScreen();
                 return true;
             case R.id.menu_save:
+                boolean validate = Validate.validateEditTextsToString(this, edtCardSeri);
+                if (!validate) return true;
                 String number = edtCardNumber.getText().toString().trim();
-                if (mode == 1) {
-                    if (number.length() == 0) {
-                        edtCardNumber.setError(getResources().getString(R.string.err_empty));
-                        return true;
-                    }
-                }
                 String seri = edtCardSeri.getText().toString().trim();
-                if (seri.length() == 0) {
-                    edtCardSeri.setError(getResources().getString(R.string.err_empty));
-                    return true;
-                }
-                if (mode == 1) {
-                    presenter.createNewCard(new Card(checkPositionCardCategory, checkedPositionCardValue, Tools.md5(number), seri, 1));
-                } else if (mode == 0) {
-                    if (number == null || number.equals("")) number = card.getNumber();
-                    else number =  Tools.md5(number);
-                    presenter.editCard(new Card(card.getCardId(), checkPositionCardCategory, checkedPositionCardValue, number, seri, 1), card);
-                }
+                presenter.addOrUpdateCard(new Card(checkPositionCardCategory, checkedPositionCardValue, number, seri, 1));
                 return true;
         }
         return false;
@@ -140,10 +128,23 @@ public class ModifyCardActivity extends AppCompatActivity implements ModifyCardV
         }
     }
 
-    private void showCardInfomation(Card card) {
-        rbCardCategoryList.get(card.getCategory()).setChecked(true);
-        rbCardValueList.get(card.getValue()).setChecked(true);
-        edtCardSeri.setText(card.getSeri());
+    @Override
+    public void showMessage(int messageId) {
+        Toast.makeText(this, getResources().getString(messageId), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void backToScreen() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    public void onBackScreenWithResult() {
+        Intent intent = new Intent();
+        intent.putExtra(Constants.Result, 1);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void setControls() {
@@ -165,27 +166,8 @@ public class ModifyCardActivity extends AppCompatActivity implements ModifyCardV
         rbCardValueList.add((RadioButton) findViewById(R.id.radioButtonCardValue6));
         edtCardNumber = findViewById(R.id.editTextCardNumber);
         edtCardSeri = findViewById(R.id.editTextCardSeri);
-        btnNext = findViewById(R.id.buttonNext);
-        WalletLayout = findViewById(R.id.WalletLayout);
+        walletLayout = findViewById(R.id.WalletLayout);
+        walletLayout.setVisibility(View.GONE);
         toolbar = findViewById(R.id.toolbar);
-    }
-
-    @Override
-    public void showMessage(int message_id) {
-        Toast.makeText(this, getResources().getString(message_id), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void backToScreen() {
-        super.onBackPressed();
-        finish();
-    }
-
-    @Override
-    public void onBackScreenWithOkCode() {
-        Intent intent = new Intent();
-        intent.putExtra("result", 1);
-        setResult(RESULT_OK, intent);
-        finish();
     }
 }

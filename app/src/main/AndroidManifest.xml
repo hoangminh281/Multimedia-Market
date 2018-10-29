@@ -41,7 +41,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".view.activity.UserActivity" />
         <activity android:name=".view.activity.CardActivity" />
-        <activity android:name=".view.activity.ModifyCardActivity"
+        <activity android:name=".view.activity.AddUpdateCardActivity"
             android:windowSoftInputMode="stateHidden" />
     </application>
 

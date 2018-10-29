@@ -44,7 +44,7 @@ public class BookmarkPresenterImpl implements BookmarkPresenter {
     }
 
     public void bindingCurrentUserRole(final Context context) {
-        eventListener = userRepository.findAndWatchRoleByUserId(currentUser.getUid(), new ValueEventListener() {
+        eventListener = userRepository.findAndWatchRole(currentUser.getUid(), new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -62,7 +62,7 @@ public class BookmarkPresenterImpl implements BookmarkPresenter {
     @Override
     public void removeListener() {
         if (eventListener != null) {
-            userRepository.removeFindAndWatchRoleByUserIdListener(currentUser.getUid(), eventListener);
+            userRepository.removeFindAndWatchRoleListener(currentUser.getUid(), eventListener);
         }
     }
 }

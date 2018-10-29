@@ -1,7 +1,7 @@
 package com.thm.hoangminh.multimediamarket.model;
 
 public class RechargedHistory {
-    private String id, cardId, time;
+    private String id, cardId, time, userId;
     private int cardCategory, cardValue;
 
     public RechargedHistory() {
@@ -28,6 +28,14 @@ public class RechargedHistory {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getCardId() {

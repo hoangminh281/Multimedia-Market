@@ -7,7 +7,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.repository.base.Repository;
 
 public interface RechargeHistoryRepository<T, ID> extends Repository<T, ID> {
-    DatabaseReference createDataRef(ID userId);
+    DatabaseReference createDataRef(String userId);
 
     void addByDataRef(DatabaseReference dataRef, T clazz, OnSuccessListener successListener, OnFailureListener failureListener);
 

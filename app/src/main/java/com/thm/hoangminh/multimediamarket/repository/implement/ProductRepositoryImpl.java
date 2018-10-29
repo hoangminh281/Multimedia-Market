@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.api.ROUTE;
 import com.thm.hoangminh.multimediamarket.model.Product;
+import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
 
 public class ProductRepositoryImpl implements ProductRepository {
@@ -72,7 +73,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public DatabaseReference createDataRef() {
+    public DatabaseReference createDataRef(String productId) {
         return mRef.child(ROUTE.PRODUCT()).push();
     }
 

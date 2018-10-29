@@ -3,6 +3,7 @@ package com.thm.hoangminh.multimediamarket.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -21,13 +22,13 @@ import com.thm.hoangminh.multimediamarket.model.Card;
 import com.thm.hoangminh.multimediamarket.repository.CardRepository;
 import com.thm.hoangminh.multimediamarket.repository.implement.CardRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.utility.Validate;
+import com.thm.hoangminh.multimediamarket.view.activity.AddUpdateCardActivity;
 import com.thm.hoangminh.multimediamarket.view.activity.CardActivity;
-import com.thm.hoangminh.multimediamarket.view.activity.ModifyCardActivity;
 
 import java.util.ArrayList;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.SingleItemRowHolder>  {
-    private Context mContext;
+    private Context context;
     private ArrayList<Card> itemsList;
     private CardRepository cardRepository;
 
@@ -35,7 +36,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.SingleItemRowH
     public final static int INACTIVE_MENU_ID = 3333;
 
     public CardAdapter(Context context, ArrayList<Card> itemsList) {
-        this.mContext = context;
+        this.context = context;
         this.itemsList = itemsList;
         cardRepository = new CardRepositoryImpl();
     }
@@ -53,7 +54,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.SingleItemRowH
         holder.card = card;
         holder.imgAvatar.setImageResource(Validate.validateCardCategoryToResource(card.getCategory()));
         holder.txtSeri.setText(card.getSeri());
-        holder.txtValue.setText(MoneyFormular.format(card.getValue()));
+        holder.txtValue.setText(MoneyFormular.format(Constants.CardValueList[card.getValue()]));
         cardRepository.findAndWatchStatus(card, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -94,9 +95,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.SingleItemRowH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(mContext, ModifyCardActivity.class);
-                    intent.putExtra(CardActivity.requestCode, card);
-                    ((Activity) mContext).startActivityForResult(intent, CardActivity.cardRequestCode);
+                    Intent intent = new Intent(context, AddUpdateCardActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(Constants.CardObjectKey, card);
+                    intent.putExtras(bundle);
+                    ((Activity) context).startActivityForResult(intent, Constants.CardRequestCode);
                 }
             });
             itemView.setLongClickable(true);
@@ -106,9 +109,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.SingleItemRowH
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
             if (card.getStatus() == 0)
-                contextMenu.add(0, ACTIVE_MENU_ID, getAdapterPosition(), mContext.getResources().getString(R.string.menu_active));
+                contextMenu.add(0, ACTIVE_MENU_ID, getAdapterPosition(), context.getResources().getString(R.string.menu_active));
             else
-                contextMenu.add(0, INACTIVE_MENU_ID, getAdapterPosition(), mContext.getResources().getString(R.string.menu_inactive));
+                contextMenu.add(0, INACTIVE_MENU_ID, getAdapterPosition(), context.getResources().getString(R.string.menu_inactive));
         }
     }
 }

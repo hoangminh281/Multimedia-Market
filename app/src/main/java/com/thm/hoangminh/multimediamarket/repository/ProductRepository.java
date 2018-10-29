@@ -14,7 +14,7 @@ public interface ProductRepository extends WatchingRepository<Product, String> {
 
     void setStatus(String productId, int status, OnSuccessListener successListener, OnFailureListener failureListener);
 
-    DatabaseReference createDataRef();
+    DatabaseReference createDataRef(String productId);
 
-    void addByDataRef(DatabaseReference dataRef, Product clazz, OnSuccessListener successListener, OnFailureListener failureListener);
+    void addByDataRef(DatabaseReference dataRef, Product product, OnSuccessListener successListener, OnFailureListener failureListener);
 }

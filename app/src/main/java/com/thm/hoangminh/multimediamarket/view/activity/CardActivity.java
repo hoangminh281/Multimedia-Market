@@ -14,22 +14,22 @@ import android.widget.Toast;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.adapter.CardAdapter;
 import com.thm.hoangminh.multimediamarket.adapter.UserAdapter;
+import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Card;
 import com.thm.hoangminh.multimediamarket.model.User;
+import com.thm.hoangminh.multimediamarket.presenter.AddUpdateCardPresenter;
 import com.thm.hoangminh.multimediamarket.presenter.implement.CardPresenter;
 import com.thm.hoangminh.multimediamarket.view.callback.CardView;
 
 import java.util.ArrayList;
 
 public class CardActivity extends AppCompatActivity implements CardView {
-    private CardAdapter adapter;
+    private Toolbar toolbar;
     private RecyclerView myRecyclerView;
+
+    private CardAdapter adapter;
     private ArrayList<Card> cards;
     private CardPresenter presenter;
-    private Toolbar toolbar;
-
-    public final static String requestCode = "cardObj";
-    public final static int cardRequestCode = 1111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +63,8 @@ public class CardActivity extends AppCompatActivity implements CardView {
                 finish();
                 return true;
             case R.id.menu_addcard:
-                Intent intent = new Intent(CardActivity.this, ModifyCardActivity.class);
-                startActivityForResult(intent, cardRequestCode);
+                Intent intent = new Intent(CardActivity.this, AddUpdateCardActivity.class);
+                startActivityForResult(intent, Constants.CardRequestCode);
                 return true;
         }
         return false;
@@ -73,7 +73,7 @@ public class CardActivity extends AppCompatActivity implements CardView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == this.cardRequestCode && resultCode == RESULT_OK) {
+        if (requestCode == Constants.CardRequestCode && resultCode == RESULT_OK) {
             if (data.getExtras().getInt("result") == 1)
                 presenter.loadCardList();
         }

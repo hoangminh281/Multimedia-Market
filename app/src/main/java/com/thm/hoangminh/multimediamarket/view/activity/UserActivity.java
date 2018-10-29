@@ -45,7 +45,6 @@ public class UserActivity extends AppCompatActivity implements UserView {
 
         initPresenter();
         presenter.initDataUsers(this);
-
     }
 
     @Override

@@ -119,7 +119,7 @@ public class AddProductPresenterImpl implements AddProductPresenter {
 
     @Override
     public void addProduct(Product product, final ProductDetail productDetail, final ArrayList<Integer> selectedSections, final ArrayList<Bitmap> selectedBitmaps, final File pickedFile) {
-        DatabaseReference mRef = productRepository.createDataRef();
+        DatabaseReference mRef = productRepository.createDataRef(null);
         final String productId = mRef.getKey();
         product.setProductId(productId);
         final String avatarId = Tools.createRandomImageName();

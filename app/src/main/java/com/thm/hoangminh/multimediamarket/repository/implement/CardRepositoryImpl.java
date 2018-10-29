@@ -13,18 +13,27 @@ public class CardRepositoryImpl implements CardRepository {
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
-    public void add(Card item, OnSuccessListener successListener, OnFailureListener failureListener) {
-
+    public void add(Card card, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.CARD(card.getCategory(), card.getValue(), card.getCardId())).setValue(card)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 
     @Override
-    public void update(Card item, OnSuccessListener successListener, OnFailureListener failureListener) {
-
+    public void update(final Card card, final OnSuccessListener successListener, final OnFailureListener failureListener) {
+        remove(card, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                add(card, successListener, failureListener);
+            }
+        }, failureListener);
     }
 
     @Override
-    public void remove(Card item, OnSuccessListener successListener, OnFailureListener failureListener) {
-
+    public void remove(Card card, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.CARD(card.getCategory(), card.getValue(), card.getCardId())).removeValue()
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 
     @Override
@@ -59,5 +68,15 @@ public class CardRepositoryImpl implements CardRepository {
     public void findAndWatchStatus(Card card, ValueEventListener eventListener) {
         mRef.child(ROUTE.CARD_STATUS(card.getCategory(), card.getValue(), card.getCardId()))
                 .addValueEventListener(eventListener);
+    }
+
+    @Override
+    public DatabaseReference createDataRef(int cardCategory, int cardValue) {
+        return mRef.child(ROUTE.CARD(cardCategory, cardValue)).push();
+    }
+
+    @Override
+    public void addByDataRef(DatabaseReference dataRef, Card card, OnSuccessListener successListener, OnFailureListener failureListener) {
+        dataRef.setValue(card).addOnSuccessListener(successListener).addOnFailureListener(failureListener);
     }
 }
