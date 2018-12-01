@@ -49,6 +49,8 @@ import com.thm.hoangminh.multimediamarket.view.fragment.RatingFragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -298,6 +300,20 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
             btnCheckout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //Set the schedule function and rate
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (checkoutDialog != null && checkoutDialog.isShowing()) {
+                                        checkoutDialog.hide();
+                                    }
+                                }
+                            });
+                        }
+                    }, 5000);
                     presenter.checkoutProduct();
                 }
             });

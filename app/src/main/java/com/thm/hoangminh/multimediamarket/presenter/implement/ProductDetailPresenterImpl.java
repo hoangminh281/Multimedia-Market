@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,6 +45,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Callable;
 
 public class ProductDetailPresenterImpl implements ProductDetailPresenter {
@@ -309,12 +312,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
             public void onSuccess(Object o) {
                 listener.showMessage(b ? R.string.info_saved : R.string.info_unSaved);
             }
-        }, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
-        });
+        }, null);
     }
 
     @Override
