@@ -137,6 +137,8 @@ public class RechargePresenterImpl implements RechargePresenter {
                         }
                     }
                     rechargeCardWrong();
+                } else {
+                    rechargeCardWrong();
                 }
             }
 
