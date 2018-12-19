@@ -89,4 +89,7 @@ public class Constants {
     public static int BookMarkEnable = 1;
     public static int BookMarkDisable = 0;
     public static String AdminProductKey = "adminKey";
+
+    public static float ChargeFeePer = 5;
+    public static String AdminId = "2Z5JuQB4aiggqkYVcXXY0LB8vLw2";
 }
