@@ -16,11 +16,13 @@ import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
 import com.thm.hoangminh.multimediamarket.repository.SectionRepository;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.SectionRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.utility.Tools;
 import com.thm.hoangminh.multimediamarket.view.callback.SectionView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SectionPresenterImpl implements SectionPresenter {
@@ -72,21 +74,22 @@ public class SectionPresenterImpl implements SectionPresenter {
                             }
                             if (section.getProductIdArr() != null) {
                                 Iterator<Map.Entry<String, Integer>> ite = section.getProductIdArr().entrySet().iterator();
-                                HashMap<String, Integer> limitedProductIdArr = new HashMap<>();
+                                LinkedHashMap<String, Integer> limitedProductIdArr = new LinkedHashMap<>();
                                 while (ite.hasNext()) {
                                     if (limitedProductIdArr.size() == Constants.entireProductLimitInSection)
                                         break;
                                     Map.Entry<String, Integer> productIdAndValue = ite.next();
-                                    if (productIdAndValue.getValue() == Constants.ProductEnable)
+                                    if (productIdAndValue.getValue() != Constants.ProductDisable)
                                         limitedProductIdArr.put(productIdAndValue.getKey(), productIdAndValue.getValue());
                                 }
                                 if (limitedProductIdArr.size() != 0) {
+                                    Map<String, Integer> sortedDominatedArcadeProducts = Tools.sortMap(limitedProductIdArr, "des");
                                     SectionDataModel dataModel = new SectionDataModel();
                                     dataModel.setCateId(cateId);
                                     dataModel.setSectionId(section.getSectionId());
                                     dataModel.setHeaderTitle(section.getTitle());
                                     if (limitedProductIdArr != null) {
-                                        dataModel.setProductIdArr(new ArrayList<>(limitedProductIdArr.keySet()));
+                                        dataModel.setProductIdArr(new ArrayList<>(sortedDominatedArcadeProducts.keySet()));
                                     }
                                     listener.addSectionDataModelToCardview(dataModel);
                                 }

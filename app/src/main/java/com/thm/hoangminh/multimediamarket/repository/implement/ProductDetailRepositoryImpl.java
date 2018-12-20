@@ -48,6 +48,7 @@ public class ProductDetailRepositoryImpl implements ProductDetailRepository {
 
     @Override
     public void findAll(ValueEventListener event) {
+        mRef.child(ROUTE.PRODUCTDETAIL()).addListenerForSingleValueEvent(event);
     }
 
     @Override

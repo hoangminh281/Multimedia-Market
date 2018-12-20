@@ -8,6 +8,8 @@ import com.thm.hoangminh.multimediamarket.model.Pageable;
 import com.thm.hoangminh.multimediamarket.model.Section;
 import com.thm.hoangminh.multimediamarket.repository.base.Repository;
 
+import java.util.Map;
+
 public interface SectionRepository extends Repository<Section, String> {
     void findByPageable(String cateId, Pageable pageable, ValueEventListener event);
 
@@ -16,4 +18,8 @@ public interface SectionRepository extends Repository<Section, String> {
     boolean checkProductIdInSection(DataSnapshot dataSnapshot, String productId);
 
     void setProductValue(String cateId, String sectionId, String productId, int value, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
+
+    void removeProductIdArr(String cateId, String sectionId, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
+
+    void setProductValueList(String cateId, String sectionId, Map<String, Integer> productIds, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 }

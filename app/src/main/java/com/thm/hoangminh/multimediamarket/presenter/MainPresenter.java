@@ -6,4 +6,6 @@ public interface MainPresenter {
     void loadProductSuggestions();
 
     void loadCategory();
+
+    void refreshProductSection();
 }

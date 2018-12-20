@@ -20,7 +20,7 @@ import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.model.Section;
 import com.thm.hoangminh.multimediamarket.presenter.AddProductPresenter;
-import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.utility.Tools;
 import com.thm.hoangminh.multimediamarket.repository.FileStorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductDetailStorageRepository;

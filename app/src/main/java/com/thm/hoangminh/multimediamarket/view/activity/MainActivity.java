@@ -36,7 +36,6 @@ import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.implement.MainPresenterImpl;
-import com.thm.hoangminh.multimediamarket.references.Tools;
 import com.thm.hoangminh.multimediamarket.view.fragment.SectionFragment;
 
 import java.util.ArrayList;
@@ -53,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
     private MaterialSearchView searchView;
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
-    private TextView txtUserName, txtBalance, txtRole;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView txtUserName, txtBalance, txtRole;
     private de.hdodenhof.circleimageview.CircleImageView imgUser;
 
     private MainPresenter presenter;
@@ -185,6 +184,9 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
                 break;
             case R.id.menu_upload:
                 startActivity(AddProductActivity.class);
+                break;
+            case R.id.menu_refresh_section:
+                presenter.refreshProductSection();
                 break;
             case R.id.menu_user_admin:
                 startActivity(UserActivity.class);

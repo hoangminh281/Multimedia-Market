@@ -2,6 +2,7 @@ package com.thm.hoangminh.multimediamarket.constant;
 
 public class Constants {
     public final static String Home = "home";
+    public final static String DominatedArcadeSectionId = "-LGsndCDQUX0_Dn2oHIa";
 
     //Product
     public final static int ProductLimit = 5;

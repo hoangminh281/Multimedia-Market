@@ -38,7 +38,7 @@ public class RatingRepositoryImpl implements RatingRepository {
 
     @Override
     public void findAll(ValueEventListener event) {
-
+        mRef.child(ROUTE.RATING()).addListenerForSingleValueEvent(event);
     }
 
     @Override

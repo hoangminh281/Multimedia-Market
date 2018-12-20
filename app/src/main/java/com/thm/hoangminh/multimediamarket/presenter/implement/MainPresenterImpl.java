@@ -2,6 +2,7 @@ package com.thm.hoangminh.multimediamarket.presenter.implement;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -12,16 +13,23 @@ import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Category;
+import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.model.User;
 import com.thm.hoangminh.multimediamarket.presenter.MainPresenter;
 import com.thm.hoangminh.multimediamarket.repository.CategoryRepository;
+import com.thm.hoangminh.multimediamarket.repository.ProductDetailRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
+import com.thm.hoangminh.multimediamarket.repository.RatingRepository;
 import com.thm.hoangminh.multimediamarket.repository.RoleRepository;
+import com.thm.hoangminh.multimediamarket.repository.SectionRepository;
 import com.thm.hoangminh.multimediamarket.repository.UserRepository;
 import com.thm.hoangminh.multimediamarket.repository.UserStorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.implement.CategoryRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.ProductDetailRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.RatingRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.RoleRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.SectionRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.UserRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.UserStorageRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.utility.Validate;
@@ -29,6 +37,7 @@ import com.thm.hoangminh.multimediamarket.view.callback.MainView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MainPresenterImpl implements MainPresenter {
@@ -39,6 +48,9 @@ public class MainPresenterImpl implements MainPresenter {
     private RoleRepository roleRepository;
     private CategoryRepository categoryRepository;
     private ProductRepository productRepository;
+    private SectionRepository sectionRepository;
+    private ProductDetailRepository productDetailRepository;
+    private RatingRepository ratingRepository;
 
     public MainPresenterImpl(MainView listener, Context context) {
         this.context = context;
@@ -48,6 +60,9 @@ public class MainPresenterImpl implements MainPresenter {
         productRepository = new ProductRepositoryImpl();
         categoryRepository = new CategoryRepositoryImpl();
         userStorageRepository = new UserStorageRepositoryImpl();
+        sectionRepository = new SectionRepositoryImpl();
+        productDetailRepository = new ProductDetailRepositoryImpl();
+        ratingRepository = new RatingRepositoryImpl();
     }
 
     @Override
@@ -68,6 +83,7 @@ public class MainPresenterImpl implements MainPresenter {
                                 listener.setVisibleItemMenu(R.id.menu_card_admin, true);
                                 listener.setVisibleItemMenu(R.id.menu_product_admin, true);
                                 listener.setVisibleItemMenu(R.id.menu_upload, true);
+                                listener.setVisibleItemMenu(R.id.menu_refresh_section, true);
                                 break;
                             case Constants.ModRole:
                                 listener.setVisibleItemMenu(R.id.menu_user_admin, false);
@@ -163,5 +179,70 @@ public class MainPresenterImpl implements MainPresenter {
 
             }
         });
+    }
+
+    @Override
+    public void refreshProductSection() {
+        final LinkedHashMap<String, Integer> dominatedArcadeProducts = new LinkedHashMap<>();
+
+        productDetailRepository.findAll(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                    for (DataSnapshot item : iterable) {
+                        final ProductDetail productDetail = item.getValue(ProductDetail.class);
+                        dominatedArcadeProducts.put(productDetail.getId(), productDetail.getDownloaded());
+                    }
+                    ratingRepository.findAll(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                                for (DataSnapshot item : iterable) {
+                                    String productRatingId = item.getKey();
+                                    if (dominatedArcadeProducts.get(productRatingId) != null) {
+                                        dominatedArcadeProducts.put(productRatingId, dominatedArcadeProducts.get(productRatingId) + Math.round(item.getChildrenCount() / 3));
+                                    }
+                                }
+                            }
+                            saveDominatedArcadeGameIds(dominatedArcadeProducts);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void saveDominatedArcadeGameIds(Map<String, Integer> dominatedArcadeProducts) {
+        for (Map.Entry<String, Integer> entry : dominatedArcadeProducts.entrySet()) {
+            productRepository.findCateById(entry.getKey(), new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Log.d("main presenter", Category.getInstance().get(1).getCateId() + "");
+                        if (dataSnapshot.getValue(String.class).equals(Category.getInstance().get(1).getCateId())) {
+                            sectionRepository.setProductValue(Constants.Home, Constants.DominatedArcadeSectionId, entry.getKey(), entry.getValue(), null, null);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
     }
 }

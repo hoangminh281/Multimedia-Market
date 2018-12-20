@@ -13,6 +13,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Tools {
     public static String md5(String data) {
@@ -70,12 +77,12 @@ public class Tools {
         return age;
     }
 
-    public static String createImageNameRandom() {
+    public static String createRandomImageName() {
         Calendar calendar = Calendar.getInstance();
         return "image" + calendar.getTimeInMillis() + ".png";
     }
 
-    public static String createFileNameRandom(String name) {
+    public static String createRandomFileName(String name) {
         String suffix = name.split("\\.")[1];
         Calendar calendar = Calendar.getInstance();
         return "file" + calendar.getTimeInMillis() + "." + suffix;
@@ -99,5 +106,33 @@ public class Tools {
             }
         }
         return 0;
+    }
+
+    public static LinkedHashMap<String, Integer> sortMap(LinkedHashMap<String, Integer> map, String direction) {
+        List<Map.Entry<String, Integer>> capitalList = new LinkedList<>(map.entrySet());
+
+        if (direction.equals("inc")) {
+            Collections.sort(capitalList, (o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+        } else if (direction.equals("des")) {
+            Collections.sort(capitalList, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+        }
+
+        LinkedHashMap<String, Integer> result = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : capitalList) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+
+        return result;
+    }
+
+    public static Map<String, Integer> limitToMap(Map<String, Integer> map, int bound) {
+        Map<String, Integer> result = new HashMap<>();
+        int count = 1;
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            if (count > bound) break;
+            result.put(entry.getKey(), entry.getValue());
+        }
+
+        return result;
     }
 }

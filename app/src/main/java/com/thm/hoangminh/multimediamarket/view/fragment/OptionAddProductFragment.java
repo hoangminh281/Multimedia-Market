@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Category;
-import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
+import com.thm.hoangminh.multimediamarket.utility.AnimationSupport;
 
 public class OptionAddProductFragment extends Fragment {
     private Toolbar toolbar;

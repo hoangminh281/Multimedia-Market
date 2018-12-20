@@ -36,7 +36,7 @@ import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.presenter.AddProductPresenter;
 import com.thm.hoangminh.multimediamarket.presenter.implement.AddProductPresenterImpl;
-import com.thm.hoangminh.multimediamarket.references.AnimationSupport;
+import com.thm.hoangminh.multimediamarket.utility.AnimationSupport;
 import com.thm.hoangminh.multimediamarket.utility.Validate;
 import com.thm.hoangminh.multimediamarket.view.callback.ModifyProductView;
 

@@ -17,4 +17,6 @@ public interface ProductRepository extends WatchingRepository<Product, String> {
     DatabaseReference createDataRef(String productId);
 
     void addByDataRef(DatabaseReference dataRef, Product product, OnSuccessListener successListener, OnFailureListener failureListener);
+
+    void findCateById(String productId, ValueEventListener valueEventListener);
 }

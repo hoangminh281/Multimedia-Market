@@ -153,7 +153,7 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     public void updateImageCurrentUser(final Bitmap bitmap) {
         if (bitmap != null) {
             String imagePath = currentUser.getImage();
-            final String newImagePath = Tools.createImageNameRandom();
+            final String newImagePath = Tools.createRandomImageName();
             if (imagePath.equals(Constants.UserImageDefault)) {
                 userRepository.setImagePath(currentUser.getId(), newImagePath, new OnSuccessListener() {
                     @Override

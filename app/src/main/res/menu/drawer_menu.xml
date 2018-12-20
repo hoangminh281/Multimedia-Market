@@ -3,34 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_profile"
-        android:title="@string/btn_profile"
-        android:icon="@mipmap/ic_profile" />
+        android:icon="@mipmap/ic_profile"
+        android:title="@string/btn_profile" />
     <item
         android:id="@+id/menu_bookmark"
-        android:title="@string/menu_bookmark"
-        android:icon="@mipmap/ic_bookmark_menu"/>
+        android:icon="@mipmap/ic_bookmark_menu"
+        android:title="@string/menu_bookmark" />
     <item
         android:id="@+id/menu_upload"
+        android:icon="@mipmap/ic_upload"
         android:title="@string/menu_upload"
-        android:visible="false"
-        android:icon="@mipmap/ic_upload"/>
+        android:visible="false" />
+    <item
+        android:id="@+id/menu_refresh_section"
+        android:icon="@mipmap/ic_female"
+        android:title="Refresh product section"
+        android:visible="false" />
     <item
         android:id="@+id/menu_user_admin"
+        android:icon="@mipmap/ic_user_admin"
         android:title="@string/menu_user_admin"
-        android:visible="false"
-        android:icon="@mipmap/ic_user_admin"/>
+        android:visible="false" />
     <item
         android:id="@+id/menu_card_admin"
+        android:icon="@mipmap/ic_card_admin"
         android:title="@string/menu_card_admin"
-        android:visible="false"
-        android:icon="@mipmap/ic_card_admin"/>
+        android:visible="false" />
     <item
         android:id="@+id/menu_product_admin"
+        android:icon="@mipmap/ic_product_admin"
         android:title="@string/menu_product_admin"
-        android:visible="false"
-        android:icon="@mipmap/ic_product_admin"/>
+        android:visible="false" />
     <item
         android:id="@+id/menu_logout"
-        android:title="@string/btn_logout"
-        android:icon="@mipmap/ic_logout"/>
+        android:icon="@mipmap/ic_logout"
+        android:title="@string/btn_logout" />
 </menu>

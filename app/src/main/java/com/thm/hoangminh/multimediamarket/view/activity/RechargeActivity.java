@@ -23,7 +23,6 @@ import com.thm.hoangminh.multimediamarket.fomular.MoneyFormular;
 import com.thm.hoangminh.multimediamarket.model.Card;
 import com.thm.hoangminh.multimediamarket.presenter.RechargePresenter;
 import com.thm.hoangminh.multimediamarket.presenter.implement.RechargePresenterImpl;
-import com.thm.hoangminh.multimediamarket.references.Tools;
 import com.thm.hoangminh.multimediamarket.utility.Validate;
 import com.thm.hoangminh.multimediamarket.view.callback.RechargeView;
 

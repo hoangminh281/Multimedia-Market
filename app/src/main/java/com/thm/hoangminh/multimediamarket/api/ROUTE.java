@@ -18,6 +18,7 @@ public class ROUTE {
     private static final String PRODUCT_STATUS = "/status/";
     private static final String PRODUCT_PRICE = "/price/";
     private static final String PRODUCT_RATING = "/rating/";
+    private static final String PRODUCT_CATEID = "/cateId/";
 
     private static final String FILE = "files/";
 
@@ -92,6 +93,7 @@ public class ROUTE {
     public static String ROLE() {
         return ROLE;
     }
+
     public static String ROLE(int roleId) {
         return ROLE + roleId;
     }
@@ -124,6 +126,10 @@ public class ROUTE {
         return PRODUCT(productId) + PRODUCT_PRICE;
     }
 
+    public static String PRODUCT_CATEID(String productId) {
+        return PRODUCT(productId) + PRODUCT_CATEID;
+    }
+
     public static String RECHARGEHISTORY(String userId) {
         return RECHARGEHISTORY + userId;
     }
@@ -150,6 +156,10 @@ public class ROUTE {
 
     public static String FILE(String fileId) {
         return FILE + fileId;
+    }
+
+    public static String PRODUCTDETAIL() {
+        return PRODUCTDETAIL;
     }
 
     public static String PRODUCTDETAIL(String productId) {
@@ -202,6 +212,10 @@ public class ROUTE {
 
     public static String PURCHASEDPRODUCT(String userId, String cateId, String productId) {
         return PURCHASEDPRODUCT(userId, cateId) + "/" + productId;
+    }
+
+    public static String RATING() {
+        return RATING;
     }
 
     public static String RATING(String productId) {

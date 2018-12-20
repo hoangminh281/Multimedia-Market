@@ -19,7 +19,7 @@ import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.view.activity.RatingActivity;
 import com.thm.hoangminh.multimediamarket.adapter.RatingAdapter;
 import com.thm.hoangminh.multimediamarket.model.ProductRating;
-import com.thm.hoangminh.multimediamarket.references.Tools;
+import com.thm.hoangminh.multimediamarket.utility.Tools;
 
 import java.util.ArrayList;
 

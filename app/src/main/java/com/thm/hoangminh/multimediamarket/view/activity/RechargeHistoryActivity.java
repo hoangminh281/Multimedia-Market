@@ -13,7 +13,6 @@ import com.thm.hoangminh.multimediamarket.model.Card;
 import com.thm.hoangminh.multimediamarket.model.RechargedHistory;
 import com.thm.hoangminh.multimediamarket.presenter.RechargeHistoryPresenter;
 import com.thm.hoangminh.multimediamarket.presenter.implement.RechargeHistoryPresenterImpl;
-import com.thm.hoangminh.multimediamarket.references.Tools;
 import com.thm.hoangminh.multimediamarket.view.callback.RechargeHistoryView;
 
 public class RechargeHistoryActivity extends AppCompatActivity implements RechargeHistoryView {

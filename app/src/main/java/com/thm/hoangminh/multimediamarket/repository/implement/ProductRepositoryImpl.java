@@ -2,6 +2,8 @@ package com.thm.hoangminh.multimediamarket.repository.implement;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -80,5 +82,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public void addByDataRef(DatabaseReference dataRef, Product product, OnSuccessListener successListener, OnFailureListener failureListener) {
         dataRef.setValue(product).addOnSuccessListener(successListener).addOnFailureListener(failureListener);
+    }
+
+    @Override
+    public void findCateById(String productId, ValueEventListener valueEventListener) {
+        mRef.child(ROUTE.PRODUCT_CATEID(productId)).addListenerForSingleValueEvent(valueEventListener);
     }
 }

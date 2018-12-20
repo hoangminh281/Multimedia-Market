@@ -14,6 +14,8 @@ import com.thm.hoangminh.multimediamarket.model.Section;
 import com.thm.hoangminh.multimediamarket.repository.SectionRepository;
 import com.thm.hoangminh.multimediamarket.utility.Validate;
 
+import java.util.Map;
+
 public class SectionRepositoryImpl implements SectionRepository {
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
@@ -69,6 +71,20 @@ public class SectionRepositoryImpl implements SectionRepository {
     @Override
     public void setProductValue(String cateId, String sectionId, String productId, int value, OnSuccessListener<Void> successListener, OnFailureListener failureListener) {
         mRef.child(ROUTE.SECTION(cateId, sectionId, productId)).setValue(value)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
+    }
+
+    @Override
+    public void removeProductIdArr(String cateId, String sectionId, OnSuccessListener<Void> successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.SECTION(cateId, sectionId)).removeValue()
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
+    }
+
+    @Override
+    public void setProductValueList(String cateId, String sectionId, Map<String, Integer> productIds, OnSuccessListener<Void> successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.SECTION(cateId, sectionId)).setValue(productIds)
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
     }

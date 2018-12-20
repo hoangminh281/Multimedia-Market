@@ -350,7 +350,7 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter {
                         });
             } else {
                 do {
-                    tempId = Tools.createImageNameRandom();
+                    tempId = Tools.createRandomImageName();
                 } while (newImageId == tempId);
                 newImageId = tempId;
                 final String finalNewImageId = tempId;
@@ -379,7 +379,7 @@ public class UpdateProductPresenterImpl implements UpdateProductPresenter {
     }
 
     private void updateProductFile(final File updatedFile) {
-        final String fileId = Tools.createFileNameRandom(updatedFile.getName());
+        final String fileId = Tools.createRandomFileName(updatedFile.getName());
         updatedFile.setName(fileId);
         fileStorageRepository.updateOrCreate(currentProductDetail.getFileId(), updatedFile,
                 new OnSuccessListener<UploadTask.TaskSnapshot>() {
