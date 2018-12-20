@@ -152,6 +152,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
                     if (productDetail.getImageIdList() != null) {
                         loadImageList(new ArrayList<>(productDetail.getImageIdList().values()));
                     }
+                    recordCurrentUserView(productDetail, currentUser.getUid());
                 }
             }
 
@@ -161,6 +162,15 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
             }
         });
     }
+
+    private void recordCurrentUserView(ProductDetail productDetail, String userId) {
+        if (productDetail.getViews() != null && productDetail.getViews().get(currentUser.getUid()) != null) {
+            productDetailRepository.setViewsByUserId(productDetail.getId(), currentUser.getUid(), productDetail.getViews().get(currentUser.getUid()) + 1, null, null);
+        } else {
+            productDetailRepository.setViewsByUserId(productDetail.getId(), currentUser.getUid(), 1, null, null);
+        }
+    }
+
 
     private void loadProductOwner(String ownerId) {
         userRepository.findById(ownerId, new ValueEventListener() {

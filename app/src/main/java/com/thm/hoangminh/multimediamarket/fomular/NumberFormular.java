@@ -1,17 +1,17 @@
 package com.thm.hoangminh.multimediamarket.fomular;
 
 public class NumberFormular {
-    private int downloaded;
+    private int number;
     private String[] unitArr;
 
-    public NumberFormular(int downloaded, String[] unitArr) {
-        this.downloaded = downloaded;
+    public NumberFormular(int number, String[] unitArr) {
+        this.number = number;
         this.unitArr = unitArr;
     }
 
     public int getNumber() {
-        int tmp = downloaded;
-        if (downloaded > 999) {
+        int tmp = number;
+        if (number > 999) {
             do {
                 tmp /= 1000;
             }
@@ -21,7 +21,7 @@ public class NumberFormular {
     }
 
     public String getUnit() {
-        String st = downloaded + "";
+        String st = number + "";
         int i = (st.length() - 1) / 3;
         return unitArr[i];
     }

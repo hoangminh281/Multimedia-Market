@@ -1,23 +1,5 @@
 package com.thm.hoangminh.multimediamarket.model;
 
-import android.content.Context;
-import android.net.Uri;
-import android.widget.ImageView;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
-import com.thm.hoangminh.multimediamarket.R;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Product {
     private String productId;
     private String cateId;

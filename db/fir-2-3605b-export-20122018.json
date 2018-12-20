@@ -1,0 +1,895 @@
+{
+  "bookmark" : {
+    "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : {
+      "-LGAQqsSdhMt2bTudm1L" : {
+        "-LDlhVwesbhJsBsFVmEt" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "productId" : "-LDlhVwesbhJsBsFVmEt",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2",
+          "value" : 1
+        },
+        "-LDlhVwfP9wYLVhHgqI6" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "productId" : "-LDlhVwfP9wYLVhHgqI6",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2",
+          "value" : 1
+        },
+        "-LDlhVwh2F9hNBas5vHD" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "productId" : "-LDlhVwh2F9hNBas5vHD",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2",
+          "value" : 1
+        }
+      },
+      "-LGAQqsSdhMt2bTudm1M" : {
+        "-LI-MzgJbSrknzSk7r-f" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1M",
+          "productId" : "-LI-MzgJbSrknzSk7r-f",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2",
+          "value" : 1
+        },
+        "-LPjTKGkKx2EgEieg57c" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1M",
+          "productId" : "-LPjTKGkKx2EgEieg57c",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2",
+          "value" : 1
+        }
+      }
+    }
+  },
+  "cards" : [ {
+    "0" : {
+      "-LSj-gqWkf3areqFnokX" : {
+        "cardId" : "-LSj-gqWkf3areqFnokX",
+        "category" : 0,
+        "number" : "e10adc3949ba59abbe56e057f20f883e",
+        "seri" : "123",
+        "status" : 0,
+        "value" : 0
+      }
+    },
+    "5" : {
+      "-LU0fL4nkb2tzmH7AFWP" : {
+        "cardId" : "-LU0fL4nkb2tzmH7AFWP",
+        "category" : 0,
+        "number" : "e10adc3949ba59abbe56e057f20f883e",
+        "seri" : "123456",
+        "status" : 0,
+        "value" : 5
+      }
+    }
+  }, [ {
+    "-LRSYXn3QDeL4LVFJvPG" : {
+      "cardId" : "-LRSYXn3QDeL4LVFJvPG",
+      "category" : 1,
+      "number" : "e10adc3949ba59abbe56e057f20f883e",
+      "seri" : "12312",
+      "status" : 1,
+      "value" : 0
+    },
+    "-LRpEtAsk8iaTah0WuIo" : {
+      "cardId" : "-LRpEtAsk8iaTah0WuIo",
+      "category" : 1,
+      "number" : "202cb962ac59075b964b07152d234b70",
+      "seri" : "123",
+      "status" : 1,
+      "value" : 0
+    }
+  } ], {
+    "5" : {
+      "-LSj01kbEVfSt4mghae2" : {
+        "cardId" : "-LSj01kbEVfSt4mghae2",
+        "category" : 2,
+        "number" : "e10adc3949ba59abbe56e057f20f883e",
+        "seri" : "qwerty",
+        "status" : 0,
+        "value" : 5
+      }
+    }
+  }, null, {
+    "5" : {
+      "-LPybC7NhmLFIP6Ki5aW" : {
+        "cardId" : "-LPybC7NhmLFIP6Ki5aW",
+        "category" : 4,
+        "number" : "5c04925674920eb58467fb52ce4ef728",
+        "seri" : "123458",
+        "status" : 1,
+        "value" : 5
+      },
+      "-LQ-6yQ7iup-EZdUsBDg" : {
+        "cardId" : "-LQ-6yQ7iup-EZdUsBDg",
+        "category" : 4,
+        "number" : "c4ca4238a0b923820dcc509a6f75849b",
+        "seri" : "w",
+        "status" : 1,
+        "value" : 5
+      }
+    }
+  } ],
+  "categories" : {
+    "-LGAQqsSdhMt2bTudm1L" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "name" : "Trò chơi"
+    },
+    "-LGAQqsSdhMt2bTudm1M" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1M",
+      "name" : "Hình ảnh"
+    },
+    "-LGAQqsTMhSlSTKBd03A" : {
+      "cateId" : "-LGAQqsTMhSlSTKBd03A",
+      "name" : "Video"
+    },
+    "-LGAQqsTMhSlSTKBd03B" : {
+      "cateId" : "-LGAQqsTMhSlSTKBd03B",
+      "name" : "Âm thanh"
+    }
+  },
+  "product_detail" : {
+    "-LDlhVwX9fzrFxtdewJo" : {
+      "ageLimit" : 8,
+      "capacity" : 110,
+      "description" : "Now you can experience the uncompromising wilderness survuval product full of science and magic on the go.",
+      "downloaded" : 4,
+      "id" : "-LDlhVwX9fzrFxtdewJo",
+      "imageIdList" : {
+        "-LDlhVwesbhJsBsFVmE2" : "406x228bb.png",
+        "-LDlhVwesbhJsBsFVmE3" : "images (1).png",
+        "-LDlhVwesbhJsBsFVmE4" : "images.png",
+        "-LDlhVwesbhJsBsFVmE5" : "maxresdefault.png"
+      },
+      "intro" : "Chơi các trò chơi trúng thưởng hơn 6 triệu người chơi!",
+      "ownerId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "videoId" : "FBhVgaf9JS4"
+    },
+    "-LDlhVwesbhJsBsFVmEt" : {
+      "ageLimit" : 3,
+      "capacity" : 235,
+      "description" : "Use the slingshot to fling birds at the piggies' towers and bring them crashing down - all to save the precious eggs.",
+      "downloaded" : 1000000,
+      "id" : "-LDlhVwesbhJsBsFVmEt",
+      "intro" : "Tốt nhất trò chơi hành động Bird!",
+      "ownerId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "videoId" : "M0niPfYZaaI"
+    },
+    "-LDlhVwfP9wYLVhHgqI6" : {
+      "ageLimit" : 3,
+      "capacity" : 235,
+      "description" : "What you can do in Ice Crush.",
+      "downloaded" : 1000004,
+      "id" : "-LDlhVwfP9wYLVhHgqI6",
+      "intro" : "Hyper-gây nghiện miễn phí phù hợp với câu đố phiêu lưu, cho mùa đông mới và 2018 năm mới",
+      "ownerId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "videoId" : "5hutuC91cIY"
+    },
+    "-LDlhVwgwHDj__CE6gIz" : {
+      "ageLimit" : 3,
+      "capacity" : 532,
+      "description" : "*** Pay once & Play forever + receive FREE updates! No ads and no IAP ***",
+      "downloaded" : 5005,
+      "id" : "-LDlhVwgwHDj__CE6gIz",
+      "intro" : "Riêng công viên giải trí của bạn! Fun mini trò chơi, Rides và Giải thưởng",
+      "ownerId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "videoId" : "1GpjE2Uogws"
+    },
+    "-LDlhVwh2F9hNBas5vHD" : {
+      "ageLimit" : 12,
+      "capacity" : 111,
+      "description" : "Trong cuộc chiến chống lại các thế lực ác quỷ hắc ám (Shadow Wars), các chiến binh Stickman Warriors tham gia vào hành trình chinh phục thế giới hắc ám.",
+      "downloaded" : 1000006,
+      "id" : "-LDlhVwh2F9hNBas5vHD",
+      "intro" : "Stickman Legends: Shadow Wars - Trò chơi hay nhất trong loạt product Stickman!",
+      "ownerId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "videoId" : "ILd4dVcXQnU"
+    },
+    "-LDlhVwj9j3tU89adLiE" : {
+      "ageLimit" : 3,
+      "capacity" : 74,
+      "description" : "Maze Planet 3D Pro 2018.",
+      "downloaded" : 100004,
+      "id" : "-LDlhVwj9j3tU89adLiE",
+      "intro" : "Vũ trụ đầy Mê Planets đang chờ bạn khám phá",
+      "ownerId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "videoId" : "2CNTWH0zp9s"
+    },
+    "-LDlhVwkEMtWv1ttsEVs" : {
+      "ageLimit" : 7,
+      "capacity" : 423,
+      "description" : "This paid version of Mystic Gardian is full-screen ad free, and unlocking the final chapter is free of charge.",
+      "downloaded" : 100001,
+      "id" : "-LDlhVwkEMtWv1ttsEVs",
+      "intro" : "Cổ điển trò chơi phong cách JRPG trên điện thoại di động! Những cuộc phiêu lưu vĩ đại đang chờ bạn!",
+      "ownerId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "videoId" : "hIw3TH2EOZ0"
+    },
+    "-LDlhVwlraRt24dXSmyx" : {
+      "ageLimit" : 7,
+      "capacity" : 344,
+      "description" : "Shadow of Death is the greatest combination of Role-playing product (RPG) and Classic Fighting product.",
+      "downloaded" : 100000,
+      "id" : "-LDlhVwlraRt24dXSmyx",
+      "intro" : "Shadow of Death: Stickman Fighting - Unlock tất cả Heroes. Thách thức kẻ thù của bạn!",
+      "ownerId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "videoId" : "hUaBEZuYj_s"
+    },
+    "-LDlhVwmIEuMkLPNA9EK" : {
+      "ageLimit" : 3,
+      "capacity" : 33,
+      "description" : "The Brand New Idle RPG!!",
+      "downloaded" : 1000,
+      "id" : "-LDlhVwmIEuMkLPNA9EK",
+      "intro" : "Nhận Souls và Gems trị giá $ 100 !! (Bạn cũng có thể lấy nó với gốc ID Ranking)",
+      "ownerId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "videoId" : "ghsWXmd75SE"
+    },
+    "-LDlhVwnkVIDaZrdnmhy" : {
+      "ageLimit" : 3,
+      "capacity" : 421,
+      "description" : "In Monument Valley you will manipulate impossible architecture and guide a silent princess through a stunningly beautifull world",
+      "downloaded" : 1000000,
+      "id" : "-LDlhVwnkVIDaZrdnmhy",
+      "intro" : "Một cuộc phiêu lưu huyền ảo của kiến trúc không thể và sự tha thứ",
+      "ownerId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "videoId" : "wC1jHHF_Wjo"
+    },
+    "-LI6Qhq0hOojPHvgqZqP" : {
+      "ageLimit" : 10,
+      "capacity" : 941958,
+      "description" : "Mau mau mua ngay để làm cho căn bếp của bạn thật ấm cúng",
+      "downloadLink" : "file1532354289909.mp4",
+      "downloaded" : 1,
+      "id" : "-LI6Qhq0hOojPHvgqZqP",
+      "intro" : "Nấu ăn thật dễ dàng",
+      "ownerId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2",
+      "videoId" : "hi"
+    },
+    "-LIMHdMIRYe-gLewbGfB" : {
+      "ageLimit" : 1,
+      "capacity" : 47822,
+      "description" : "Mau mau mua ngay để sở hữu trọn bộ món ăn ngon",
+      "downloadLink" : "file1532620604488.jpg",
+      "downloaded" : 1,
+      "id" : "-LIMHdMIRYe-gLewbGfB",
+      "imageIdList" : {
+        "-LIMHdgkVFN2jULJVPdA" : "image1532620603724.png",
+        "-LIMHdgl8we7O39EwrdM" : "image1532620347637.png",
+        "-LIMHdgl8we7O39EwrdN" : "image1532620347638.png",
+        "-LIMHdgl8we7O39EwrdO" : "image1532620347639.png"
+      },
+      "intro" : "Tất cả các loại món ăn đều nằm tại đây",
+      "ownerId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2",
+      "videoId" : "2"
+    },
+    "-LTz87tzeWR4J2ePpFBr" : {
+      "ageLimit" : 1,
+      "capacity" : 0,
+      "description" : "Des",
+      "downloaded" : 2,
+      "fileId" : "file1545100103301.jpg",
+      "id" : "-LTz87tzeWR4J2ePpFBr",
+      "intro" : "Abc",
+      "ownerId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2",
+      "videoId" : ""
+    }
+  },
+  "products" : {
+    "-LDlhVwX9fzrFxtdewJo" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "photoId" : "dont-starve.png",
+      "price" : 110000,
+      "productId" : "-LDlhVwX9fzrFxtdewJo",
+      "rating" : 1,
+      "status" : 1,
+      "title" : "Don't starve: Pocket Edition"
+    },
+    "-LDlhVwesbhJsBsFVmEt" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "photoId" : "angry-birds-2.png",
+      "price" : 0,
+      "productId" : "-LDlhVwesbhJsBsFVmEt",
+      "rating" : 4,
+      "status" : 1,
+      "title" : "Angry Bird 2"
+    },
+    "-LDlhVwfP9wYLVhHgqI6" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "photoId" : "ice-crush-2018.png",
+      "price" : 0,
+      "productId" : "-LDlhVwfP9wYLVhHgqI6",
+      "rating" : 5,
+      "status" : 1,
+      "title" : "Ice Crush 2018 - A new Puzzle Matching Adventure"
+    },
+    "-LDlhVwgwHDj__CE6gIz" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "photoId" : "my-town.png",
+      "price" : 22000,
+      "productId" : "-LDlhVwgwHDj__CE6gIz",
+      "rating" : 5,
+      "status" : 0,
+      "title" : "My Town : ICEE™ Amusement Park"
+    },
+    "-LDlhVwh2F9hNBas5vHD" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "photoId" : "stickman.png",
+      "price" : 6000,
+      "productId" : "-LDlhVwh2F9hNBas5vHD",
+      "rating" : 1,
+      "status" : 1,
+      "title" : "Stickman Legends"
+    },
+    "-LDlhVwj9j3tU89adLiE" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "photoId" : "maze-planet.png",
+      "price" : 27000,
+      "productId" : "-LDlhVwj9j3tU89adLiE",
+      "rating" : 5,
+      "status" : 1,
+      "title" : "Maze Planet 3D Pro"
+    },
+    "-LDlhVwkEMtWv1ttsEVs" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "photoId" : "mystic-guardian.png",
+      "price" : 80000,
+      "productId" : "-LDlhVwkEMtWv1ttsEVs",
+      "rating" : 1,
+      "status" : 1,
+      "title" : "Mystic Guardian VIP : Old School Action RPG"
+    },
+    "-LDlhVwlraRt24dXSmyx" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "photoId" : "shadow-of-death.png",
+      "price" : 9000,
+      "productId" : "-LDlhVwlraRt24dXSmyx",
+      "rating" : 4.6,
+      "status" : 1,
+      "title" : "Shadow of Death: Stickman Fighting - Dark Knight"
+    },
+    "-LDlhVwmIEuMkLPNA9EK" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "photoId" : "cashknight.png",
+      "price" : 213000,
+      "productId" : "-LDlhVwmIEuMkLPNA9EK",
+      "rating" : 4.5,
+      "status" : 1,
+      "title" : "CashKnight ( Soul Event Version )"
+    },
+    "-LDlhVwnkVIDaZrdnmhy" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1L",
+      "photoId" : "monyment-valley.png",
+      "price" : 86000,
+      "productId" : "-LDlhVwnkVIDaZrdnmhy",
+      "rating" : 4.8,
+      "status" : 1,
+      "title" : "Monument Valley"
+    },
+    "-LI6Qhq0hOojPHvgqZqP" : {
+      "cateId" : "-LGAQqsTMhSlSTKBd03A",
+      "photoId" : "image1532354289621.png",
+      "price" : 25000,
+      "productId" : "-LI6Qhq0hOojPHvgqZqP",
+      "rating" : 5,
+      "status" : 1,
+      "title" : "Hướng dẫn nấu ăn ngon"
+    },
+    "-LIMHdMIRYe-gLewbGfB" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1M",
+      "photoId" : "image1532620347274.png",
+      "price" : 160000,
+      "productId" : "-LIMHdMIRYe-gLewbGfB",
+      "rating" : 4,
+      "status" : 1,
+      "title" : "Món ăn ba miền bốn phương"
+    },
+    "-LTz87tzeWR4J2ePpFBr" : {
+      "cateId" : "-LGAQqsSdhMt2bTudm1M",
+      "photoId" : "image1545100103301.png",
+      "price" : 12000,
+      "productId" : "-LTz87tzeWR4J2ePpFBr",
+      "rating" : 5,
+      "status" : 1,
+      "title" : "Test"
+    }
+  },
+  "purchased_product" : {
+    "0jOohXAgqMfoU6T3NWex1cd2jvH3" : {
+      "-LGAQqsSdhMt2bTudm1L" : {
+        "-LDlhVwh2F9hNBas5vHD" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "dateTime" : "18/12/2018 - 21:21:42",
+          "productId" : "-LDlhVwh2F9hNBas5vHD",
+          "userId" : "0jOohXAgqMfoU6T3NWex1cd2jvH3"
+        }
+      }
+    },
+    "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : {
+      "-LGAQqsSdhMt2bTudm1L" : {
+        "-LDlhVwX9fzrFxtdewJo" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "dateTime" : "01/12/2018 - 22:30:37",
+          "productId" : "-LDlhVwX9fzrFxtdewJo",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        },
+        "-LDlhVwesbhJsBsFVmEt" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "dateTime" : "21/11/2018 - 15:32:00",
+          "productId" : "-LDlhVwesbhJsBsFVmEt",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        },
+        "-LDlhVwfP9wYLVhHgqI6" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "dateTime" : "02/12/2018 - 18:52:33",
+          "productId" : "-LDlhVwfP9wYLVhHgqI6",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        },
+        "-LDlhVwgwHDj__CE6gIz" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "dateTime" : "12/12/2018 - 16:35:59",
+          "productId" : "-LDlhVwgwHDj__CE6gIz",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        },
+        "-LDlhVwh2F9hNBas5vHD" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "dateTime" : "21/11/2018 - 16:01:46",
+          "productId" : "-LDlhVwh2F9hNBas5vHD",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        },
+        "-LDlhVwj9j3tU89adLiE" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "dateTime" : "03/12/2018 - 21:42:15",
+          "productId" : "-LDlhVwj9j3tU89adLiE",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        },
+        "-LDlhVwkEMtWv1ttsEVs" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1L",
+          "dateTime" : "03/12/2018 - 21:42:35",
+          "productId" : "-LDlhVwkEMtWv1ttsEVs",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        }
+      },
+      "-LGAQqsSdhMt2bTudm1M" : {
+        "-LI-MzgJbSrknzSk7r-f" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1M",
+          "dateTime" : "23/11/2018 - 14:28:40",
+          "productId" : "-LI-MzgJbSrknzSk7r-f",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        },
+        "-LIMHdMIRYe-gLewbGfB" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1M",
+          "dateTime" : "03/12/2018 - 21:43:12",
+          "productId" : "-LIMHdMIRYe-gLewbGfB",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        },
+        "-LTz87tzeWR4J2ePpFBr" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1M",
+          "dateTime" : "18/12/2018 - 09:28:44",
+          "productId" : "-LTz87tzeWR4J2ePpFBr",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        }
+      },
+      "-LGAQqsTMhSlSTKBd03A" : {
+        "-LI6Qhq0hOojPHvgqZqP" : {
+          "cateId" : "-LGAQqsTMhSlSTKBd03A",
+          "dateTime" : "03/12/2018 - 21:43:38",
+          "productId" : "-LI6Qhq0hOojPHvgqZqP",
+          "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+        }
+      }
+    },
+    "3U8SiJbkyJQS8SCxSswoVfIIf4z1" : {
+      "-LGAQqsSdhMt2bTudm1M" : {
+        "-LTz87tzeWR4J2ePpFBr" : {
+          "cateId" : "-LGAQqsSdhMt2bTudm1M",
+          "dateTime" : "18/12/2018 - 13:50:40",
+          "productId" : "-LTz87tzeWR4J2ePpFBr",
+          "userId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1"
+        }
+      }
+    }
+  },
+  "rating" : {
+    "-LDlhVwX9fzrFxtdewJo" : {
+      "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : {
+        "comment" : "",
+        "point" : 1,
+        "productId" : "-LDlhVwX9fzrFxtdewJo",
+        "time" : "02/12/2018",
+        "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+      }
+    },
+    "-LDlhVwesbhJsBsFVmEt" : {
+      "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : {
+        "content" : "",
+        "likedList" : {
+          "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : 1
+        },
+        "point" : 5,
+        "productId" : "-LDlhVwesbhJsBsFVmEt",
+        "time" : "21/10/2018",
+        "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+      }
+    },
+    "-LDlhVwfP9wYLVhHgqI6" : {
+      "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : {
+        "comment" : "",
+        "point" : 5,
+        "productId" : "-LDlhVwfP9wYLVhHgqI6",
+        "time" : "02/12/2018",
+        "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+      }
+    },
+    "-LDlhVwh2F9hNBas5vHD" : {
+      "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : {
+        "content" : "Hay",
+        "likedList" : {
+          "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : 0
+        },
+        "point" : 1,
+        "productId" : "-LDlhVwh2F9hNBas5vHD",
+        "time" : "21/10/2018",
+        "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+      }
+    },
+    "-LDlhVwkEMtWv1ttsEVs" : {
+      "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : {
+        "comment" : "Chiều hướng \n\nKo ",
+        "point" : 1,
+        "productId" : "-LDlhVwkEMtWv1ttsEVs",
+        "time" : "25/10/2018",
+        "userId" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2"
+      }
+    },
+    "-LIMHdMIRYe-gLewbGfB" : {
+      "3U8SiJbkyJQS8SCxSswoVfIIf4z1" : {
+        "comment" : "OK ",
+        "point" : 4,
+        "productId" : "-LIMHdMIRYe-gLewbGfB",
+        "time" : "18/12/2018",
+        "userId" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1"
+      }
+    }
+  },
+  "recharge_histories" : {
+    "0jOohXAgqMfoU6T3NWex1cd2jvH3" : {
+      "-LU0fXW8TSvtU-3GisF_" : {
+        "cardCategory" : 0,
+        "cardId" : "-LU0fL4nkb2tzmH7AFWP",
+        "cardValue" : 5,
+        "id" : "-LU0fXW8TSvtU-3GisF_",
+        "time" : "18/12/2018 - 21:17:54"
+      }
+    },
+    "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : {
+      "-LPeMHVFFVndxBQxcdMs" : {
+        "cardCategory" : 0,
+        "cardId" : "-LNuBwElWChVwjDua8Dc",
+        "cardValue" : 0,
+        "id" : "-LPeMHVFFVndxBQxcdMs",
+        "time" : "25/11/2018 - 15:35:23"
+      },
+      "-LSj-imzhbOFRi0Yeln8" : {
+        "cardCategory" : 0,
+        "cardId" : "-LSj-gqWkf3areqFnokX",
+        "cardValue" : 0,
+        "id" : "-LSj-imzhbOFRi0Yeln8",
+        "time" : "02/12/2018 - 20:02:02"
+      },
+      "-LSj04FeaIWINCiuHFfr" : {
+        "cardCategory" : 2,
+        "cardId" : "-LSj01kbEVfSt4mghae2",
+        "cardValue" : 5,
+        "id" : "-LSj04FeaIWINCiuHFfr",
+        "time" : "02/12/2018 - 20:03:34"
+      }
+    }
+  },
+  "roles" : [ "admin", "mod", "user" ],
+  "sections" : {
+    "-LGAQqsSdhMt2bTudm1L" : {
+      "-LGsndCOxtNqd_Hu44UR" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 1,
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1,
+          "-LDlhVwkEMtWv1ttsEVs" : 1
+        },
+        "sectionId" : "-LGsndCOxtNqd_Hu44UR",
+        "title" : "Chiến thuật"
+      },
+      "-LGsndCQ_90LFUWJr87U" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 1,
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1,
+          "-LDlhVwkEMtWv1ttsEVs" : 1
+        },
+        "sectionId" : "-LGsndCQ_90LFUWJr87U",
+        "title" : "Đua xe"
+      },
+      "-LGsndCS1RDKSlQLYBES" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 1,
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1
+        },
+        "sectionId" : "-LGsndCS1RDKSlQLYBES",
+        "title" : "Nhập vai"
+      },
+      "-LGsndCTJqU4rG7KMJvj" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 1,
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1,
+          "-LDlhVwkEMtWv1ttsEVs" : 1
+        },
+        "sectionId" : "-LGsndCTJqU4rG7KMJvj",
+        "title" : "Phiêu lưu"
+      },
+      "-LGsndCVq8G2uoCPF9q0" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 1,
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1,
+          "-LDlhVwkEMtWv1ttsEVs" : 1
+        },
+        "sectionId" : "-LGsndCVq8G2uoCPF9q0",
+        "title" : "Thể thao"
+      },
+      "-LGsndCWn9KCNFmUe_6l" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 1,
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1,
+          "-LDlhVwkEMtWv1ttsEVs" : 1
+        },
+        "sectionId" : "-LGsndCWn9KCNFmUe_6l",
+        "title" : "Câu đố"
+      },
+      "-LGsndCYFL-ABP0_Is6W" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 1,
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1,
+          "-LDlhVwkEMtWv1ttsEVs" : 1
+        },
+        "sectionId" : "-LGsndCYFL-ABP0_Is6W",
+        "title" : "Giáo dục"
+      },
+      "-LGsndC_4LyGCDXi6TKi" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 1,
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1,
+          "-LDlhVwkEMtWv1ttsEVs" : 1,
+          "-LHTcEUR0jZ_1HfGxrbE" : 1,
+          "-LPjESQ6vurvNLhT-2IJ" : 1
+        },
+        "sectionId" : "-LGsndC_4LyGCDXi6TKi",
+        "title" : "Mô phỏng"
+      }
+    },
+    "-LGAQqsSdhMt2bTudm1M" : {
+      "-LGsndCbLKHCzWXCitLg" : {
+        "sectionId" : "-LGsndCbLKHCzWXCitLg",
+        "title" : "Animal"
+      },
+      "-LGsndCcJXWoqouLzh6d" : {
+        "sectionId" : "-LGsndCcJXWoqouLzh6d",
+        "title" : "Nature"
+      },
+      "-LGsndCdVz1mGNSbPA85" : {
+        "productIdArr" : {
+          "-LI-MzgJbSrknzSk7r-f" : 1,
+          "-LPjPPaDrOFlaXQprMpn" : 1,
+          "-LPjTKGkKx2EgEieg57c" : 1,
+          "-LTz87tzeWR4J2ePpFBr" : 1
+        },
+        "sectionId" : "-LGsndCdVz1mGNSbPA85",
+        "title" : "Autumn"
+      },
+      "-LGsndCeevHRFWeKNB4q" : {
+        "productIdArr" : {
+          "-LIMHdMIRYe-gLewbGfB" : 1
+        },
+        "sectionId" : "-LGsndCeevHRFWeKNB4q",
+        "title" : "Flower"
+      },
+      "-LGsndCfQSviSxRP5Ypa" : {
+        "sectionId" : "-LGsndCfQSviSxRP5Ypa",
+        "title" : "Love"
+      },
+      "-LGsndCgtZWW0ymdpdlu" : {
+        "productIdArr" : {
+          "-LIMHdMIRYe-gLewbGfB" : 1,
+          "-LTz87tzeWR4J2ePpFBr" : 1
+        },
+        "sectionId" : "-LGsndCgtZWW0ymdpdlu",
+        "title" : "Texure"
+      },
+      "-LGsndCh65J-8b2g9VmP" : {
+        "sectionId" : "-LGsndCh65J-8b2g9VmP",
+        "title" : "Wallpaper"
+      },
+      "-LGsndCj-kWXyFGblvhR" : {
+        "productIdArr" : {
+          "-LI-MzgJbSrknzSk7r-f" : 1
+        },
+        "sectionId" : "-LGsndCj-kWXyFGblvhR",
+        "title" : "Business"
+      }
+    },
+    "-LGAQqsTMhSlSTKBd03A" : {
+      "-LGsndCbLKHCzWXCitLg" : {
+        "productIdArr" : {
+          "-LI-7sTn8vbPZWuBN0NY" : 1,
+          "-LI-AphKrmcyx9-1sQr1" : 1,
+          "-LI-BGzOp1MBZYS0I-HF" : 1,
+          "-LI-OEY1rQGnVSBSTBzf" : 1,
+          "-LI6Qhq0hOojPHvgqZqP" : 1,
+          "-LPjLiAgjn0nzWGS4fPS" : 1
+        },
+        "sectionId" : "-LGsndCbLKHCzWXCitLg",
+        "title" : "Top trend"
+      },
+      "-LGsndCbLKHCzWXCitLk" : {
+        "sectionId" : "-LGsndCbLKHCzWXCitLk",
+        "title" : "Phim ảnh"
+      },
+      "-LGsndCbLKHCzWXCitlh" : {
+        "sectionId" : "-LGsndCbLKHCzWXCitlh",
+        "title" : "Thịnh hành"
+      }
+    },
+    "-LGAQqsTMhSlSTKBd03B" : {
+      "-LGsndCbLKHCzWXCitLg" : {
+        "sectionId" : "-LGsndCbLKHCzWXCitLg",
+        "title" : "Trữ tình & bolero"
+      },
+      "-LGsndCbLKHCzWXCitLh" : {
+        "sectionId" : "-LGsndCbLKHCzWXCitLh",
+        "title" : "Những bài hit"
+      },
+      "-LGsndCbLKHCzWXCitLk" : {
+        "sectionId" : "-LGsndCbLKHCzWXCitLk",
+        "title" : "Acoustic"
+      }
+    },
+    "home" : {
+      "-LGsndCBWaEwM85IAftC" : {
+        "productIdArr" : {
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1
+        },
+        "sectionId" : "-LGsndCBWaEwM85IAftC",
+        "title" : "Game mới + c.nhật"
+      },
+      "-LGsndCDQUX0_Dn2oHIa" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 4,
+          "-LDlhVwesbhJsBsFVmEt" : 1000000,
+          "-LDlhVwfP9wYLVhHgqI6" : 1000004,
+          "-LDlhVwgwHDj__CE6gIz" : 5005,
+          "-LDlhVwh2F9hNBas5vHD" : 1000006,
+          "-LDlhVwj9j3tU89adLiE" : 100004,
+          "-LDlhVwkEMtWv1ttsEVs" : 100001,
+          "-LDlhVwlraRt24dXSmyx" : 100000,
+          "-LDlhVwmIEuMkLPNA9EK" : 1000,
+          "-LDlhVwnkVIDaZrdnmhy" : 1000000
+        },
+        "sectionId" : "-LGsndCDQUX0_Dn2oHIa",
+        "title" : "Thống trị Arcade"
+      },
+      "-LGsndCEcGVI4bYdou-7" : {
+        "productIdArr" : {
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1
+        },
+        "sectionId" : "-LGsndCEcGVI4bYdou-7",
+        "title" : "Được gợi ý cho bạn"
+      },
+      "-LGsndCGyaT-QOhrNlLi" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 1,
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1,
+          "-LDlhVwkEMtWv1ttsEVs" : 1
+        },
+        "sectionId" : "-LGsndCGyaT-QOhrNlLi",
+        "title" : "Lập chiến lược và chinh phục"
+      },
+      "-LGsndCIF2wZNW7AWXSp" : {
+        "productIdArr" : {
+          "-LDlhVwX9fzrFxtdewJo" : 1,
+          "-LDlhVwesbhJsBsFVmEt" : 1,
+          "-LDlhVwfP9wYLVhHgqI6" : 1,
+          "-LDlhVwgwHDj__CE6gIz" : 1,
+          "-LDlhVwh2F9hNBas5vHD" : 1,
+          "-LDlhVwj9j3tU89adLiE" : 1,
+          "-LDlhVwkEMtWv1ttsEVs" : 1
+        },
+        "sectionId" : "-LGsndCIF2wZNW7AWXSp",
+        "title" : "Đề xuất cho bạn"
+      }
+    }
+  },
+  "users" : {
+    "0jOohXAgqMfoU6T3NWex1cd2jvH3" : {
+      "balance" : 488001,
+      "birthday" : "",
+      "email" : "hoangminh281@gmail.com",
+      "id" : "0jOohXAgqMfoU6T3NWex1cd2jvH3",
+      "image" : "image1545108791949.png",
+      "name" : "hoangminh281",
+      "phone" : "0127123",
+      "role" : 2,
+      "sex" : 0,
+      "status" : 1
+    },
+    "2Z5JuQB4aiggqkYVcXXY0LB8vLw2" : {
+      "balance" : 1300,
+      "birthday" : "28/12/1996",
+      "email" : "tranhoangminhptit@gmail.com",
+      "id" : "2Z5JuQB4aiggqkYVcXXY0LB8vLw2",
+      "image" : "user.png",
+      "name" : "Admin",
+      "phone" : "",
+      "role" : 0,
+      "sex" : 0,
+      "status" : 1
+    },
+    "3U8SiJbkyJQS8SCxSswoVfIIf4z1" : {
+      "balance" : 6700,
+      "birthday" : "28/12/1996",
+      "email" : "minh123@gmail.com",
+      "id" : "3U8SiJbkyJQS8SCxSswoVfIIf4z1",
+      "image" : "image1529733120095.png",
+      "name" : "Hùng Mod",
+      "phone" : "",
+      "role" : 0,
+      "sex" : 2,
+      "status" : 1
+    },
+    "cRSaJFZhc2bFe3sOY5xtddKl4773" : {
+      "balance" : 20009,
+      "birthday" : "15/7/1996",
+      "email" : "inevermi2812@gmail.com",
+      "id" : "cRSaJFZhc2bFe3sOY5xtddKl4773",
+      "image" : "user.png",
+      "name" : "Khoa Nguyễn",
+      "phone" : "",
+      "role" : 2,
+      "sex" : 1,
+      "status" : 0
+    }
+  }
+}

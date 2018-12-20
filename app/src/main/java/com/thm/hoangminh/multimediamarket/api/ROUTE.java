@@ -40,6 +40,7 @@ public class ROUTE {
     private static final String PRODUCTDETAIL_IMAGELIST = "/imageIdList/";
     private static final String PRODUCTDETAIL_FILE = "/fileId/";
     private static final String PRODUCTDETAIL_PURCHASEDQUANTITY = "/downloaded/";
+    private static final String PRODUCTDETAIL_VIEWS = "/views/";
 
     private static final String PRODUCTDETAILSTORAGE_IMAGE = "products/";
 
@@ -184,6 +185,10 @@ public class ROUTE {
 
     public static String PRODUCTDETAIL_CAPACITY(String productId) {
         return PRODUCTDETAIL(productId) + PRODUCTDETAIL_CAPACITY;
+    }
+
+    public static String PRODUCTDETAIL_VIEWS(String productId, String userId) {
+        return PRODUCTDETAIL(productId) + PRODUCTDETAIL_VIEWS + userId;
     }
 
     public static String USERSTORAGE_IMAGE(String photoId) {

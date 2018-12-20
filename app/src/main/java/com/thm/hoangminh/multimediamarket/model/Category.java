@@ -1,7 +1,6 @@
 package com.thm.hoangminh.multimediamarket.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Category {
     private String cateId;

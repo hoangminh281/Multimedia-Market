@@ -184,6 +184,7 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void refreshProductSection() {
         final LinkedHashMap<String, Integer> dominatedArcadeProducts = new LinkedHashMap<>();
+        final LinkedHashMap<String, Integer> hintedProducts = new LinkedHashMap<>();
 
         productDetailRepository.findAll(new ValueEventListener() {
             @Override
@@ -192,7 +193,10 @@ public class MainPresenterImpl implements MainPresenter {
                     Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                     for (DataSnapshot item : iterable) {
                         final ProductDetail productDetail = item.getValue(ProductDetail.class);
-                        dominatedArcadeProducts.put(productDetail.getId(), productDetail.getDownloaded());
+                        dominatedArcadeProducts.put(productDetail.getId(), productDetail.getBuyCount());
+                        if (productDetail.getViews() != null) {
+                            hintedProducts.put(productDetail.getId(), productDetail.getViews().size());
+                        }
                     }
                     ratingRepository.findAll(new ValueEventListener() {
                         @Override
@@ -202,7 +206,7 @@ public class MainPresenterImpl implements MainPresenter {
                                 for (DataSnapshot item : iterable) {
                                     String productRatingId = item.getKey();
                                     if (dominatedArcadeProducts.get(productRatingId) != null) {
-                                        dominatedArcadeProducts.put(productRatingId, dominatedArcadeProducts.get(productRatingId) + Math.round(item.getChildrenCount() / 3));
+                                        dominatedArcadeProducts.put(productRatingId, dominatedArcadeProducts.get(productRatingId) + Math.round(item.getChildrenCount() / 2));
                                     }
                                 }
                             }
@@ -214,6 +218,7 @@ public class MainPresenterImpl implements MainPresenter {
 
                         }
                     });
+                    saveHintedGameIds(hintedProducts);
                 }
             }
 
@@ -230,7 +235,6 @@ public class MainPresenterImpl implements MainPresenter {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        Log.d("main presenter", Category.getInstance().get(1).getCateId() + "");
                         if (dataSnapshot.getValue(String.class).equals(Category.getInstance().get(1).getCateId())) {
                             sectionRepository.setProductValue(Constants.Home, Constants.DominatedArcadeSectionId, entry.getKey(), entry.getValue(), null, null);
                         }
@@ -242,7 +246,26 @@ public class MainPresenterImpl implements MainPresenter {
 
                 }
             });
+        }
+    }
 
+    private void saveHintedGameIds(Map<String, Integer> hintedProducts) {
+        for (Map.Entry<String, Integer> entry : hintedProducts.entrySet()) {
+            productRepository.findCateById(entry.getKey(), new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        if (dataSnapshot.getValue(String.class).equals(Category.getInstance().get(1).getCateId())) {
+                            sectionRepository.setProductValue(Constants.Home, Constants.HintedSectionId, entry.getKey(), entry.getValue(), null, null);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 }

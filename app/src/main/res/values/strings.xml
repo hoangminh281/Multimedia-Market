@@ -155,8 +155,8 @@
     <string name="menu_role">Update role</string>
     <string name="info_fail_role">The account didn\'t meet out requirement to process this action</string>
     <string name="err_signup">Cannot sign up with your information.</string>
-    <string name="info_downloadFileSuccess">Product successfully downloaded</string>
-    <string name="info_downloadFireFailure">Product failure downloaded</string>
+    <string name="info_downloadFileSuccess">Product successfully number</string>
+    <string name="info_downloadFireFailure">Product failure number</string>
     <string name="btn_loading">Downloading...</string>
     <string name="menu_card_admin">Card management tool</string>
     <string name="menu_addCard">Add new card</string>

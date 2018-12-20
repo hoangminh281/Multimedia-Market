@@ -1,16 +1,5 @@
 package com.thm.hoangminh.multimediamarket.model;
 
-import android.content.Context;
-import android.net.Uri;
-import android.widget.ImageView;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
-import com.thm.hoangminh.multimediamarket.R;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProductDetail {
@@ -18,8 +7,9 @@ public class ProductDetail {
     private String intro;
     private String description;
     private int capacity;
-    private int downloaded;
+    private int buyCount;
     private int ageLimit;
+    private HashMap<String, Integer> views;
     private String ownerId;
     private String videoId;
     private HashMap<String, String> imageIdList;
@@ -28,44 +18,21 @@ public class ProductDetail {
     public ProductDetail() {
     }
 
-    public ProductDetail(String intro, String description, int capacity, int downloaded, int ageLimit, String ownerId, String videoId, String fileId) {
-        this.intro = intro;
-        this.description = description;
-        this.capacity = capacity;
-        this.downloaded = downloaded;
-        this.ageLimit = ageLimit;
-        this.ownerId = ownerId;
-        this.videoId = videoId;
-        this.fileId = fileId;
-    }
-
-    public ProductDetail(String id, String intro, String description, int capacity, int downloaded, int ageLimit, String ownerId, String videoId, String fileId) {
+    public ProductDetail(String id, String intro, String description, int capacity, int buyCount, int ageLimit, String ownerId, String videoId, HashMap<String, String> imageIdList, String fileId, HashMap<String, Integer> views) {
         this.id = id;
         this.intro = intro;
         this.description = description;
         this.capacity = capacity;
-        this.downloaded = downloaded;
-        this.ageLimit = ageLimit;
-        this.ownerId = ownerId;
-        this.videoId = videoId;
-        this.fileId = fileId;
-    }
-
-    public ProductDetail(String id, String intro, String description, int capacity, int downloaded, int ageLimit, String ownerId, String videoId, HashMap<String, String> imageIdList, String fileId) {
-        this.id = id;
-        this.intro = intro;
-        this.description = description;
-        this.capacity = capacity;
-        this.downloaded = downloaded;
+        this.buyCount = buyCount;
         this.ageLimit = ageLimit;
         this.ownerId = ownerId;
         this.videoId = videoId;
         this.imageIdList = imageIdList;
         this.fileId = fileId;
+        this.views = views;
     }
 
     public String getId() {
-
         return id;
     }
 
@@ -97,12 +64,12 @@ public class ProductDetail {
         this.capacity = capacity;
     }
 
-    public int getDownloaded() {
-        return downloaded;
+    public int getBuyCount() {
+        return buyCount;
     }
 
-    public void setDownloaded(int downloaded) {
-        this.downloaded = downloaded;
+    public void setBuyCount(int buyCount) {
+        this.buyCount = buyCount;
     }
 
     public int getAgeLimit() {
@@ -143,5 +110,13 @@ public class ProductDetail {
 
     public void setFileId(String fileId) {
         this.fileId = fileId;
+    }
+
+    public HashMap<String, Integer> getViews() {
+        return views;
+    }
+
+    public void setViews(HashMap<String, Integer> views) {
+        this.views = views;
     }
 }

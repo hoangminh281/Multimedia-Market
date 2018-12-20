@@ -102,4 +102,11 @@ public class ProductDetailRepositoryImpl implements ProductDetailRepository {
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
     }
+
+    @Override
+    public void setViewsByUserId(String productId, String userId, int value, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.PRODUCTDETAIL_VIEWS(productId, userId)).setValue(value)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
+    }
 }

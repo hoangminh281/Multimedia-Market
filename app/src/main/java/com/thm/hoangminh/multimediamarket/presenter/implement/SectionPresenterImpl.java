@@ -76,8 +76,9 @@ public class SectionPresenterImpl implements SectionPresenter {
                                 Iterator<Map.Entry<String, Integer>> ite = section.getProductIdArr().entrySet().iterator();
                                 LinkedHashMap<String, Integer> limitedProductIdArr = new LinkedHashMap<>();
                                 while (ite.hasNext()) {
-                                    if (limitedProductIdArr.size() == Constants.entireProductLimitInSection)
+                                    if (limitedProductIdArr.size() == Constants.entireProductLimitInSection) {
                                         break;
+                                    }
                                     Map.Entry<String, Integer> productIdAndValue = ite.next();
                                     if (productIdAndValue.getValue() != Constants.ProductDisable)
                                         limitedProductIdArr.put(productIdAndValue.getKey(), productIdAndValue.getValue());

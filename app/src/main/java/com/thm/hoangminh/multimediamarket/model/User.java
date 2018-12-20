@@ -1,31 +1,5 @@
 package com.thm.hoangminh.multimediamarket.model;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
-import com.thm.hoangminh.multimediamarket.R;
-
-import java.io.ByteArrayOutputStream;
-import java.util.Calendar;
-
 /**
  * Created by Dell on 5/7/2018.
  */

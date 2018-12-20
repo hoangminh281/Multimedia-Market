@@ -20,4 +20,6 @@ public interface ProductDetailRepository extends WatchingRepository <ProductDeta
     void setCapacity(String productId, double capacity, OnSuccessListener successListener, OnFailureListener failureListener);
 
     void removeImageId(String productId, String oldImageKey, OnSuccessListener successListener, OnFailureListener failureListener);
+
+    void setViewsByUserId(String productId, String userId, int value, OnSuccessListener successListener, OnFailureListener failureListener);
 }

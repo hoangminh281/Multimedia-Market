@@ -177,7 +177,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     public void showProductDetail(ProductDetail productDetail) {
         initYoutubeLayout(productDetail.getVideoId());
         txtAgelimit.setText(productDetail.getAgeLimit() + "+");
-        ConvertNumberToString convert = new ConvertNumberToString(productDetail.getDownloaded(), getResources().getStringArray(R.array.unit));
+        ConvertNumberToString convert = new ConvertNumberToString(productDetail.getBuyCount(), getResources().getStringArray(R.array.unit));
         txtDownloaded.setText(convert.getNumber() + "");
         txtSubdownloaded.setText(convert.getUnit());
         txtIntro.setText(productDetail.getIntro());
