@@ -6,6 +6,13 @@ public class PurchasedProduct {
     private String userId;
     private String dateTime;
 
+    public PurchasedProduct(String cateId, String productId, String userId, String dateTime) {
+        this.cateId = cateId;
+        this.productId = productId;
+        this.userId = userId;
+        this.dateTime = dateTime;
+    }
+
     public PurchasedProduct() {}
 
     public String getCateId() {

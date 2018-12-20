@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,13 +39,9 @@ import com.thm.hoangminh.multimediamarket.repository.implement.RatingRepositoryI
 import com.thm.hoangminh.multimediamarket.repository.implement.UserRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.view.callback.ProductDetailView;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Callable;
 
 public class ProductDetailPresenterImpl implements ProductDetailPresenter {
@@ -336,54 +331,55 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
                                         public void onSuccess(Void aVoid) {
                                             SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
                                             String currentDateTime = dateFormatter.format(Calendar.getInstance().getTime());
-                                            PurchasedProduct purcharsedProduct = new PurchasedProduct();
-                                            purcharsedProduct.setCateId(product.getCateId());
-                                            purcharsedProduct.setProductId(product.getProductId());
-                                            purcharsedProduct.setUserId(currentUser.getUid());
-                                            purcharsedProduct.setDateTime(currentDateTime);
+                                            PurchasedProduct purcharsedProduct = new PurchasedProduct(product.getCateId(), product.getProductId()
+                                                    , currentUser.getUid(), currentDateTime);
                                             purchasedProductRepository.add(purcharsedProduct,
                                                     new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
+                                                            //charge owner product
                                                             userRepository.findBalance(productDetail.getOwnerId(), new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                                                     if (dataSnapshot.exists()) {
-                                                                        userRepository.setBalance(productDetail.getOwnerId(), dataSnapshot.getValue(double.class) + price, new OnSuccessListener<Void>() {
-                                                                            @Override
-                                                                            public void onSuccess(Void aVoid) {
-                                                                                productDetailRepository.findPurchasedQuantityByProductId(product.getProductId(), new ValueEventListener() {
-                                                                                    @Override
-                                                                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                        if (dataSnapshot.exists()) {
-                                                                                            productDetailRepository.setPurchasedQuantityByProductId(product.getProductId(), dataSnapshot.getValue(int.class) + 1, null, null);
-                                                                                        }
-                                                                                    }
-
-                                                                                    @Override
-                                                                                    public void onCancelled(DatabaseError databaseError) {
-
-                                                                                    }
-                                                                                });
-                                                                                listener.showMessage(R.string.info_buyingSuccess);
-                                                                                listener.closeCheckoutDialog();
-                                                                            }
-                                                                        }, new OnFailureListener() {
-                                                                            @Override
-                                                                            public void onFailure(@NonNull Exception e) {
-                                                                                listener.showMessage(R.string.info_failure);
-                                                                                listener.hideProgressbarDialog();
-                                                                            }
-                                                                        });
+                                                                        userRepository.setBalance(productDetail.getOwnerId(), (dataSnapshot.getValue(double.class) + ((int) (price * (100 - Constants.ChargeFeePer) / 100) * 100) / 100.00), null, null);
                                                                     }
                                                                 }
 
                                                                 @Override
                                                                 public void onCancelled(DatabaseError databaseError) {
-                                                                    listener.showMessage(R.string.info_failure);
-                                                                    listener.hideProgressbarDialog();
                                                                 }
                                                             });
+                                                            //get profit to admin
+                                                            userRepository.findBalance(Constants.AdminId, new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                    if (dataSnapshot.exists()) {
+                                                                        userRepository.setBalance(Constants.AdminId, (dataSnapshot.getValue(double.class) + ((int) (price * Constants.ChargeFeePer / 100) * 100) / 100.00), null, null);
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(DatabaseError databaseError) {
+                                                                }
+                                                            });
+                                                            //count purchased product
+                                                            productDetailRepository.findPurchasedQuantityByProductId(product.getProductId(), new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                    if (dataSnapshot.exists()) {
+                                                                        productDetailRepository.setPurchasedQuantityByProductId(product.getProductId(), dataSnapshot.getValue(int.class) + 1, null, null);
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+
+                                                            listener.showMessage(R.string.info_buyingSuccess);
+                                                            listener.closeCheckoutDialog();
                                                         }
                                                     },
                                                     new OnFailureListener() {
