@@ -7,9 +7,9 @@ import com.thm.hoangminh.multimediamarket.model.ProductDetail;
 import com.thm.hoangminh.multimediamarket.repository.base.WatchingRepository;
 
 public interface ProductDetailRepository extends WatchingRepository <ProductDetail, String> {
-    void findPurchasedQuantityByProductId(String productId, ValueEventListener event);
+    void findBuyCount(String productId, ValueEventListener valueEventListener);
 
-    void setPurchasedQuantityByProductId(String productId, int purchasedQuantity, OnSuccessListener successListener, OnFailureListener failureListener);
+    void setBuyCount(String productId, int purchasedQuantity, OnSuccessListener successListener, OnFailureListener failureListener);
 
     void updateImageId(String productId, String imageId, String newImageId, OnSuccessListener successListener, OnFailureListener failureListener);
 
@@ -22,4 +22,6 @@ public interface ProductDetailRepository extends WatchingRepository <ProductDeta
     void removeImageId(String productId, String oldImageKey, OnSuccessListener successListener, OnFailureListener failureListener);
 
     void setViewsByUserId(String productId, String userId, int value, OnSuccessListener successListener, OnFailureListener failureListener);
+
+    void findViews(String productId, ValueEventListener valueEventListener);
 }

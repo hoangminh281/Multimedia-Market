@@ -14,11 +14,12 @@ public class ProductDetail {
     private String videoId;
     private HashMap<String, String> imageIdList;
     private String fileId;
+    private String created;
 
     public ProductDetail() {
     }
 
-    public ProductDetail(String id, String intro, String description, int capacity, int buyCount, int ageLimit, String ownerId, String videoId, HashMap<String, String> imageIdList, String fileId, HashMap<String, Integer> views) {
+    public ProductDetail(String id, String intro, String description, int capacity, int buyCount, int ageLimit, String ownerId, String videoId, HashMap<String, String> imageIdList, String fileId, HashMap<String, Integer> views, String created) {
         this.id = id;
         this.intro = intro;
         this.description = description;
@@ -30,6 +31,7 @@ public class ProductDetail {
         this.imageIdList = imageIdList;
         this.fileId = fileId;
         this.views = views;
+        this.created = created;
     }
 
     public String getId() {
@@ -118,5 +120,13 @@ public class ProductDetail {
 
     public void setViews(HashMap<String, Integer> views) {
         this.views = views;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
     }
 }

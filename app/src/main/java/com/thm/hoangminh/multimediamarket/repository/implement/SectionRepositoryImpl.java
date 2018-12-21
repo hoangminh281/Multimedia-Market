@@ -88,4 +88,18 @@ public class SectionRepositoryImpl implements SectionRepository {
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
     }
+
+    @Override
+    public void setDominatedArcadeGamePointByProductId(String productId, int value, OnSuccessListener<Void> successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.SECTION(Constants.Home, Constants.DominatedArcadeSectionId, productId)).setValue(value)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
+    }
+
+    @Override
+    public void setHintedGamePointByProductId(String productId, int value, OnSuccessListener<Void> successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.SECTION(Constants.Home, Constants.HintedSectionId, productId)).setValue(value)
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
+    }
 }

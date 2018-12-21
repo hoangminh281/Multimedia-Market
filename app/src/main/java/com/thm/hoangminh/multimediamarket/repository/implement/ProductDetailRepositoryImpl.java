@@ -57,13 +57,8 @@ public class ProductDetailRepositoryImpl implements ProductDetailRepository {
     }
 
     @Override
-    public void findPurchasedQuantityByProductId(String productId, ValueEventListener event) {
-        mRef.child(ROUTE.PRODUCTDETAIL_PURCHASEDQUANTITY(productId)).addListenerForSingleValueEvent(event);
-    }
-
-    @Override
-    public void setPurchasedQuantityByProductId(String productId, int purchasedQuantity, OnSuccessListener successListener, OnFailureListener failureListener) {
-        mRef.child(ROUTE.PRODUCTDETAIL_PURCHASEDQUANTITY(productId)).setValue(purchasedQuantity)
+    public void setBuyCount(String productId, int purchasedQuantity, OnSuccessListener successListener, OnFailureListener failureListener) {
+        mRef.child(ROUTE.PRODUCTDETAIL_BUYCOUNT(productId)).setValue(purchasedQuantity)
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
     }
@@ -108,5 +103,15 @@ public class ProductDetailRepositoryImpl implements ProductDetailRepository {
         mRef.child(ROUTE.PRODUCTDETAIL_VIEWS(productId, userId)).setValue(value)
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
+    }
+
+    @Override
+    public void findViews(String productId, ValueEventListener valueEventListener) {
+        mRef.child(ROUTE.PRODUCTDETAIL_VIEWS(productId)).addListenerForSingleValueEvent(valueEventListener);
+    }
+
+    @Override
+    public void findBuyCount(String productId, ValueEventListener valueEventListener) {
+        mRef.child(ROUTE.PRODUCTDETAIL_BUYCOUNT(productId)).addListenerForSingleValueEvent(valueEventListener);
     }
 }

@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.fomular.DateTimeFormular;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.File;
 import com.thm.hoangminh.multimediamarket.model.Product;
@@ -132,6 +133,8 @@ public class AddProductPresenterImpl implements AddProductPresenter {
         productDetail.setOwnerId(currentUser.getUid());
         String fileId = Tools.createRandomFileName(pickedFile.getName());
         productDetail.setFileId(fileId);
+        productDetail.setCreated(DateTimeFormular.getCurrentDateTime());
+
         pickedFile.setName(fileId);
 
         final Map<String, Bitmap> preparedSelectedImages = prepareImages(avatarId, selectedBitmaps);

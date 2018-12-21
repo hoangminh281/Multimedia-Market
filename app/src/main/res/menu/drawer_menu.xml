@@ -16,7 +16,7 @@
         android:visible="false" />
     <item
         android:id="@+id/menu_refresh_section"
-        android:icon="@mipmap/ic_female"
+        android:icon="@mipmap/ic_refresh"
         android:title="Refresh product section"
         android:visible="false" />
     <item

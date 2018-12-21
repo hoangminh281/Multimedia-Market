@@ -295,6 +295,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
     public void enableOrDisableProductCheckout(double balance, boolean b) {
         if (b) {
             txtWallet.setText(MoneyFormular.format(balance));
+            txtWallet.setTextColor(getResources().getColor(R.color.super_black));
             txtContent.setText(R.string.txt_allowCheckout);
             btnCheckout.setText(R.string.btn_checkout);
             btnCheckout.setOnClickListener(new View.OnClickListener() {
@@ -307,7 +308,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductD
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (checkoutDialog != null && checkoutDialog.isShowing()) {
+                                    if (checkoutDialog != null && checkoutDialog.isShowing() && pgbCheckoutDialog != null && pgbCheckoutDialog.isShown()) {
                                         checkoutDialog.hide();
                                     }
                                 }

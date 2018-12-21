@@ -13,7 +13,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.business.SectionCalculator;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.fomular.DateTimeFormular;
+import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.Product;
 import com.thm.hoangminh.multimediamarket.model.ProductBookmark;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
@@ -27,6 +30,7 @@ import com.thm.hoangminh.multimediamarket.repository.ProductDetailRepository;
 import com.thm.hoangminh.multimediamarket.repository.ProductRepository;
 import com.thm.hoangminh.multimediamarket.repository.PurchasedProductRepository;
 import com.thm.hoangminh.multimediamarket.repository.RatingRepository;
+import com.thm.hoangminh.multimediamarket.repository.SectionRepository;
 import com.thm.hoangminh.multimediamarket.repository.UserRepository;
 import com.thm.hoangminh.multimediamarket.repository.base.StorageRepository;
 import com.thm.hoangminh.multimediamarket.repository.implement.BookmarkRepositoryImpl;
@@ -36,12 +40,11 @@ import com.thm.hoangminh.multimediamarket.repository.implement.ProductRepository
 import com.thm.hoangminh.multimediamarket.repository.implement.ProductStorageRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.PurchasedProductRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.RatingRepositoryImpl;
+import com.thm.hoangminh.multimediamarket.repository.implement.SectionRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.repository.implement.UserRepositoryImpl;
 import com.thm.hoangminh.multimediamarket.view.callback.ProductDetailView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.concurrent.Callable;
 
 public class ProductDetailPresenterImpl implements ProductDetailPresenter {
@@ -53,6 +56,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
     private UserRepository userRepository;
     private RatingRepository ratingRepository;
     private ProductRepository productRepository;
+    private SectionRepository sectionRepository;
     private BookmarkRepository bookmarkRepository;
     private StorageRepository productStorageRepository;
     private FileStorageRepository fileStorageRepository;
@@ -64,6 +68,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
         userRepository = new UserRepositoryImpl();
         ratingRepository = new RatingRepositoryImpl();
         productRepository = new ProductRepositoryImpl();
+        sectionRepository = new SectionRepositoryImpl();
         bookmarkRepository = new BookmarkRepositoryImpl();
         fileStorageRepository = new FileStorageRepositoryImpl();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -152,6 +157,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
                     if (productDetail.getImageIdList() != null) {
                         loadImageList(new ArrayList<>(productDetail.getImageIdList().values()));
                     }
+
                     recordCurrentUserView(productDetail, currentUser.getUid());
                 }
             }
@@ -164,10 +170,20 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
     }
 
     private void recordCurrentUserView(ProductDetail productDetail, String userId) {
-        if (productDetail.getViews() != null && productDetail.getViews().get(currentUser.getUid()) != null) {
-            productDetailRepository.setViewsByUserId(productDetail.getId(), currentUser.getUid(), productDetail.getViews().get(currentUser.getUid()) + 1, null, null);
+        if (productDetail.getViews() != null && productDetail.getViews().get(userId) != null) {
+            productDetailRepository.setViewsByUserId(productDetail.getId(), userId, productDetail.getViews().get(currentUser.getUid()) + 1, new OnSuccessListener() {
+                @Override
+                public void onSuccess(Object o) {
+                    calculateHintedPoint(productDetail.getId());
+                }
+            }, null);
         } else {
-            productDetailRepository.setViewsByUserId(productDetail.getId(), currentUser.getUid(), 1, null, null);
+            productDetailRepository.setViewsByUserId(productDetail.getId(), userId, 1, new OnSuccessListener() {
+                @Override
+                public void onSuccess(Object o) {
+                    calculateHintedPoint(productDetail.getId());
+                }
+            }, null);
         }
     }
 
@@ -339,8 +355,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
                                     userRepository.setBalance(currentUser.getUid(), refund, new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
-                                            String currentDateTime = dateFormatter.format(Calendar.getInstance().getTime());
+                                            String currentDateTime = DateTimeFormular.getCurrentDateTime();
                                             PurchasedProduct purcharsedProduct = new PurchasedProduct(product.getCateId(), product.getProductId()
                                                     , currentUser.getUid(), currentDateTime);
                                             purchasedProductRepository.add(purcharsedProduct,
@@ -374,11 +389,13 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
                                                                 }
                                                             });
                                                             //count purchased product
-                                                            productDetailRepository.findPurchasedQuantityByProductId(product.getProductId(), new ValueEventListener() {
+                                                            productDetailRepository.findBuyCount(product.getProductId(), new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                                                     if (dataSnapshot.exists()) {
-                                                                        productDetailRepository.setPurchasedQuantityByProductId(product.getProductId(), dataSnapshot.getValue(int.class) + 1, null, null);
+                                                                        productDetailRepository.setBuyCount(product.getProductId(), dataSnapshot.getValue(int.class) + 1, null, null);
+
+                                                                        calculateDominatedArcadePoint(product.getProductId());
                                                                     }
                                                                 }
 
@@ -407,6 +424,9 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
                                             listener.hideProgressbarDialog();
                                         }
                                     });
+                                } else {
+                                    listener.showMessage(R.string.info_failure);
+                                    listener.hideProgressbarDialog();
                                 }
                             }
                         }
@@ -431,8 +451,7 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
     @Override
     public void addRating(ProductRating productRating) {
         productRating.setUserId(currentUser.getUid());
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-        productRating.setTime(dateFormatter.format(Calendar.getInstance().getTime()));
+        productRating.setTime(DateTimeFormular.getCurrentDateTime());
         ratingRepository.add(productRating, new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -454,6 +473,8 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
                             ratingPoint = Math.round(ratingPoint);
                             ratingPoint /= 10;
                             productRepository.setRatingPoint(product.getProductId(), ratingPoint, null, null);
+
+                            calculateDominatedArcadePoint(product.getProductId());
                         }
                     }
 
@@ -464,6 +485,59 @@ public class ProductDetailPresenterImpl implements ProductDetailPresenter {
                 });
             }
         }, null);
+    }
+
+    private void calculateDominatedArcadePoint(String productId) {
+        if (product.getCateId().equals(Category.getInstance().get(1).getCateId())) {
+            productDetailRepository.findBuyCount(productId, new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    int buyCount = 0;
+
+                    if (dataSnapshot.exists()) buyCount = dataSnapshot.getValue(int.class);
+
+                    int finalBuyCount = buyCount;
+
+                    ratingRepository.findById(productId, new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            int ratingCount = 0;
+
+                            if (dataSnapshot.exists())
+                                ratingCount = (int) dataSnapshot.getChildrenCount();
+
+                            sectionRepository.setDominatedArcadeGamePointByProductId(productId, SectionCalculator.calculateDominatedArcadeGamePoint(finalBuyCount, ratingCount), null, null);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+    }
+
+    private void calculateHintedPoint(String productId) {
+        if (product.getCateId().equals(Category.getInstance().get(1).getCateId())) {
+            productDetailRepository.findViews(productId, new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        sectionRepository.setHintedGamePointByProductId(productId, SectionCalculator.calculateHintedGamePoint((int) dataSnapshot.getChildrenCount()), null, null);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
     }
 
     @Override

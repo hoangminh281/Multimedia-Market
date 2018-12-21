@@ -317,6 +317,19 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
 
     }
 
+
+    @Override
+    public void refreshSectionData() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        swipeRefreshLayout.setRefreshing(true);
+        for (Fragment fragment : adapter.mFragmentList) {
+            ((SectionFragment) fragment).refresh();
+        }
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
     @Override
     public void setEvents() {
         btnRecharge.setOnClickListener(new View.OnClickListener() {
@@ -329,11 +342,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                for (Fragment fragment : adapter.mFragmentList) {
-                    ((SectionFragment) fragment).refresh();
-                }
-                swipeRefreshLayout.setRefreshing(false);
+                refreshSectionData();
             }
         });
 

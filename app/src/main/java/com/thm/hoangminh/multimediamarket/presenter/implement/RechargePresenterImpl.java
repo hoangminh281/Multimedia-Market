@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.R;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
+import com.thm.hoangminh.multimediamarket.fomular.DateTimeFormular;
 import com.thm.hoangminh.multimediamarket.model.Card;
 import com.thm.hoangminh.multimediamarket.model.RechargedHistory;
 import com.thm.hoangminh.multimediamarket.presenter.RechargePresenter;
@@ -26,9 +27,6 @@ import com.thm.hoangminh.multimediamarket.utility.Tools;
 import com.thm.hoangminh.multimediamarket.utility.Validate;
 import com.thm.hoangminh.multimediamarket.view.activity.RechargeHistoryActivity;
 import com.thm.hoangminh.multimediamarket.view.callback.RechargeView;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class RechargePresenterImpl implements RechargePresenter {
     private RechargeView listener;
@@ -88,10 +86,8 @@ public class RechargePresenterImpl implements RechargePresenter {
                                                                         new OnSuccessListener<Void>() {
                                                                             @Override
                                                                             public void onSuccess(Void aVoid) {
-                                                                                SimpleDateFormat dateFormatter
-                                                                                        = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
                                                                                 RechargedHistory rechargeHistory = new RechargedHistory(baseCard.getCardId()
-                                                                                        , baseCard.getCategory(), baseCard.getValue(), dateFormatter.format(Calendar.getInstance().getTime()));
+                                                                                        , baseCard.getCategory(), baseCard.getValue(), DateTimeFormular.getCurrentDateTime());
                                                                                 DatabaseReference mRef = rechargeHistoryRepository.createDataRef(currentUser.getUid());
                                                                                 final String transactionId = mRef.getKey();
                                                                                 rechargeHistory.setId(transactionId);

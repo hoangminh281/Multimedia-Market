@@ -32,4 +32,6 @@ public interface MainView extends BundleBaseView {
     void setEvents();
 
     void setProductSuggestions(Map<String, String> suggestions);
+
+    void refreshSectionData();
 }

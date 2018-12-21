@@ -22,4 +22,8 @@ public interface SectionRepository extends Repository<Section, String> {
     void removeProductIdArr(String cateId, String sectionId, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 
     void setProductValueList(String cateId, String sectionId, Map<String, Integer> productIds, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
+
+    void setDominatedArcadeGamePointByProductId(String productId, int value, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
+
+    void setHintedGamePointByProductId(String productId, int value, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 }

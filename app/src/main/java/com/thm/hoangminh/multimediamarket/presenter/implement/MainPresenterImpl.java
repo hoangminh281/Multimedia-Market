@@ -2,7 +2,6 @@ package com.thm.hoangminh.multimediamarket.presenter.implement;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -11,6 +10,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.thm.hoangminh.multimediamarket.R;
+import com.thm.hoangminh.multimediamarket.business.SectionCalculator;
 import com.thm.hoangminh.multimediamarket.constant.Constants;
 import com.thm.hoangminh.multimediamarket.model.Category;
 import com.thm.hoangminh.multimediamarket.model.ProductDetail;
@@ -41,28 +41,28 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MainPresenterImpl implements MainPresenter {
-    private final Context context;
     private MainView listener;
+    private final Context context;
     private UserRepository userRepository;
-    private UserStorageRepository userStorageRepository;
     private RoleRepository roleRepository;
-    private CategoryRepository categoryRepository;
+    private RatingRepository ratingRepository;
     private ProductRepository productRepository;
     private SectionRepository sectionRepository;
+    private CategoryRepository categoryRepository;
+    private UserStorageRepository userStorageRepository;
     private ProductDetailRepository productDetailRepository;
-    private RatingRepository ratingRepository;
 
     public MainPresenterImpl(MainView listener, Context context) {
         this.context = context;
         this.listener = listener;
         userRepository = new UserRepositoryImpl();
         roleRepository = new RoleRepositoryImpl();
+        ratingRepository = new RatingRepositoryImpl();
         productRepository = new ProductRepositoryImpl();
+        sectionRepository = new SectionRepositoryImpl();
         categoryRepository = new CategoryRepositoryImpl();
         userStorageRepository = new UserStorageRepositoryImpl();
-        sectionRepository = new SectionRepositoryImpl();
         productDetailRepository = new ProductDetailRepositoryImpl();
-        ratingRepository = new RatingRepositoryImpl();
     }
 
     @Override
@@ -195,9 +195,11 @@ public class MainPresenterImpl implements MainPresenter {
                         final ProductDetail productDetail = item.getValue(ProductDetail.class);
                         dominatedArcadeProducts.put(productDetail.getId(), productDetail.getBuyCount());
                         if (productDetail.getViews() != null) {
-                            hintedProducts.put(productDetail.getId(), productDetail.getViews().size());
+                            hintedProducts.put(productDetail.getId(), SectionCalculator.calculateHintedGamePoint(productDetail.getViews().size()));
                         }
                     }
+                    saveSectionProductIds(Constants.HintedSectionId, hintedProducts);
+
                     ratingRepository.findAll(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -206,11 +208,14 @@ public class MainPresenterImpl implements MainPresenter {
                                 for (DataSnapshot item : iterable) {
                                     String productRatingId = item.getKey();
                                     if (dominatedArcadeProducts.get(productRatingId) != null) {
-                                        dominatedArcadeProducts.put(productRatingId, dominatedArcadeProducts.get(productRatingId) + Math.round(item.getChildrenCount() / 2));
+                                        dominatedArcadeProducts.put(productRatingId, SectionCalculator.calculateDominatedArcadeGamePoint(dominatedArcadeProducts.get(productRatingId), (int) item.getChildrenCount()));
+                                    } else {
+                                        dominatedArcadeProducts.put(productRatingId, SectionCalculator.calculateDominatedArcadeGamePoint(0, (int) item.getChildrenCount()));
                                     }
                                 }
                             }
-                            saveDominatedArcadeGameIds(dominatedArcadeProducts);
+                            saveSectionProductIds(Constants.DominatedArcadeSectionId, dominatedArcadeProducts);
+                            listener.refreshSectionData();
                         }
 
                         @Override
@@ -218,7 +223,6 @@ public class MainPresenterImpl implements MainPresenter {
 
                         }
                     });
-                    saveHintedGameIds(hintedProducts);
                 }
             }
 
@@ -229,14 +233,14 @@ public class MainPresenterImpl implements MainPresenter {
         });
     }
 
-    private void saveDominatedArcadeGameIds(Map<String, Integer> dominatedArcadeProducts) {
+    private void saveSectionProductIds(String sectionId, Map<String, Integer> dominatedArcadeProducts) {
         for (Map.Entry<String, Integer> entry : dominatedArcadeProducts.entrySet()) {
             productRepository.findCateById(entry.getKey(), new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         if (dataSnapshot.getValue(String.class).equals(Category.getInstance().get(1).getCateId())) {
-                            sectionRepository.setProductValue(Constants.Home, Constants.DominatedArcadeSectionId, entry.getKey(), entry.getValue(), null, null);
+                            sectionRepository.setProductValue(Constants.Home, sectionId, entry.getKey(), entry.getValue(), null, null);
                         }
                     }
                 }
@@ -249,23 +253,4 @@ public class MainPresenterImpl implements MainPresenter {
         }
     }
 
-    private void saveHintedGameIds(Map<String, Integer> hintedProducts) {
-        for (Map.Entry<String, Integer> entry : hintedProducts.entrySet()) {
-            productRepository.findCateById(entry.getKey(), new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        if (dataSnapshot.getValue(String.class).equals(Category.getInstance().get(1).getCateId())) {
-                            sectionRepository.setProductValue(Constants.Home, Constants.HintedSectionId, entry.getKey(), entry.getValue(), null, null);
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
 }
